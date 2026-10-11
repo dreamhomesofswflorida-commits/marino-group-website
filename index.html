@@ -227,9 +227,14 @@ footer .fine{grid-column:1/-1;border-top:1px solid #2e2b27;padding-top:22px;disp
         <div class="stat"><b>3 counties</b><span>Collier, Lee and Charlotte</span></div>
         <div class="stat"><b>New builds</b><span>lots and custom homes with our builder partner</span></div>
       </div>
-      <p class="lead" style="font-size:16px">On the live site, this panel shows the MLS listings feed you already use, so new listings appear automatically.</p>
     </div>
   </div>
+</section>
+
+<section id="listings" aria-label="Live MLS listings" style="padding-block:0 88px">
+  <div class="wrap"><div style="border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--surface)">
+    <iframe src="https://matrix.swflamls.com/Matrix/public/IDX.aspx?idx=90081c45" title="Marino Group listings from the SWFL MLS" style="width:100%;height:900px;border:0;display:block" loading="lazy"></iframe>
+  </div></div>
 </section>
 
 <section id="sell" aria-labelledby="sell-h" style="background:var(--surface)">
@@ -259,7 +264,7 @@ footer .fine{grid-column:1/-1;border-top:1px solid #2e2b27;padding-top:22px;disp
           <label class="field" for="v-phone"><span>Phone</span><input id="v-phone" type="tel" required></label>
         </div>
         <button class="btn btn-gold" type="submit">Get my free home value</button>
-        <p class="ok" id="value-ok" hidden>Thanks! On the live site, this sends your request to the team.</p>
+        <p class="ok" id="value-ok" hidden>Thanks! We received your request and will call you within one business day.</p>
       </form>
     </aside>
   </div>
@@ -369,7 +374,7 @@ footer .fine{grid-column:1/-1;border-top:1px solid #2e2b27;padding-top:22px;disp
       <label class="field" for="c-topic"><span>I want to</span><select id="c-topic"><option>Buy a home</option><option>Sell my home</option><option>Build a new home</option><option>Join the team</option><option>Something else</option></select></label>
       <label class="field" for="c-msg"><span>Message</span><textarea id="c-msg" rows="4"></textarea></label>
       <button class="btn btn-gold" type="submit" style="justify-self:start">Send message</button>
-      <p class="ok" id="contact-ok" hidden style="color:var(--gold)">Thanks! On the live site, this sends your message to the team.</p>
+      <p class="ok" id="contact-ok" hidden style="color:var(--gold)">Thanks! Your message was sent. We will get back to you shortly.</p>
     </form>
   </div>
 </section>
@@ -398,8 +403,18 @@ footer .fine{grid-column:1/-1;border-top:1px solid #2e2b27;padding-top:22px;disp
 <script>
 const $=id=>document.getElementById(id);
 $("search").addEventListener("submit",e=>e.preventDefault());
-$("value-form").addEventListener("submit",e=>{e.preventDefault();$("value-ok").hidden=false});
-$("contact-form").addEventListener("submit",e=>{e.preventDefault();$("contact-ok").hidden=false});
+const FORM_URL="https://formsubmit.co/ajax/dreamhomesofswflorida@gmail.com";
+async function send(form,ok,subject,data){
+  const btn=form.querySelector("button[type=submit]");btn.disabled=true;
+  try{
+    const r=await fetch(FORM_URL,{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({_subject:subject,_template:"table",...data})});
+    if(!r.ok) throw new Error();
+    form.reset();$(ok).hidden=false;$(ok).textContent=$(ok).dataset.ok||$(ok).textContent;
+  }catch(err){$(ok).hidden=false;$(ok).dataset.ok=$(ok).textContent;$(ok).textContent="Sorry, that didn't send. Please call or text (239) 776-2393.";}
+  btn.disabled=false;
+}
+$("value-form").addEventListener("submit",e=>{e.preventDefault();send(e.target,"value-ok","Home value request – Marino Group website",{Address:$("v-addr").value,Name:$("v-name").value,Phone:$("v-phone").value})});
+$("contact-form").addEventListener("submit",e=>{e.preventDefault();send(e.target,"contact-ok","New message – Marino Group website",{Name:$("c-name").value,Phone:$("c-phone").value,Email:$("c-email").value,"I want to":$("c-topic").value,Message:$("c-msg").value})});
 </script>
 
 </body>
