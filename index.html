@@ -111,11 +111,30 @@ input,select,textarea{font:16px var(--body);color:var(--fg);background:var(--sur
 
 /* build */
 .build{background:var(--surface)}
-.models{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.model{border:1px solid var(--line);border-radius:14px;padding:22px 20px;display:grid;gap:6px;background:var(--bg)}
-.model b{font:400 26px var(--display)}
-.model span{color:var(--muted);font-size:15px}
-@media (max-width:900px){.models{grid-template-columns:repeat(2,1fr)}}
+.catalog{display:grid;gap:18px}
+.filters{display:grid;grid-template-columns:1.6fr repeat(5,1fr) 1.15fr;gap:12px;background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:16px}
+.filters label{display:grid;gap:6px;font:500 12px var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.filters input,.filters select{font-size:15px;padding:10px 12px;letter-spacing:0;text-transform:none}
+@media (max-width:1100px){.filters{grid-template-columns:repeat(3,1fr)}.f-search{grid-column:1/-1}}
+@media (max-width:560px){.filters{grid-template-columns:1fr 1fr}}
+.cat-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.cat-bar p{margin:0;color:var(--muted);font-size:15px}
+.linkbtn{background:none;border:0;color:var(--gold);font:500 15px var(--body);cursor:pointer;padding:6px 0;text-decoration:underline;text-underline-offset:3px}
+.mgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+@media (max-width:980px){.mgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.mgrid{grid-template-columns:1fr}}
+.mcard{background:var(--bg);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.mcard figure{margin:0;aspect-ratio:16/9;background:var(--sunk);position:relative;overflow:hidden}
+.mcard img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.mtag{position:absolute;top:12px;left:12px;background:rgba(20,19,18,.82);color:#f3ece0;font:500 12px var(--display);letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:999px}
+.mbody{padding:18px 18px 20px;display:flex;flex-direction:column;gap:10px;flex:1}
+.mbody h3{font-size:22px;letter-spacing:.06em}
+.marea{font:400 17px var(--display);color:var(--fg)}
+.marea small{color:var(--muted);font:14px var(--body)}
+.mspecs{display:flex;flex-wrap:wrap;gap:6px 14px;margin:0;padding:0;list-style:none;color:var(--muted);font-size:15px}
+.mbody .btn{align-self:flex-start;margin-top:auto;padding:10px 18px;font-size:14px}
+.btn-ghost-dark{border-color:var(--fg);color:var(--fg);background:transparent}
+.cat-more{display:flex;justify-content:center}
 .license{font-size:14px;color:var(--muted)}
 
 /* team */
@@ -275,19 +294,23 @@ footer .fine{grid-column:1/-1;border-top:1px solid #2e2b27;padding-top:22px;disp
     <div class="head">
       <span class="eyebrow">Build with us</span>
       <h2 id="build-h">If you can dream it, we can build it.</h2>
-      <p class="lead">Pick a home model, and we'll help you find the lot, the financing, and the builder. Our models are popular in Golden Gate Estates, Lehigh Acres, and Cape Coral.</p>
+      <p class="lead">Browse more than 340 home models, from ADUs and guest houses to duplexes and family homes. Pick one, and we'll help you find the lot, the financing, and the builder. Our models are popular in Golden Gate Estates, Lehigh Acres, and Cape Coral.</p>
     </div>
-    <div class="models">
-      <div class="model"><b>Under 1,400</b><span>sq ft models</span></div>
-      <div class="model"><b>1,400–1,700</b><span>sq ft models</span></div>
-      <div class="model"><b>1,700–2,000</b><span>sq ft models</span></div>
-      <div class="model"><b>2,000–2,400</b><span>sq ft models</span></div>
-      <div class="model"><b>2,400+</b><span>sq ft models</span></div>
-      <div class="model"><b>Duplexes</b><span>for investors</span></div>
-      <div class="model"><b>ADU &amp; guest</b><span>houses</span></div>
-      <div class="model"><b>Kitchens</b><span>&amp; door options</span></div>
+    <div class="catalog" id="catalog">
+      <div class="filters" role="search" aria-label="Filter home models">
+        <label class="f-search">Model name<input id="m-q" type="search" placeholder="Search by name" autocomplete="off"></label>
+        <label>Bedrooms<select id="m-beds"><option value="0">Any</option><option value="1">1+</option><option value="2">2+</option><option value="3">3+</option><option value="4">4+</option><option value="5">5+</option></select></label>
+        <label>Bathrooms<select id="m-baths"><option value="0">Any</option><option value="2">2+</option><option value="3">3+</option><option value="4">4+</option></select></label>
+        <label>Garage<select id="m-garage"><option value="-1">Any</option><option value="1">1+ car</option><option value="2">2+ car</option><option value="3">3+ car</option></select></label>
+        <label>Living area<select id="m-size"><option value="">Any size</option><option value="0-1399">Under 1,400 sq ft</option><option value="1400-1699">1,400–1,700 sq ft</option><option value="1700-1999">1,700–2,000 sq ft</option><option value="2000-2399">2,000–2,400 sq ft</option><option value="2400-99999">2,400+ sq ft</option></select></label>
+        <label>Type<select id="m-type"><option value="">All types</option><option value="single">Single-family</option><option value="Duplex">Duplex</option><option value="Adu">ADU</option><option value="Guest House">Guest house</option></select></label>
+        <label>Sort by<select id="m-sort"><option value="feat">Popular</option><option value="asc">Size: small to large</option><option value="desc">Size: large to small</option><option value="name">Name: A to Z</option></select></label>
+      </div>
+      <div class="cat-bar"><p id="m-count" aria-live="polite">Loading home models…</p><button type="button" class="linkbtn" id="m-reset">Clear filters</button></div>
+      <div class="mgrid" id="m-grid"></div>
+      <div class="cat-more"><button type="button" class="btn btn-ghost-dark" id="m-more" hidden>Show more models</button></div>
     </div>
-    <p class="license" style="margin-top:20px">Builder license RG291104097</p>
+    <p class="license" style="margin-top:24px">Builder license RG291104097 · Home designs by Olympus Designs Group. Renderings are for illustration; final plans, options and pricing are confirmed at contract.</p>
   </div>
 </section>
 
@@ -415,6 +438,54 @@ async function send(form,ok,subject,data){
 }
 $("value-form").addEventListener("submit",e=>{e.preventDefault();send(e.target,"value-ok","Home value request – Marino Group website",{Address:$("v-addr").value,Name:$("v-name").value,Phone:$("v-phone").value})});
 $("contact-form").addEventListener("submit",e=>{e.preventDefault();send(e.target,"contact-ok","New message – Marino Group website",{Name:$("c-name").value,Phone:$("c-phone").value,Email:$("c-email").value,"I want to":$("c-topic").value,Message:$("c-msg").value})});
+
+/* home model catalog */
+(function(){
+  const $=id=>document.getElementById(id), grid=$("m-grid"), more=$("m-more"), count=$("m-count");
+  const ctl=["m-q","m-beds","m-baths","m-garage","m-size","m-type","m-sort"].map($);
+  const PAGE=24; let all=[], list=[], shown=0;
+  const fmt=n=>n==null?"":n.toLocaleString("en-US");
+  const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  function card(m){
+    const tag=m.ty.length?`<span class="mtag">${esc(m.ty.join(" · "))}</span>`:"";
+    const specs=[];
+    if(m.b!=null)specs.push(`${m.b} bed`);
+    if(m.ba!=null)specs.push(`${m.ba} bath`);
+    if(m.g!=null)specs.push(m.g?`${m.g}-car garage`:"No garage");
+    if(m.o)specs.push("Office/den");
+    if(m.w&&m.d)specs.push(`${m.w} W × ${m.d} D`);
+    const area=m.l?`${fmt(m.l)} sq ft living${m.t?` <small>· ${fmt(m.t)} sq ft total</small>`:""}`:"Details on request";
+    return `<article class="mcard"><figure><img src="img/models/${m.s}.webp" alt="${esc(m.n)} home model rendering" loading="lazy" decoding="async" width="640" height="${Math.round(640/m.r)}">${tag}</figure>
+<div class="mbody"><h3>${esc(m.n)}</h3><div class="marea">${area}</div><ul class="mspecs">${specs.map(x=>`<li>${x}</li>`).join("")}</ul>
+<button type="button" class="btn btn-gold" data-model="${esc(m.n)}">Ask about this model</button></div></article>`;
+  }
+  function apply(){
+    const q=ctl[0].value.trim().toUpperCase(), b=+ctl[1].value, ba=+ctl[2].value, g=+ctl[3].value, sz=ctl[4].value, ty=ctl[5].value, so=ctl[6].value;
+    const [lo,hi]=sz?sz.split("-").map(Number):[0,1e9];
+    list=all.filter(m=>(!q||m.n.includes(q))&&(!b||(m.b||0)>=b)&&(!ba||(m.ba||0)>=ba)&&(g<0||(m.g||0)>=g)
+      &&(!sz||(m.l!=null&&m.l>=lo&&m.l<=hi))&&(!ty||(ty==="single"?!m.ty.length:m.ty.includes(ty))));
+    const L=m=>m.l??1e9;
+    list.sort(so==="asc"?(a,c)=>L(a)-L(c):so==="desc"?(a,c)=>(c.l??0)-(a.l??0):so==="name"?(a,c)=>a.n.localeCompare(c.n):(a,c)=>(c.f-a.f)||a.n.localeCompare(c.n));
+    grid.innerHTML=""; shown=0; page();
+  }
+  function page(){
+    grid.insertAdjacentHTML("beforeend",list.slice(shown,shown+PAGE).map(card).join(""));
+    shown=Math.min(shown+PAGE,list.length);
+    count.textContent=list.length?`Showing ${shown} of ${list.length} home models`:"No models match these filters. Try clearing a filter.";
+    more.hidden=shown>=list.length;
+  }
+  ctl.forEach(c=>c.addEventListener(c.tagName==="INPUT"?"input":"change",apply));
+  more.addEventListener("click",page);
+  $("m-reset").addEventListener("click",()=>{ctl[0].value="";ctl.slice(1).forEach(c=>c.selectedIndex=0);apply();});
+  grid.addEventListener("click",e=>{
+    const btn=e.target.closest("[data-model]"); if(!btn)return;
+    $("c-topic").value="Build a new home";
+    $("c-msg").value=`Hi, I'm interested in the ${btn.dataset.model} home model. Please send me more information.`;
+    document.getElementById("contact").scrollIntoView({behavior:"smooth"});
+    setTimeout(()=>$("c-name").focus({preventScroll:true}),600);
+  });
+  fetch("models.json").then(r=>r.json()).then(d=>{all=d;apply();}).catch(()=>{count.textContent="Home models could not load. Please call (239) 776-2393.";});
+})();
 </script>
 
 </body>
