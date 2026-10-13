@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wooden Concept Renovations</title>
+<meta name="description" content="Wooden Concept Renovations LLC builds custom kitchens, bathroom vanities, closets and finish carpentry for homes in Naples and Southwest Florida. Call (239) 821-9261.">
+<link rel="icon" href="img/icon.png">
+<link rel="canonical" href="https://marinogroupswfl.com/woodenconcept/">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Marcellus+SC&family=Work+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: a workshop ledger. Oak-paper ground, walnut type, real project photos carry the page; one brass accent. */
+:root{
+  --bg:#f3ece1;        /* white-oak paper */
+  --surface:#fbf8f2;
+  --sunk:#e7dccb;
+  --fg:#2b1f17;        /* walnut */
+  --muted:#6e5d4f;
+  --line:#d6c7b1;
+  --accent:#8a5a2b;    /* stained oak */
+  --brass:#b98a4e;
+  --ink:#22180f; --on-ink:#f3ece1;
+  --display:"Marcellus","Trajan Pro","Palatino Linotype",Georgia,serif;
+  --caps:"Marcellus SC","Marcellus",Georgia,serif;
+  --body:"Work Sans","Segoe UI",Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#1a130d;--surface:#22190f;--sunk:#2c2117;--fg:#efe5d5;--muted:#b5a38e;--line:#3d2f22;--accent:#d29a5c;--brass:#d6ab70;--ink:#120c07;--on-ink:#f3ece1;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1a130d;--surface:#22190f;--sunk:#2c2117;--fg:#efe5d5;--muted:#b5a38e;--line:#3d2f22;--accent:#d29a5c;--brass:#d6ab70;--ink:#120c07;--on-ink:#f3ece1;color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 17px/1.65 var(--body)}
+img{max-width:100%;height:auto;display:block}
+[hidden]{display:none!important}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.12;margin:0;text-wrap:balance}
+p{margin:0}
+.wrap{max-width:1180px;margin-inline:auto;padding-inline:clamp(16px,4vw,32px)}
+section{padding-block:clamp(64px,9vw,112px)}
+section[id],footer{scroll-margin-top:84px}
+.label{font:500 12px var(--body);letter-spacing:.22em;text-transform:uppercase;color:var(--accent)}
+.lead{color:var(--muted);font-size:18px;max-width:60ch}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:500 15px var(--body);padding:13px 24px;border-radius:4px;text-decoration:none;border:1px solid transparent;cursor:pointer}
+.btn-solid{background:var(--fg);color:var(--bg)}
+.btn-solid:hover{background:var(--accent);color:#fff}
+.btn-line{border-color:var(--fg);color:var(--fg);background:transparent}
+.btn-line:hover{background:var(--sunk)}
+:focus-visible{outline:3px solid var(--brass);outline-offset:3px}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:20px;padding-block:12px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.brand img{width:62px;height:43px;border-radius:4px;object-fit:cover}
+.brand b{font:400 19px/1.05 var(--caps);letter-spacing:.06em;display:block}
+.brand small{display:block;font:500 10.5px var(--body);letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+.nav{display:flex;gap:24px;margin-left:auto;font-size:15px}
+.nav a{text-decoration:none;color:var(--muted)}.nav a:hover{color:var(--fg)}
+.top .call{font:500 15px var(--body);text-decoration:none;white-space:nowrap}
+@media (max-width:900px){.nav{display:none}.top .call{margin-left:auto}}
+@media (max-width:420px){.brand small{letter-spacing:.18em}.top .call{font-size:14px}}
+
+/* hero */
+.hero{padding-block:clamp(40px,6vw,72px) clamp(56px,8vw,96px)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(28px,5vw,64px);align-items:center}
+.hero h1{font-size:clamp(38px,5.4vw,66px);letter-spacing:-.005em}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero .lead{margin-top:20px}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:34px;padding-top:22px;border-top:1px solid var(--line);font-size:15px;color:var(--muted)}
+.facts b{color:var(--fg);font-weight:600}
+.hero-photo{position:relative}
+.hero-photo img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px}
+.hero-photo figcaption{position:absolute;left:14px;bottom:14px;background:rgba(34,24,15,.82);color:#f3ece1;font-size:13px;padding:6px 12px;border-radius:3px;letter-spacing:.04em}
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr}.hero-photo{order:-1}}
+
+/* services */
+.services{background:var(--surface);border-block:1px solid var(--line)}
+.sec-head{display:grid;gap:14px;max-width:720px;margin-bottom:44px}
+.sec-head h2{font-size:clamp(30px,3.6vw,44px)}
+.svc{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:1px solid var(--line)}
+.svc article{padding:26px 24px 28px 0;display:grid;gap:10px;align-content:start}
+.svc article+article{padding-left:24px;border-left:1px solid var(--line)}
+.svc h3{font-size:24px}
+.svc p{color:var(--muted);font-size:16px}
+.svc ul{margin:4px 0 0;padding:0;list-style:none;display:grid;gap:4px;font-size:15px}
+.svc li::before{content:"—";color:var(--brass);margin-right:8px}
+@media (max-width:980px){.svc{grid-template-columns:repeat(2,minmax(0,1fr))}.svc article:nth-child(3){padding-left:0;border-left:0}.svc article:nth-child(n+3){border-top:1px solid var(--line)}}
+@media (max-width:560px){.svc{grid-template-columns:1fr}.svc article,.svc article+article{padding-left:0;border-left:0}.svc article+article{border-top:1px solid var(--line)}}
+
+/* work */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.tabs button{font:500 14px var(--body);padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--fg);cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.gallery button{padding:0;border:0;background:var(--sunk);border-radius:5px;overflow:hidden;cursor:zoom-in;position:relative;aspect-ratio:4/3}
+.gallery img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.gallery button:hover img{transform:scale(1.03)}
+.gallery span{position:absolute;left:10px;bottom:10px;background:rgba(34,24,15,.8);color:#f3ece1;font-size:12.5px;padding:4px 10px;border-radius:3px}
+@media (max-width:900px){.gallery{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.gallery{grid-template-columns:1fr}}
+.lb{position:fixed;inset:0;z-index:50;background:rgba(18,12,7,.94);display:grid;place-items:center;padding:calc(env(safe-area-inset-top,0px) + 56px) 16px calc(env(safe-area-inset-bottom,0px) + 56px)}
+.lb img{max-height:calc(100vh - 150px);max-height:calc(100dvh - 150px);width:auto;max-width:min(1400px,100%);object-fit:contain;border-radius:4px}
+.lb button{position:absolute;background:rgba(255,255,255,.1);color:#fff;border:0;border-radius:999px;width:46px;height:46px;font-size:22px;cursor:pointer}
+.lb .x{top:calc(env(safe-area-inset-top,0px) + 8px);right:12px}
+.lb .pv{left:12px;top:50%}.lb .nx{right:12px;top:50%}
+.lb p{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);color:#e7dccb;font-size:14px}
+
+/* process */
+.process{background:var(--ink);color:var(--on-ink)}
+.process .label{color:var(--brass)}
+.process .lead{color:#c9b9a3}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;counter-reset:s}
+.steps li{display:grid;gap:10px;align-content:start;border-top:1px solid #4a3a2b;padding-top:20px;counter-increment:s}
+.steps li::before{content:"Step " counter(s);font:500 12px var(--body);letter-spacing:.22em;text-transform:uppercase;color:var(--brass)}
+.steps h3{font-size:24px}
+.steps p{color:#c9b9a3;font-size:16px}
+@media (max-width:900px){.steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.steps{grid-template-columns:1fr}}
+
+/* about */
+.about .wrap{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(28px,5vw,64px);align-items:center}
+.about figure{margin:0}
+.about figure img{border-radius:6px;aspect-ratio:1;object-fit:cover;width:100%}
+.about h2{font-size:clamp(30px,3.6vw,44px);margin-block:14px 18px}
+.about .copy{display:grid;gap:16px;color:var(--muted)}
+.about .copy p:first-child{color:var(--fg);font-size:19px}
+.about .partner{margin-top:8px;padding:16px 18px;border:1px solid var(--line);border-radius:5px;font-size:15px}
+@media (max-width:860px){.about .wrap{grid-template-columns:1fr}.about figure{max-width:440px}}
+
+/* contact */
+.contact{background:var(--surface);border-top:1px solid var(--line)}
+.contact .wrap{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(28px,5vw,64px)}
+.contact h2{font-size:clamp(30px,3.6vw,44px);margin-block:14px 18px}
+.info{display:grid;gap:18px;margin-top:28px}
+.info div{display:grid;gap:2px}
+.info span{font:500 12px var(--body);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.info b{font:400 21px var(--display)}
+.info .hours{display:grid;grid-template-columns:auto auto;gap:2px 18px;font-size:16px;font-variant-numeric:tabular-nums;justify-content:start}
+form{display:grid;gap:14px;align-content:start}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:520px){.two{grid-template-columns:1fr}}
+label{display:grid;gap:6px;font-size:14px;color:var(--muted)}
+input,select,textarea{font:16px var(--body);color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:12px 14px;width:100%}
+textarea{resize:vertical}
+form .btn{justify-self:start;margin-top:4px}
+.note{font-size:15px;color:var(--accent)}
+@media (max-width:860px){.contact .wrap{grid-template-columns:1fr}}
+
+footer{background:var(--ink);color:#c9b9a3;padding-block:48px 32px;font-size:15px}
+footer .wrap{display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center}
+footer img{width:120px;height:120px;border-radius:5px;object-fit:cover}
+footer nav{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:center}
+footer a{text-decoration:none}footer a:hover{color:#f3ece1}
+footer .fine{grid-column:1/-1;border-top:1px solid #3d2f22;padding-top:18px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:13.5px}
+@media (max-width:760px){footer .wrap{grid-template-columns:1fr}footer nav{justify-content:flex-start}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.gallery img{transition:none}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Wooden Concept Renovations home">
+      <img src="img/wc-mark.webp" alt="" width="172" height="120">
+      <span><b>Wooden Concept</b><small>Renovations LLC</small></span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#services">Services</a><a href="#work">Our Work</a><a href="#process">Process</a><a href="#about">About</a><a href="#contact">Contact</a>
+    </nav>
+    <a class="call" href="tel:+12398219261">(239) 821-9261</a>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero" aria-labelledby="hero-h">
+  <div class="wrap">
+    <div>
+      <span class="label">Naples, Florida</span>
+      <h1 id="hero-h" style="margin-top:16px">Custom kitchens and woodwork, <em>built to fit your home.</em></h1>
+      <p class="lead">Wooden Concept Renovations designs and installs kitchens, bathroom vanities, closets and finish carpentry across Naples and Southwest Florida.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-solid" href="#contact">Get a free estimate</a>
+        <a class="btn btn-line" href="#work">See our work</a>
+      </div>
+      <div class="facts">
+        <span><b>Free</b> in-home consultation</span>
+        <span><b>Clear</b> written estimates</span>
+        <span><b>Family</b> owned in Naples</span>
+      </div>
+    </div>
+    <figure class="hero-photo" style="margin:0">
+      <img src="img/p12.webp" alt="Finished kitchen with a slatted wood island, white cabinets and stainless appliances" width="1536" height="1024">
+      <figcaption>Recent kitchen project</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="services" id="services" aria-labelledby="svc-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="label">What we build</span>
+      <h2 id="svc-h">From one vanity to a whole-home renovation.</h2>
+    </div>
+    <div class="svc">
+      <article>
+        <h3>Kitchens</h3>
+        <p>Full kitchen remodels with custom cabinetry, islands and counters, planned around how your family cooks.</p>
+        <ul><li>Custom cabinets &amp; islands</li><li>Countertops &amp; backsplash</li><li>Cabinet refacing</li></ul>
+      </article>
+      <article>
+        <h3>Bathrooms</h3>
+        <p>Vanities, storage and finishes that hold up to Florida humidity and look good doing it.</p>
+        <ul><li>Single &amp; double vanities</li><li>Floating vanities</li><li>Lighted mirrors</li></ul>
+      </article>
+      <article>
+        <h3>Closets &amp; built-ins</h3>
+        <p>Walk-in closets, pantries, entertainment walls and built-in storage made to measure.</p>
+        <ul><li>Walk-in closets</li><li>Pantries &amp; laundry</li><li>Media walls</li></ul>
+      </article>
+      <article>
+        <h3>Finish carpentry</h3>
+        <p>Wood wall features, trim and millwork that give a room its character.</p>
+        <ul><li>Wood wall panels</li><li>Trim &amp; crown molding</li><li>Custom millwork</li></ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="work" aria-labelledby="work-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="label">Our work</span>
+      <h2 id="work-h">Recent projects from our team.</h2>
+    </div>
+    <div class="tabs" role="group" aria-label="Filter projects">
+      <button type="button" aria-pressed="true" data-f="all">All</button>
+      <button type="button" aria-pressed="false" data-f="Kitchen">Kitchens</button>
+      <button type="button" aria-pressed="false" data-f="Bathroom">Bathrooms</button>
+    </div>
+    <div class="gallery" id="gallery"></div>
+  </div>
+</section>
+
+<section class="process" id="process" aria-labelledby="proc-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="label">How we work</span>
+      <h2 id="proc-h">Four steps from first call to final install.</h2>
+    </div>
+    <ol class="steps">
+      <li><h3>Request a quote</h3><p>Call, text or send the form. We set up a free consultation at your home to talk through what you want.</p></li>
+      <li><h3>Get your estimate</h3><p>You receive a clear, written estimate with the design, materials and price laid out. No hidden fees.</p></li>
+      <li><h3>We build it</h3><p>Your cabinets and woodwork are built to your measurements, style and finish.</p></li>
+      <li><h3>Installation</h3><p>Our team installs everything, cleans up, and walks the finished work with you.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="about" id="about" aria-labelledby="about-h">
+  <div class="wrap">
+    <figure><img src="img/wc-logo.webp" alt="Wooden Concept Renovations LLC logo carved in oak" width="900" height="900" loading="lazy"></figure>
+    <div>
+      <span class="label">About us</span>
+      <h2 id="about-h">A family business that treats your home like ours.</h2>
+      <div class="copy">
+        <p>Wooden Concept Renovations is a family-owned company in Naples, FL. Kitchens are our specialty, and we also build bathrooms, closets and custom wood features.</p>
+        <p>We measure carefully, keep you updated, and do not call a job finished until you are happy with it. When we are done, we ask for one thing: an honest Google review.</p>
+        <p class="partner">Building a new home? Our sister company <a href="/#build">Marino Group</a> helps you find the lot, the model and the financing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact" aria-labelledby="contact-h">
+  <div class="wrap">
+    <div>
+      <span class="label">Contact</span>
+      <h2 id="contact-h">Tell us about your project.</h2>
+      <p class="lead">Send a few details and we will call you back to schedule your free estimate.</p>
+      <div class="info">
+        <div><span>Call or text</span><b><a href="tel:+12398219261" style="text-decoration:none">(239) 821-9261</a></b></div>
+        <div><span>Email</span><b><a href="mailto:info@woodencor.com" style="text-decoration:none">info@woodencor.com</a></b></div>
+        <div><span>Hours</span><div class="hours"><span style="all:unset">Mon – Fri</span><span style="all:unset">8 AM – 5 PM</span><span style="all:unset">Saturday</span><span style="all:unset">8 AM – 1 PM</span><span style="all:unset">Sunday</span><span style="all:unset">Closed</span></div></div>
+        <div><span>Service area</span><b style="font-size:18px">Naples &amp; Southwest Florida</b></div>
+      </div>
+    </div>
+    <form id="quote" novalidate>
+      <div class="two">
+        <label for="q-name">Name<input id="q-name" name="name" autocomplete="name" required></label>
+        <label for="q-phone">Phone<input id="q-phone" name="phone" type="tel" autocomplete="tel" required></label>
+      </div>
+      <label for="q-email">Email<input id="q-email" name="email" type="email" autocomplete="email"></label>
+      <div class="two">
+        <label for="q-type">Project
+          <select id="q-type" name="project"><option>Kitchen</option><option>Bathroom / vanity</option><option>Closet or built-ins</option><option>Finish carpentry</option><option>Other</option></select>
+        </label>
+        <label for="q-city">City<input id="q-city" name="city" placeholder="Naples"></label>
+      </div>
+      <label for="q-msg">Tell us about it<textarea id="q-msg" name="message" rows="5" placeholder="Size of the space, what you want to change, timing…"></textarea></label>
+      <button class="btn btn-solid" type="submit">Request my free estimate</button>
+      <p class="note" id="q-note" role="status" hidden></p>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <img src="img/wc-logo.webp" alt="Wooden Concept Renovations LLC" width="120" height="120" loading="lazy">
+    <nav aria-label="Footer">
+      <a href="#services">Services</a><a href="#work">Our Work</a><a href="#process">Process</a><a href="#about">About</a><a href="#contact">Contact</a>
+      <a href="/">Marino Group</a>
+    </nav>
+    <div style="text-align:right">(239) 821-9261<br>info@woodencor.com</div>
+    <div class="fine"><span>© 2026 Wooden Concept Renovations LLC · Naples, FL</span><span>Custom kitchens · Bathrooms · Closets · Woodwork</span></div>
+  </div>
+</footer>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Project photo">
+  <button class="x" type="button" aria-label="Close">×</button>
+  <button class="pv" type="button" aria-label="Previous photo">‹</button>
+  <img id="lb-img" alt="">
+  <button class="nx" type="button" aria-label="Next photo">›</button>
+  <p id="lb-cap"></p>
+</div>
+
+<script>
+const PHOTOS=[
+ ["p12","Kitchen","Kitchen with slatted wood island"],
+ ["p02","Kitchen","Long kitchen with waterfall island and pendant lights"],
+ ["p08","Bathroom","Double vanity with framed mirrors"],
+ ["p16","Kitchen","White kitchen with brass pulls"],
+ ["p06","Kitchen","Kitchen with open shelving and wine cooler"],
+ ["p14","Bathroom","Floating vanity with lighted mirror"],
+ ["p11","Kitchen","Open kitchen with island and pendants"],
+ ["p03","Kitchen","High-gloss white kitchen"],
+ ["p09","Bathroom","Corner vanity with lighted mirrors"],
+ ["p05","Kitchen","Kitchen island with pendant lights"],
+ ["p15","Kitchen","Two-tone kitchen with dark lower cabinets"],
+ ["p13","Bathroom","Long vanity with dark countertop"],
+ ["p07","Kitchen","Open kitchen with wall ovens"],
+ ["p04","Kitchen","White kitchen with black fixtures"]
+];
+const g=document.getElementById("gallery"), lb=document.getElementById("lb"), lbi=document.getElementById("lb-img"), cap=document.getElementById("lb-cap");
+let view=PHOTOS, cur=0;
+function render(f){
+  view=f==="all"?PHOTOS:PHOTOS.filter(p=>p[1]===f);
+  g.innerHTML=view.map((p,i)=>`<button type="button" data-i="${i}" aria-label="Open photo: ${p[2]}"><img src="img/${p[0]}-s.webp" alt="${p[2]}" loading="lazy" decoding="async" width="720" height="540"><span>${p[1]}</span></button>`).join("");
+}
+function show(i){cur=(i+view.length)%view.length;const p=view[cur];lbi.src=`img/${p[0]}.webp`;lbi.alt=p[2];cap.textContent=`${p[2]} · ${cur+1} of ${view.length}`;}
+g.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;show(+b.dataset.i);lb.hidden=false;lb.querySelector(".x").focus();});
+lb.querySelector(".x").onclick=()=>{lb.hidden=true};
+lb.querySelector(".pv").onclick=()=>show(cur-1);
+lb.querySelector(".nx").onclick=()=>show(cur+1);
+lb.addEventListener("click",e=>{if(e.target===lb)lb.hidden=true});
+document.addEventListener("keydown",e=>{if(lb.hidden)return;if(e.key==="Escape")lb.hidden=true;if(e.key==="ArrowLeft")show(cur-1);if(e.key==="ArrowRight")show(cur+1);});
+document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-pressed",x===b));render(b.dataset.f);
+}));
+render("all");
+
+const form=document.getElementById("quote"), note=document.getElementById("q-note");
+form.addEventListener("submit",async e=>{
+  e.preventDefault();
+  const d=Object.fromEntries(new FormData(form));
+  if(!d.name.trim()||!d.phone.trim()){note.hidden=false;note.textContent="Please add your name and phone number so we can call you back.";return;}
+  const btn=form.querySelector("button");btn.disabled=true;note.hidden=false;note.textContent="Sending…";
+  try{
+    const r=await fetch("https://formsubmit.co/ajax/info@woodencor.com",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({_subject:"New estimate request – woodencor.com",_template:"table",...d})});
+    if(!r.ok)throw 0;
+    form.reset();note.textContent="Thank you. We received your request and will call you within one business day.";
+  }catch(_){note.textContent="Your message did not send. Please call or text (239) 821-9261.";}
+  btn.disabled=false;
+});
+</script>
+</body>
+</html>
