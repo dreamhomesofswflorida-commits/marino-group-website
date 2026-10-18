@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Marino Design · AI Virtual Staging</title>
+<meta name="description" content="Marino Design by Marino Group: upload a photo of an empty room and see it virtually staged in seconds. Naples, Florida.">
+<link rel="canonical" href="https://marinogroupswfl.com/marinodesign/">
+<link rel="icon" href="../img/marino_logo_transparent_gold.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Figtree:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#f6f3ee;--surface:#fff;--sunk:#ece6dc;--fg:#1e1d1c;--muted:#655f56;--line:#ddd5c8;--ink:#1e1d1c;--on-ink:#f3ece0;--gold:#b8955d;--gold-soft:#d8c3a0;--gulf:#2f5d62}
+@media (prefers-color-scheme:dark){:root{--bg:#141312;--surface:#1d1b19;--sunk:#262320;--fg:#efe9df;--muted:#a69d90;--line:#36322d;--gold:#d3b585}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 Figtree,system-ui,sans-serif}
+h1,h2,h3{font-family:Jost,sans-serif;font-weight:400;line-height:1.15;margin:0}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.top{position:sticky;top:0;z-index:10;background:rgba(20,19,18,.92);backdrop-filter:blur(10px);color:var(--on-ink)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.brand img{height:40px}
+.brand b{font:500 18px Jost;letter-spacing:.14em;text-transform:uppercase}
+.brand small{display:block;font-size:11px;letter-spacing:.2em;color:var(--gold-soft);text-transform:uppercase}
+.top nav a{font-size:14px;text-decoration:none;opacity:.85;margin-left:20px}
+.top nav a:hover{opacity:1;color:var(--gold-soft)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:13px 26px;font:600 15px Figtree;cursor:pointer;text-decoration:none;transition:transform .15s,opacity .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn-gold{background:var(--gold-soft);color:#1e1d1c}
+.btn-ink{background:var(--ink);color:var(--on-ink)}
+.btn-line{background:transparent;border:1px solid var(--line);color:var(--fg)}
+.eyebrow{display:block;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.hero{background:var(--ink);color:var(--on-ink);padding:72px 0 64px}
+.hero h1{font-size:clamp(38px,6vw,64px);font-weight:300}
+.hero h1 em{font-style:normal;color:var(--gold-soft)}
+.hero p{max-width:600px;color:#cfc6b8;font-size:18px;margin:18px 0 28px}
+.studio{display:grid;grid-template-columns:360px 1fr;gap:28px;margin:-36px auto 0;position:relative}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px}
+.panel h3{font-size:20px;margin-bottom:6px}
+.step{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:22px 0 10px}
+.step:first-of-type{margin-top:0}
+.drop{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1.5px dashed var(--line);border-radius:14px;padding:26px 14px;text-align:center;cursor:pointer;background:var(--sunk);transition:border-color .15s}
+.drop:hover,.drop.over{border-color:var(--gold)}
+.drop svg{width:34px;height:34px;stroke:var(--gold)}
+.drop small{color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:transparent;color:var(--fg);border-radius:999px;padding:7px 14px;font:500 14px Figtree;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+@media (prefers-color-scheme:dark){.chip[aria-pressed="true"]{background:var(--gold-soft);color:#1e1d1c;border-color:var(--gold-soft)}}
+.go{width:100%;margin-top:24px}
+.stage{display:flex;flex-direction:column}
+.viewer{position:relative;flex:1;min-height:420px;border-radius:14px;overflow:hidden;background:var(--sunk);display:flex;align-items:center;justify-content:center;user-select:none}
+.viewer .empty{color:var(--muted);text-align:center;padding:30px}
+.viewer .empty h3{color:var(--fg);margin-bottom:8px}
+.ba{position:relative;width:100%;height:100%;display:none}
+.ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.ba .after{clip-path:inset(0 0 0 50%)}
+.ba .handle{position:absolute;top:0;bottom:0;left:50%;width:2px;background:#fff;box-shadow:0 0 8px rgba(0,0,0,.4);pointer-events:none}
+.ba .handle::after{content:"";position:absolute;top:50%;left:50%;width:38px;height:38px;margin:-19px 0 0 -19px;border-radius:50%;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+.ba input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
+.tag{position:absolute;top:14px;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:rgba(20,19,18,.75);color:#fff;pointer-events:none}
+.tag.l{left:14px}.tag.r{right:14px;background:var(--gold-soft);color:#1e1d1c}
+.loading{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(20,19,18,.6);color:#fff;font-weight:500}
+.spin{width:44px;height:44px;border-radius:50%;border:3px solid rgba(255,255,255,.25);border-top-color:var(--gold-soft);animation:s 1s linear infinite}
+@keyframes s{to{transform:rotate(360deg)}}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-top:16px}
+.note{font-size:14px;color:var(--muted);margin:0}
+.msg{display:none;margin-top:16px;padding:16px 18px;border-radius:12px;background:var(--sunk);border-left:3px solid var(--gold);font-size:15px}
+.msg a{font-weight:600}
+section.blk{padding:80px 0 0}
+.blk h2{font-size:clamp(28px,4vw,40px);margin-bottom:28px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.steps .panel b{display:block;font:300 40px Jost;color:var(--gold);margin-bottom:6px}
+.steps p,.rules li{color:var(--muted);margin:6px 0 0}
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.rules ul{margin:10px 0 0;padding-left:20px}
+.cta{margin:80px 0 0;background:var(--ink);color:var(--on-ink);border-radius:18px;padding:36px;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}
+.cta h3{font-size:28px}
+.cta p{color:#cfc6b8;margin:8px 0 0}
+footer{margin-top:80px;border-top:1px solid var(--line);padding:28px 0 40px;font-size:14px;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between}
+@media (max-width:860px){.studio{grid-template-columns:1fr}.steps,.rules{grid-template-columns:1fr}.viewer{min-height:300px}.top nav a:not(.keep){display:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./" aria-label="Marino Design home">
+      <img src="../img/marino_logo_transparent_gold.png" alt="">
+      <span><b>Marino Design</b><small>by Marino Group</small></span>
+    </a>
+    <nav><a href="#how">How it works</a><a href="#mls">MLS rules</a><a class="keep" href="../">← Marino Group</a></nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">AI virtual staging · Naples, Florida</span>
+    <h1>See the home <em>furnished</em><br>before you move in.</h1>
+    <p>Upload a photo of an empty room, pick a style, and Marino Design shows you what it could look like, from coastal living rooms to modern primary suites.</p>
+    <a class="btn btn-gold" href="#studio">Start staging</a>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="studio" id="studio">
+    <div class="panel">
+      <p class="step">1 · Your photo</p>
+      <label class="drop" id="drop">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/><path d="M12 4v12"/><path d="m7 9 5-5 5 5"/></svg>
+        <strong id="dropText">Upload a room photo</strong>
+        <small>JPG or PNG · empty rooms work best</small>
+        <input type="file" id="file" accept="image/*" hidden>
+      </label>
+
+      <p class="step">2 · Room type</p>
+      <div class="chips" data-group="room">
+        <button class="chip" aria-pressed="true">Living room</button>
+        <button class="chip">Bedroom</button>
+        <button class="chip">Dining room</button>
+        <button class="chip">Kitchen</button>
+        <button class="chip">Home office</button>
+        <button class="chip">Lanai</button>
+      </div>
+
+      <p class="step">3 · Style</p>
+      <div class="chips" data-group="style">
+        <button class="chip" aria-pressed="true">Coastal</button>
+        <button class="chip">Modern</button>
+        <button class="chip">Luxury</button>
+        <button class="chip">Scandinavian</button>
+        <button class="chip">Farmhouse</button>
+        <button class="chip">Mid-century</button>
+      </div>
+
+      <button class="btn btn-ink go" id="go" disabled>Stage this room</button>
+    </div>
+
+    <div class="panel stage">
+      <div class="viewer" id="viewer">
+        <div class="empty" id="empty">
+          <h3>Your staged room appears here</h3>
+          <p>Upload a photo to begin. Drag the slider to compare before and after.</p>
+        </div>
+        <div class="ba" id="ba">
+          <img id="before" alt="Original room">
+          <img id="after" class="after" alt="Virtually staged room">
+          <div class="handle" id="handle"></div>
+          <span class="tag l">Before</span><span class="tag r" id="tagR">Virtually staged</span>
+          <input type="range" id="slider" min="0" max="100" value="50" aria-label="Compare before and after">
+        </div>
+        <div class="loading" id="loading"><div class="spin"></div><span>Designing your room… about 20 seconds</span></div>
+      </div>
+      <div class="bar">
+        <p class="note">Staged images are labeled “Virtually Staged” for MLS use.</p>
+        <button class="btn btn-line" id="dl" disabled>Download</button>
+      </div>
+      <div class="msg" id="msg"></div>
+    </div>
+  </div>
+
+  <section class="blk" id="how">
+    <span class="eyebrow">How it works</span>
+    <h2>Three steps, one minute.</h2>
+    <div class="steps">
+      <div class="panel"><b>01</b><h3>Upload</h3><p>Take a straight, well-lit photo of the empty room from a corner.</p></div>
+      <div class="panel"><b>02</b><h3>Choose</h3><p>Pick the room type and a style that fits the home and the buyer.</p></div>
+      <div class="panel"><b>03</b><h3>Compare</h3><p>Slide between before and after, then download the labeled image.</p></div>
+    </div>
+  </section>
+
+  <section class="blk" id="mls">
+    <span class="eyebrow">Staging the right way</span>
+    <h2>Built for honest listings.</h2>
+    <div class="rules">
+      <div class="panel"><h3>What Marino Design adds</h3><ul><li>Furniture, rugs and lighting</li><li>Art, plants and décor</li><li>Lanai seating and dining sets</li></ul></div>
+      <div class="panel"><h3>What it never changes</h3><ul><li>Walls, floors, windows or views</li><li>Paint colors, fixtures or appliances</li><li>Landscaping, pools or the structure</li></ul></div>
+    </div>
+  </section>
+
+  <div class="cta">
+    <div><h3>Listing a home with Marino Group?</h3><p>Ask us about staging and marketing your listing.</p></div>
+    <a class="btn btn-gold" href="../#contact">Talk to Marino Group</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Marino Group · Waterfront Realty Group, Inc. · (239) 776-2393</span>
+    <span><a href="../">marinogroupswfl.com</a> · <a href="../woodenconcept/">Wooden Concept Renovations</a></span>
+  </div>
+</footer>
+
+<script>
+// Set this to the staging server URL once it is live (POST {image, room, style} -> {image}).
+// While it is empty, the page runs in preview mode and sends requests to the team by email.
+const API_URL = "";
+const DAILY_LIMIT = 3;
+const EMAIL = "dhomeswfl@gmail.com";
+
+const $ = id => document.getElementById(id);
+let photo = null, stagedURL = null;
+
+document.querySelectorAll(".chips").forEach(g => g.addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if (!b) return;
+  g.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", c === b));
+}));
+const pick = g => document.querySelector(`[data-group=${g}] [aria-pressed=true]`).textContent;
+
+function load(file) {
+  if (!file || !file.type.startsWith("image/")) return;
+  const img = new Image();
+  img.onload = () => {
+    const s = Math.min(1, 1600 / Math.max(img.width, img.height));
+    const c = document.createElement("canvas");
+    c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+    c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+    photo = c.toDataURL("image/jpeg", 0.9);
+    $("before").src = $("after").src = photo;
+    $("after").style.visibility = "hidden"; $("handle").style.display = "none"; $("tagR").style.display = "none";
+    $("empty").style.display = "none"; $("ba").style.display = "block";
+    $("dropText").textContent = file.name.length > 28 ? file.name.slice(0, 25) + "…" : file.name;
+    $("go").disabled = false; $("dl").disabled = true; $("msg").style.display = "none";
+    URL.revokeObjectURL(img.src);
+  };
+  img.src = URL.createObjectURL(file);
+}
+$("file").onchange = e => load(e.target.files[0]);
+const drop = $("drop");
+["dragenter", "dragover"].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave", "drop"].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", e => load(e.dataTransfer.files[0]));
+
+$("slider").oninput = e => {
+  const v = e.target.value;
+  $("after").style.clipPath = `inset(0 0 0 ${v}%)`; $("handle").style.left = v + "%";
+};
+
+function used() {
+  try { const d = JSON.parse(localStorage.getItem("md-use") || "{}"); return d.day === new Date().toDateString() ? d.n : 0; } catch { return 0; }
+}
+function bump() {
+  try { localStorage.setItem("md-use", JSON.stringify({ day: new Date().toDateString(), n: used() + 1 })); } catch {}
+}
+function say(html) { $("msg").innerHTML = html; $("msg").style.display = "block"; }
+
+function watermark(src) {
+  return new Promise((res, rej) => {
+    const img = new Image(); img.crossOrigin = "anonymous";
+    img.onload = () => {
+      const c = document.createElement("canvas"); c.width = img.width; c.height = img.height;
+      const x = c.getContext("2d"); x.drawImage(img, 0, 0);
+      const fs = Math.round(c.width * 0.022), pad = fs * 0.8, t = "VIRTUALLY STAGED";
+      x.font = `600 ${fs}px Figtree, sans-serif`;
+      const w = x.measureText(t).width + pad * 2, h = fs + pad;
+      x.fillStyle = "rgba(20,19,18,.72)"; x.fillRect(c.width - w - pad, c.height - h - pad, w, h);
+      x.fillStyle = "#fff"; x.textBaseline = "middle"; x.fillText(t, c.width - w - pad + pad, c.height - pad - h / 2);
+      res(c.toDataURL("image/jpeg", 0.92));
+    };
+    img.onerror = rej; img.src = src;
+  });
+}
+
+$("go").onclick = async () => {
+  if (!photo) return;
+  const room = pick("room"), style = pick("style");
+  if (!API_URL) {
+    const body = encodeURIComponent(`Hi Marino Group,\n\nI'd like a ${style.toLowerCase()} ${room.toLowerCase()} virtually staged. I'll attach the photo to this email.\n\nProperty address:\nName:\nPhone:`);
+    say(`<strong>Live AI staging is launching soon.</strong> In the meantime our team will stage it for you. <a href="mailto:${EMAIL}?subject=${encodeURIComponent("Marino Design staging request")}&body=${body}">Email us your photo</a> or call (239) 776-2393.`);
+    return;
+  }
+  if (used() >= DAILY_LIMIT) { say(`You've used today's ${DAILY_LIMIT} free stagings. Come back tomorrow, or <a href="../#contact">contact Marino Group</a> to stage a full listing.`); return; }
+  $("go").disabled = true; $("loading").style.display = "flex"; $("msg").style.display = "none";
+  try {
+    const r = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ image: photo, room, style }) });
+    if (!r.ok) throw new Error(await r.text());
+    const out = await r.json();
+    stagedURL = await watermark(out.image);
+    $("after").src = stagedURL; $("after").style.visibility = "visible";
+    $("handle").style.display = "block"; $("tagR").style.display = "block";
+    $("slider").value = 50; $("slider").oninput({ target: $("slider") });
+    $("dl").disabled = false; bump();
+  } catch (e) {
+    say("Something went wrong while staging. Please try again in a minute.");
+  } finally { $("loading").style.display = "none"; $("go").disabled = false; }
+};
+
+$("dl").onclick = () => {
+  if (!stagedURL) return;
+  const a = document.createElement("a"); a.href = stagedURL;
+  a.download = `Marino_Design_${pick("style")}_${pick("room")}.jpg`.replace(/\s+/g, "_"); a.click();
+};
+</script>
+</body>
+</html>
