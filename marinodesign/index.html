@@ -70,6 +70,20 @@ a{color:inherit}
 .note{font-size:14px;color:var(--muted);margin:0}
 .msg{display:none;margin-top:16px;padding:16px 18px;border-radius:12px;background:var(--sunk);border-left:3px solid var(--gold);font-size:15px}
 .msg a{font-weight:600}
+.acct{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between;margin:-4px 0 18px;padding:12px 14px;border-radius:12px;background:var(--sunk);font-size:14px}
+.acct b{font-weight:600}
+.linkbtn{background:none;border:0;padding:0;font:600 14px Figtree;color:var(--gold);cursor:pointer;text-decoration:underline}
+.codebox{display:none;gap:8px;margin:-8px 0 18px}
+.codebox input{flex:1;min-width:0;border:1px solid var(--line);border-radius:999px;padding:10px 14px;font:15px Figtree;background:var(--surface);color:var(--fg)}
+.codebox .btn{padding:10px 18px}
+.prices{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.price{display:flex;flex-direction:column;gap:6px}
+.price.best{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+.price .amt{font:300 44px Jost;line-height:1.1;margin-top:6px}
+.price .per{color:var(--muted);font-size:14px}
+.price ul{margin:12px 0 18px;padding-left:18px;color:var(--muted)}
+.price .btn{margin-top:auto;width:100%}
+.flag{align-self:flex-start;font-size:11px;letter-spacing:.14em;text-transform:uppercase;background:var(--gold-soft);color:#1e1d1c;border-radius:999px;padding:3px 10px}
 section.blk{padding:80px 0 0}
 .blk h2{font-size:clamp(28px,4vw,40px);margin-bottom:28px}
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
@@ -82,7 +96,7 @@ section.blk{padding:80px 0 0}
 .cta p{color:#cfc6b8;margin:8px 0 0}
 footer{margin-top:80px;border-top:1px solid var(--line);padding:28px 0 40px;font-size:14px;color:var(--muted)}
 footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between}
-@media (max-width:860px){.studio{grid-template-columns:1fr}.steps,.rules{grid-template-columns:1fr}.viewer{min-height:300px}.top nav a:not(.keep){display:none}}
+@media (max-width:860px){.studio{grid-template-columns:1fr}.steps,.rules,.prices{grid-template-columns:1fr}.viewer{min-height:300px}.top nav a:not(.keep){display:none}}
 </style>
 </head>
 <body>
@@ -92,7 +106,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
       <img src="../img/marino_logo_transparent_gold.png" alt="">
       <span><b>Marino Design</b><small>by Marino Group</small></span>
     </a>
-    <nav><a href="#how">How it works</a><a href="#mls">MLS rules</a><a class="keep" href="../">← Marino Group</a></nav>
+    <nav><a href="#how">How it works</a><a href="#pricing">Pricing</a><a class="keep" href="../">← Marino Group</a></nav>
   </div>
 </header>
 
@@ -108,6 +122,8 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
 <div class="wrap">
   <div class="studio" id="studio">
     <div class="panel">
+      <div class="acct" id="acct"><span id="acctText">Try it free: <b>1 photo a day</b></span><span><a class="linkbtn" href="#pricing" id="acctBuy">Buy photos</a> · <button class="linkbtn" id="haveCode">Have a code?</button></span></div>
+      <div class="codebox" id="codebox"><input id="codeIn" placeholder="Paste your access code" autocomplete="off"><button class="btn btn-ink" id="codeGo">Use code</button></div>
       <p class="step">1 · Your photo</p>
       <label class="drop" id="drop">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/><path d="M12 4v12"/><path d="m7 9 5-5 5 5"/></svg>
@@ -172,6 +188,17 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
     </div>
   </section>
 
+  <section class="blk" id="pricing">
+    <span class="eyebrow">Photo packs</span>
+    <h2>Stage a whole listing for less than one staged room.</h2>
+    <div class="prices">
+      <div class="panel price"><h3>Starter</h3><div class="amt">$19</div><div class="per">10 staged photos · $1.90 each</div><ul><li>All rooms and styles</li><li>Labeled for MLS</li><li>Photos never expire</li></ul><button class="btn btn-line buy" data-pack="starter">Buy Starter</button></div>
+      <div class="panel price best"><span class="flag">Most popular</span><h3>Pro</h3><div class="amt">$49</div><div class="per">30 staged photos · $1.63 each</div><ul><li>Enough for 2–3 listings</li><li>All rooms and styles</li><li>Photos never expire</li></ul><button class="btn btn-gold buy" data-pack="pro">Buy Pro</button></div>
+      <div class="panel price"><h3>Agent</h3><div class="amt">$129</div><div class="per">100 staged photos · $1.29 each</div><ul><li>For busy agents and teams</li><li>All rooms and styles</li><li>Photos never expire</li></ul><button class="btn btn-line buy" data-pack="agent">Buy Agent</button></div>
+    </div>
+    <p class="note" style="margin-top:16px">Secure checkout by Square. After paying you get an access code; keep it to use your photos on any device.</p>
+  </section>
+
   <section class="blk" id="mls">
     <span class="eyebrow">Staging the right way</span>
     <h2>Built for honest listings.</h2>
@@ -198,7 +225,8 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
 // Set this to the staging server URL once it is live (POST {image, room, style} -> {image}).
 // While it is empty, the page runs in preview mode and sends requests to the team by email.
 const API_URL = "https://marinodesign-api.onrender.com/stage";
-const DAILY_LIMIT = 3;
+const API_BASE = API_URL.replace(/\/stage$/, "");
+const DAILY_LIMIT = 1;
 const EMAIL = "dhomeswfl@gmail.com";
 
 const $ = id => document.getElementById(id);
@@ -239,13 +267,46 @@ $("slider").oninput = e => {
   $("after").style.clipPath = `inset(0 0 0 ${v}%)`; $("handle").style.left = v + "%";
 };
 
-function used() {
-  try { const d = JSON.parse(localStorage.getItem("md-use") || "{}"); return d.day === new Date().toDateString() ? d.n : 0; } catch { return 0; }
-}
-function bump() {
-  try { localStorage.setItem("md-use", JSON.stringify({ day: new Date().toDateString(), n: used() + 1 })); } catch {}
-}
 function say(html) { $("msg").innerHTML = html; $("msg").style.display = "block"; }
+
+let code = null;
+try { code = localStorage.getItem("md-code"); } catch {}
+function showAcct(left) {
+  if (!code) { $("acctText").innerHTML = `Try it free: <b>${DAILY_LIMIT} photo a day</b>`; return; }
+  $("acctText").innerHTML = `Code <b>…${code.slice(-6)}</b> · <b>${left ?? "?"}</b> photo${left === 1 ? "" : "s"} left`;
+  $("acctBuy").textContent = "Buy more";
+}
+async function checkCode(c, fresh) {
+  try {
+    const r = await fetch(`${API_BASE}/credits?code=${encodeURIComponent(c)}`);
+    const j = await r.json();
+    if (r.ok && j.paid) {
+      code = c; try { localStorage.setItem("md-code", c); } catch {}
+      showAcct(j.left);
+      if (fresh) say(`<strong>Thank you! Your ${j.total} photos are ready.</strong> Your access code is <b>${c}</b>. Save it to use your photos on another device.`);
+      return true;
+    }
+    if (r.ok && !j.paid) { say("We couldn't confirm the payment for that code yet. Wait a minute and refresh, or call (239) 776-2393."); return false; }
+    say("That code wasn't found. Check it and try again, or call (239) 776-2393."); return false;
+  } catch { say("Couldn't check the code right now. Please try again in a minute."); return false; }
+}
+$("haveCode").onclick = () => { $("codebox").style.display = "flex"; $("codeIn").focus(); };
+$("codeGo").onclick = () => { const c = $("codeIn").value.trim(); if (c) checkCode(c, true).then(ok => { if (ok) $("codebox").style.display = "none"; }); };
+document.querySelectorAll(".buy").forEach(b => b.onclick = async () => {
+  const label = b.textContent; b.disabled = true; b.textContent = "Opening checkout…";
+  try {
+    const r = await fetch(`${API_BASE}/buy`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ pack: b.dataset.pack }) });
+    const j = await r.json();
+    if (r.ok && j.url) { location.href = j.url; return; }
+    alertBox("Photo packs are launching soon. Call (239) 776-2393 to order.");
+  } catch { alertBox("Checkout isn't available right now. Please try again in a minute."); }
+  b.disabled = false; b.textContent = label;
+});
+function alertBox(t) { say(t); $("msg").scrollIntoView({ behavior: "smooth", block: "center" }); }
+const qs = new URLSearchParams(location.search);
+if (qs.get("code")) { const c = qs.get("code"); history.replaceState(null, "", location.pathname); checkCode(c, true); }
+else if (code) checkCode(code, false);
+showAcct();
 
 function watermark(src) {
   return new Promise((res, rej) => {
@@ -272,15 +333,20 @@ $("go").onclick = async () => {
     say(`<strong>Live AI staging is launching soon.</strong> In the meantime our team will stage it for you. <a href="mailto:${EMAIL}?subject=${encodeURIComponent("Marino Design staging request")}&body=${body}">Email us your photo</a> or call (239) 776-2393.`);
   };
   if (!API_URL) return fallback();
-  if (used() >= DAILY_LIMIT) { say(`You've used today's ${DAILY_LIMIT} free stagings. Come back tomorrow, or <a href="../#contact">contact Marino Group</a> to stage a full listing.`); return; }
   $("go").disabled = true; $("loading").style.display = "flex"; $("msg").style.display = "none";
   try {
-    const r = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ image: photo, room, style }) });
+    const r = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ image: photo, room, style, code }) });
     if (r.status === 503) { fallback(); return; }
     if (r.status === 429) {
       const j = await r.json().catch(() => ({}));
       say(j.error === "busy" ? `Marino Design is very busy today. Please try again tomorrow, or <a href="../#contact">contact Marino Group</a>.`
-        : `You've used today's ${DAILY_LIMIT} free stagings. Come back tomorrow, or <a href="../#contact">contact Marino Group</a> to stage a full listing.`);
+        : `You've used today's free photo. <a href="#pricing">Buy a photo pack</a> to keep staging, or come back tomorrow.`);
+      return;
+    }
+    if (r.status === 402) {
+      const j = await r.json().catch(() => ({}));
+      if (j.error === "empty") { showAcct(0); say(`You've used all the photos on this code. <a href="#pricing">Buy more photos</a> to keep staging.`); }
+      else { code = null; try { localStorage.removeItem("md-code"); } catch {} showAcct(); say("That access code isn't valid anymore. Paste it again, or call (239) 776-2393."); }
       return;
     }
     if (!r.ok) throw new Error(await r.text());
@@ -289,7 +355,8 @@ $("go").onclick = async () => {
     $("after").src = stagedURL; $("after").style.visibility = "visible";
     $("handle").style.display = "block"; $("tagR").style.display = "block";
     $("slider").value = 50; $("slider").oninput({ target: $("slider") });
-    $("dl").disabled = false; bump();
+    $("dl").disabled = false;
+    if (typeof out.left === "number") showAcct(out.left);
   } catch (e) {
     say("Something went wrong while staging. Please try again in a minute.");
   } finally { $("loading").style.display = "none"; $("go").disabled = false; }
