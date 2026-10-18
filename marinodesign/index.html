@@ -3,507 +3,296 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Marino Group, a real estate team brokered by Waterfront Realty Group, Inc., helping families buy, sell, and build homes in Collier, Lee, and Charlotte counties, Florida.">
-<link rel="icon" href="img/marino_logo_transparent_gold.png">
-<title>Marino Group | Southwest Florida Real Estate</title>
+<title>Marino Design · AI Virtual Staging</title>
+<meta name="description" content="Marino Design by Marino Group: upload a photo of an empty room and see it virtually staged in seconds. Naples, Florida.">
+<link rel="canonical" href="https://marinogroupswfl.com/marinodesign/">
+<link rel="icon" href="../img/marino_logo_transparent_gold.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Figtree:wght@400;500;600&family=Poppins:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Figtree:wght@400;500;600&display=swap">
 <style>
-/* Layout: Gulf-coast editorial — the logo's glowing ring becomes the sun on the horizon; charcoal + champagne, generous whitespace, one long page with anchored sections */
-:root{
-  --bg:#f6f3ee; --surface:#ffffff; --sunk:#ece6dc; --fg:#1e1d1c; --muted:#655f56; --line:#ddd5c8;
-  --ink:#1e1d1c; --on-ink:#f3ece0; --gold:#b8955d; --gold-soft:#d8c3a0; --gulf:#2f5d62;
-  --display:"Jost","Futura","Century Gothic",Arial,sans-serif;
-  --body:"Figtree","Segoe UI",Arial,sans-serif;
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#141312; --surface:#1d1b19; --sunk:#25221f; --fg:#efe8dc; --muted:#a79e90; --line:#36322d;
-  --ink:#0f0e0d; --on-ink:#f3ece0; --gold:#d3b585; --gold-soft:#e3cfa9; --gulf:#7fb0b3; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#141312; --surface:#1d1b19; --sunk:#25221f; --fg:#efe8dc; --muted:#a79e90; --line:#36322d;
-  --ink:#0f0e0d; --on-ink:#f3ece0; --gold:#d3b585; --gold-soft:#e3cfa9; --gulf:#7fb0b3; color-scheme:dark}
+:root{--bg:#f6f3ee;--surface:#fff;--sunk:#ece6dc;--fg:#1e1d1c;--muted:#655f56;--line:#ddd5c8;--ink:#1e1d1c;--on-ink:#f3ece0;--gold:#b8955d;--gold-soft:#d8c3a0;--gulf:#2f5d62}
+@media (prefers-color-scheme:dark){:root{--bg:#141312;--surface:#1d1b19;--sunk:#262320;--fg:#efe9df;--muted:#a69d90;--line:#36322d;--gold:#d3b585}}
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.6}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 Figtree,system-ui,sans-serif}
+h1,h2,h3{font-family:Jost,sans-serif;font-weight:400;line-height:1.15;margin:0}
 a{color:inherit}
-.wrap{max-width:1180px;margin:0 auto;padding-inline:20px}
-h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.1;margin:0;text-wrap:balance;letter-spacing:-.01em}
-h2{font-size:clamp(30px,4.2vw,46px)}
-h3{font-size:22px;font-weight:500}
-.eyebrow{font-family:var(--display);font-weight:500;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
-p{margin:0}
-section{padding-block:88px;scroll-margin-top:70px}
-.lead{color:var(--muted);max-width:60ch;font-size:18px}
-.btn{display:inline-flex;align-items:center;gap:8px;font:500 15px var(--body);padding:13px 22px;border-radius:999px;border:1px solid transparent;text-decoration:none;cursor:pointer}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.top{position:sticky;top:0;z-index:10;background:rgba(20,19,18,.92);backdrop-filter:blur(10px);color:var(--on-ink)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.brand img{height:40px}
+.brand b{font:500 18px Jost;letter-spacing:.14em;text-transform:uppercase}
+.brand small{display:block;font-size:11px;letter-spacing:.2em;color:var(--gold-soft);text-transform:uppercase}
+.top nav a{font-size:14px;text-decoration:none;opacity:.85;margin-left:20px}
+.top nav a:hover{opacity:1;color:var(--gold-soft)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:13px 26px;font:600 15px Figtree;cursor:pointer;text-decoration:none;transition:transform .15s,opacity .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
 .btn-gold{background:var(--gold-soft);color:#1e1d1c}
-.btn-ghost{border-color:currentColor;background:transparent;color:inherit}
-.btn:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
-
-/* header */
-.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(20,19,18,.92);backdrop-filter:blur(8px);color:var(--on-ink)}
-.top .wrap{display:flex;align-items:center;gap:24px;padding-block:12px}
-.logo{width:132px;height:auto;display:block;flex:none}
-.nav{display:flex;gap:22px;margin-left:auto;font:400 15px var(--display);letter-spacing:.04em}
-.nav a{text-decoration:none;opacity:.85}.nav a:hover{opacity:1;color:var(--gold-soft)}
-.top .call{font:500 15px var(--display);text-decoration:none;color:var(--gold-soft);white-space:nowrap}
-.esp{font-size:12px;border:1px solid rgba(243,236,224,.35);border-radius:999px;padding:3px 10px;white-space:nowrap}
-@media (max-width:900px){.nav{display:none}.top .call{margin-left:auto}}
-@media (max-width:420px){.esp{display:none}}
-
-/* hero */
-.hero{background:#141312;color:#f3ece0;position:relative;overflow:hidden;padding-block:96px 0}
-.hero .wrap{position:relative;z-index:2;display:grid;gap:22px;max-width:1180px}
-.hero h1{font-size:clamp(40px,6.4vw,82px);font-weight:300;max-width:13ch}
-.hero h1 em{font-style:normal;color:#d8c3a0}
-.hero .lead{color:#cfc6b8}
-.horizon{position:relative;height:300px;margin-top:40px}
-.sun{position:absolute;left:62%;bottom:120px;width:150px;height:150px;border-radius:50%;border:9px solid #fff3dc;box-shadow:0 0 40px 10px rgba(246,217,160,.45),inset 0 0 30px rgba(246,217,160,.35)}
-.sea{position:absolute;inset:auto 0 0 0;height:150px;background:linear-gradient(#1f2b2c,#141312)}
-.sea::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(246,217,160,.7),transparent)}
-.glint{position:absolute;left:calc(62% + 20px);top:14px;width:110px;height:120px;background:repeating-linear-gradient(transparent 0 9px,rgba(255,236,200,.28) 9px 11px);-webkit-mask:linear-gradient(#000,transparent);mask:linear-gradient(#000,transparent)}
-@media (max-width:700px){.sun{left:58%;width:110px;height:110px;bottom:118px}.glint{left:calc(58% + 10px);width:90px}.horizon{height:240px}}
-
-.search{background:var(--surface);color:var(--fg);border-radius:16px;padding:14px;display:grid;grid-template-columns:1.4fr 1fr 1fr auto;gap:10px;max-width:880px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
-.search label{display:grid;gap:2px;font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;padding:4px 8px;min-width:0}
-.search select{font:500 16px var(--body);border:0;background:transparent;color:var(--fg);padding:2px 0}
-.search .btn{align-self:stretch;justify-content:center;background:var(--ink);color:var(--on-ink);border-radius:10px}
-@media (max-width:760px){.search{grid-template-columns:1fr 1fr}.search .btn{grid-column:1/-1}}
-.hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
-
-/* areas */
-.areas{border-bottom:1px solid var(--line);padding-block:26px;background:var(--surface)}
-.areas .wrap{display:flex;flex-wrap:wrap;gap:10px 28px;align-items:center;font:400 16px var(--display);letter-spacing:.04em}
-.areas b{font-weight:500;color:var(--gold);letter-spacing:.2em;font-size:12px;text-transform:uppercase;margin-right:6px}
-
-/* split sections */
-.split{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
-.split>*{min-width:0}
-@media (max-width:860px){.split{grid-template-columns:1fr;gap:36px}}
-.head{display:grid;gap:14px;margin-bottom:40px}
-
-/* listings */
-.mls{background:var(--sunk);border-radius:18px;padding:34px;display:grid;gap:18px}
-.mls-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
-.stat{background:var(--surface);border-radius:12px;padding:18px}
-.stat b{display:block;font:400 22px/1.2 var(--display);margin-bottom:6px}
-.stat span{color:var(--muted);font-size:14px}
-
-
-/* steps */
-.steps{list-style:none;margin:0;padding:0;display:grid;gap:0;counter-reset:s}
-.steps li{display:grid;grid-template-columns:56px 1fr;gap:18px;padding:22px 0;border-top:1px solid var(--line);counter-increment:s}
-.steps li::before{content:counter(s,decimal-leading-zero);font:300 28px var(--display);color:var(--gold)}
-.steps p{color:var(--muted);font-size:16px;margin-top:4px}
-.promise{background:var(--ink);color:var(--on-ink);border-radius:18px;padding:34px;display:grid;gap:16px;position:sticky;top:90px}
-.promise q{font:300 28px/1.25 var(--display);quotes:"\201C" "\201D"}
-.promise small{color:#bdb3a3}
-
-/* forms */
-form{display:grid;gap:12px}
-.field{display:grid;gap:4px}
-.field span{font-size:13px;color:var(--muted)}
-input,select,textarea{font:16px var(--body);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;width:100%}
-.promise input{background:#262421;border-color:#3a3631;color:#f3ece0}
-.promise .field span{color:#bdb3a3}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media (max-width:520px){.two{grid-template-columns:1fr}}
-.ok{font-size:15px;color:var(--gold-soft)}
-
-/* build */
-.build{background:var(--surface)}
-.catalog{display:grid;gap:18px}
-.filters{display:grid;grid-template-columns:1.6fr repeat(5,1fr) 1.15fr;gap:12px;background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:16px}
-.filters label{display:grid;gap:6px;font:500 12px var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.filters input,.filters select{font-size:15px;padding:10px 12px;letter-spacing:0;text-transform:none}
-@media (max-width:1100px){.filters{grid-template-columns:repeat(3,1fr)}.f-search{grid-column:1/-1}}
-@media (max-width:560px){.filters{grid-template-columns:1fr 1fr}}
-.cat-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.cat-bar p{margin:0;color:var(--muted);font-size:15px}
-.linkbtn{background:none;border:0;color:var(--gold);font:500 15px var(--body);cursor:pointer;padding:6px 0;text-decoration:underline;text-underline-offset:3px}
-.mgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
-@media (max-width:980px){.mgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:600px){.mgrid{grid-template-columns:1fr}}
-.mcard{background:var(--bg);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
-.mcard figure{margin:0;aspect-ratio:16/9;background:var(--sunk);position:relative;overflow:hidden}
-.mcard img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.mtag{position:absolute;top:12px;left:12px;background:rgba(20,19,18,.82);color:#f3ece0;font:500 12px var(--display);letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:999px}
-.mbody{padding:18px 18px 20px;display:flex;flex-direction:column;gap:10px;flex:1}
-.mbody h3{font-size:22px;letter-spacing:.06em}
-.marea{font:400 17px var(--display);color:var(--fg)}
-.marea small{color:var(--muted);font:14px var(--body)}
-.mspecs{display:flex;flex-wrap:wrap;gap:6px 14px;margin:0;padding:0;list-style:none;color:var(--muted);font-size:15px}
-.mbody .btn{align-self:flex-start;margin-top:auto;padding:10px 18px;font-size:14px}
-.btn-ghost-dark{border-color:var(--fg);color:var(--fg);background:transparent}
-.cat-more{display:flex;justify-content:center}
-.reno{margin-top:36px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;background:var(--ink);color:var(--on-ink);border-radius:18px;padding:28px 32px}
-.reno h3{font-size:clamp(22px,2.6vw,28px);margin:8px 0 6px;max-width:28ch}
-.reno p{margin:0;color:#cfc6b8;max-width:56ch}
-.license{font-size:14px;color:var(--muted)}
-
-/* team */
-.team-grid{display:grid;grid-template-columns:360px 1fr;gap:48px;align-items:start}
-@media (max-width:860px){.team-grid{grid-template-columns:1fr}}
-.portrait{border-radius:18px;overflow:hidden;aspect-ratio:4/5;max-width:100%;background:var(--sunk)}
-.portrait img{width:100%;height:100%;object-fit:cover;display:block}
-.members{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:16px;margin-top:28px}
-.agent{margin:0;display:grid;gap:8px;align-content:start}.agent img,.agent-ph{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:12px;display:block;background:var(--sunk)}.agent-ph{display:grid;place-items:center;font:300 40px var(--display);color:var(--gold)}.agent b{display:block;font:500 16px var(--display)}.agent small{color:var(--muted);font-size:13px}
-.member{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:12px}
-.avatar{width:44px;height:44px;border-radius:50%;background:var(--sunk);display:grid;place-items:center;font:500 16px var(--display);color:var(--gold);flex:none}
-.avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block}
-.member small{display:block;color:var(--muted);font-size:13px}
-
-/* reviews */
-.reviews{background:var(--ink);color:var(--on-ink)}
-.reviews .lead{color:#bdb3a3}
-.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.quotes figure{margin:0;background:#1d1b19;border:1px solid #2e2b27;border-radius:16px;padding:26px;display:grid;gap:14px;align-content:space-between}
-.quotes blockquote{margin:0;font-size:16px;color:#e7dfd2}
-.quotes figcaption{font:500 14px var(--display);letter-spacing:.06em;color:#d8c3a0}
-.stars{color:#d8c3a0;letter-spacing:3px}
-@media (max-width:900px){.quotes{grid-template-columns:1fr}}
-
-/* faq */
-details{border-top:1px solid var(--line);padding:18px 0}
-details:last-child{border-bottom:1px solid var(--line)}
-summary{cursor:pointer;font:400 20px var(--display);list-style:none;display:flex;justify-content:space-between;gap:16px}
-summary::after{content:"+";color:var(--gold);font-size:24px;line-height:1}
-details[open] summary::after{content:"–"}
-details p{color:var(--muted);margin-top:10px;max-width:62ch}
-
-/* contact + footer */
-.contact-list{display:grid;gap:14px;margin-top:24px}
-.contact-list div{display:grid}
-.contact-list span{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
-.contact-list b{font:400 21px var(--display);user-select:all}
-footer{background:#141312;color:#bdb3a3;padding-block:54px 40px;font-size:14px}
-footer .wrap{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:32px}
-footer a{text-decoration:none;color:#e7dfd2}
-footer .fine{grid-column:1/-1;border-top:1px solid #2e2b27;padding-top:22px;display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
-@media (max-width:760px){footer .wrap{grid-template-columns:1fr}}
-.broker{font:500 13px var(--display);letter-spacing:.12em;text-transform:uppercase;color:#d8c3a0}
-@media (prefers-reduced-motion:no-preference){.sun{animation:rise 2.4s ease-out both}@keyframes rise{from{transform:translateY(28px);opacity:.6}to{transform:none;opacity:1}}}
+.btn-ink{background:var(--ink);color:var(--on-ink)}
+.btn-line{background:transparent;border:1px solid var(--line);color:var(--fg)}
+.eyebrow{display:block;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.hero{background:var(--ink);color:var(--on-ink);padding:72px 0 64px}
+.hero h1{font-size:clamp(38px,6vw,64px);font-weight:300}
+.hero h1 em{font-style:normal;color:var(--gold-soft)}
+.hero p{max-width:600px;color:#cfc6b8;font-size:18px;margin:18px 0 28px}
+.studio{display:grid;grid-template-columns:360px 1fr;gap:28px;margin:-36px auto 0;position:relative}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px}
+.panel h3{font-size:20px;margin-bottom:6px}
+.step{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:22px 0 10px}
+.step:first-of-type{margin-top:0}
+.drop{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1.5px dashed var(--line);border-radius:14px;padding:26px 14px;text-align:center;cursor:pointer;background:var(--sunk);transition:border-color .15s}
+.drop:hover,.drop.over{border-color:var(--gold)}
+.drop svg{width:34px;height:34px;stroke:var(--gold)}
+.drop small{color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:transparent;color:var(--fg);border-radius:999px;padding:7px 14px;font:500 14px Figtree;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+@media (prefers-color-scheme:dark){.chip[aria-pressed="true"]{background:var(--gold-soft);color:#1e1d1c;border-color:var(--gold-soft)}}
+.go{width:100%;margin-top:24px}
+.stage{display:flex;flex-direction:column}
+.viewer{position:relative;flex:1;min-height:420px;border-radius:14px;overflow:hidden;background:var(--sunk);display:flex;align-items:center;justify-content:center;user-select:none}
+.viewer .empty{color:var(--muted);text-align:center;padding:30px}
+.viewer .empty h3{color:var(--fg);margin-bottom:8px}
+.ba{position:relative;width:100%;height:100%;display:none}
+.ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.ba .after{clip-path:inset(0 0 0 50%)}
+.ba .handle{position:absolute;top:0;bottom:0;left:50%;width:2px;background:#fff;box-shadow:0 0 8px rgba(0,0,0,.4);pointer-events:none}
+.ba .handle::after{content:"";position:absolute;top:50%;left:50%;width:38px;height:38px;margin:-19px 0 0 -19px;border-radius:50%;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+.ba input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
+.tag{position:absolute;top:14px;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:rgba(20,19,18,.75);color:#fff;pointer-events:none}
+.tag.l{left:14px}.tag.r{right:14px;background:var(--gold-soft);color:#1e1d1c}
+.loading{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(20,19,18,.6);color:#fff;font-weight:500}
+.spin{width:44px;height:44px;border-radius:50%;border:3px solid rgba(255,255,255,.25);border-top-color:var(--gold-soft);animation:s 1s linear infinite}
+@keyframes s{to{transform:rotate(360deg)}}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-top:16px}
+.note{font-size:14px;color:var(--muted);margin:0}
+.msg{display:none;margin-top:16px;padding:16px 18px;border-radius:12px;background:var(--sunk);border-left:3px solid var(--gold);font-size:15px}
+.msg a{font-weight:600}
+section.blk{padding:80px 0 0}
+.blk h2{font-size:clamp(28px,4vw,40px);margin-bottom:28px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.steps .panel b{display:block;font:300 40px Jost;color:var(--gold);margin-bottom:6px}
+.steps p,.rules li{color:var(--muted);margin:6px 0 0}
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.rules ul{margin:10px 0 0;padding-left:20px}
+.cta{margin:80px 0 0;background:var(--ink);color:var(--on-ink);border-radius:18px;padding:36px;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}
+.cta h3{font-size:28px}
+.cta p{color:#cfc6b8;margin:8px 0 0}
+footer{margin-top:80px;border-top:1px solid var(--line);padding:28px 0 40px;font-size:14px;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between}
+@media (max-width:860px){.studio{grid-template-columns:1fr}.steps,.rules{grid-template-columns:1fr}.viewer{min-height:300px}.top nav a:not(.keep){display:none}}
 </style>
-
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="mg-logo" viewBox="0 0 1200 520">
-    <text x="120" y="300" font-family="Poppins, Jost, sans-serif" font-weight="500" font-size="176" letter-spacing="42" fill="#D8C3A0">MARIN</text>
-    <circle cx="985" cy="238" r="66" fill="none" stroke="#F6D9A0" stroke-width="40" opacity=".18"/>
-    <circle cx="985" cy="238" r="66" fill="none" stroke="#FFF3DC" stroke-width="13"/>
-    <text x="600" y="420" text-anchor="middle" font-family="Poppins, Jost, sans-serif" font-weight="500" font-size="64" letter-spacing="26" fill="#D8C3A0">GROUP</text>
-  </symbol>
-</svg>
-
 <header class="top">
   <div class="wrap">
-    <a href="#home" aria-label="Marino Group home"><svg class="logo" viewBox="0 0 1200 520" role="img" aria-label="Marino Group"><use href="#mg-logo"/></svg></a>
-    <nav class="nav" aria-label="Main">
-      <a href="#buy">Buy</a><a href="#sell">Sell</a><a href="#build">Build</a><a href="#team">Our Team</a><a href="#reviews">Reviews</a><a href="#store">Agent Store</a><a href="#contact">Contact</a>
-    </nav>
-    <span class="esp">English · Español · Русский</span>
-    <a class="call" href="tel:+12397762393">(239) 776-2393</a>
+    <a class="brand" href="./" aria-label="Marino Design home">
+      <img src="../img/marino_logo_transparent_gold.png" alt="">
+      <span><b>Marino Design</b><small>by Marino Group</small></span>
+    </a>
+    <nav><a href="#how">How it works</a><a href="#mls">MLS rules</a><a class="keep" href="../">← Marino Group</a></nav>
   </div>
 </header>
 
-<main id="home">
-<section class="hero" aria-labelledby="hero-h">
+<section class="hero">
   <div class="wrap">
-    <span class="eyebrow">Marino Group · Southwest Florida Real Estate</span>
-    <h1 id="hero-h">We put people <em>before</em> transactions.</h1>
-    <p class="lead">A team of 9+ local agents helping families buy, sell, and build homes across Collier, Lee, and Charlotte counties. We speak English, Spanish, and Russian.</p>
-    <form class="search" id="search" aria-label="Search homes">
-      <label for="s-area">Area
-        <select id="s-area"><option>All Southwest Florida</option><option>Naples</option><option>Golden Gate Estates</option><option>Marco Island</option><option>Bonita Springs</option><option>Estero</option><option>Fort Myers</option><option>Lehigh Acres</option><option>Cape Coral</option><option>Port Charlotte</option></select>
-      </label>
-      <label for="s-price">Max price
-        <select id="s-price"><option>Any price</option><option>$400,000</option><option>$600,000</option><option>$800,000</option><option>$1,000,000</option><option>$2,000,000+</option></select>
-      </label>
-      <label for="s-beds">Beds
-        <select id="s-beds"><option>Any</option><option>2+</option><option>3+</option><option>4+</option><option>5+</option></select>
-      </label>
-      <a class="btn" href="https://matrix.swflamls.com/Matrix/public/IDX.aspx?idx=90081c45" target="_blank" rel="noopener">Search homes</a>
-    </form>
-    <div class="hero-ctas">
-      <a class="btn btn-gold" href="#value">What's my home worth?</a>
-      <a class="btn btn-ghost" href="#build">Build a new home</a>
-    </div>
-  </div>
-  <div class="horizon" aria-hidden="true"><div class="sun"></div><div class="sea"><div class="glint"></div></div></div>
-</section>
-
-<div class="areas"><div class="wrap"><b>We serve</b><span>Naples</span><span>Golden Gate Estates</span><span>Marco Island</span><span>Bonita Springs</span><span>Estero</span><span>Fort Myers</span><span>Lehigh Acres</span><span>Cape Coral</span><span>Port Charlotte</span></div></div>
-
-<section id="buy" aria-labelledby="buy-h">
-  <div class="wrap split">
-    <div class="head">
-      <span class="eyebrow">Buy</span>
-      <h2 id="buy-h">Every home on the Southwest Florida MLS, updated daily.</h2>
-      <p class="lead">Search live listings straight from the SWFL MLS. Save the ones you like, and we'll set up showings the same week, including evenings and weekends.</p>
-      <div class="hero-ctas"><a class="btn btn-gold" href="https://matrix.swflamls.com/Matrix/public/IDX.aspx?idx=90081c45" target="_blank" rel="noopener">Open live MLS search</a><a class="btn btn-ghost" href="#contact">Schedule a showing</a></div>
-    </div>
-    <div class="mls">
-      <span class="eyebrow">How we help buyers</span>
-      <div class="mls-row">
-        <div class="stat"><b>Same-week</b><span>showings, including evenings and weekends</span></div>
-        <div class="stat"><b>3 counties</b><span>Collier, Lee, and Charlotte</span></div>
-        <div class="stat"><b>New builds</b><span>lots and custom homes with our builder partner</span></div>
-      </div>
-    </div>
+    <span class="eyebrow">AI virtual staging · Naples, Florida</span>
+    <h1>See the home <em>furnished</em><br>before you move in.</h1>
+    <p>Upload a photo of an empty room, pick a style, and Marino Design shows you what it could look like, from coastal living rooms to modern primary suites.</p>
+    <a class="btn btn-gold" href="#studio">Start staging</a>
   </div>
 </section>
 
-<section id="listings" aria-label="Live MLS listings" style="padding-block:0 88px">
-  <div class="wrap"><div style="border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--surface)">
-    <iframe src="https://matrix.swflamls.com/Matrix/public/IDX.aspx?idx=90081c45" title="Marino Group listings from the SWFL MLS" style="width:100%;height:900px;border:0;display:block" loading="lazy"></iframe>
-  </div></div>
-</section>
+<div class="wrap">
+  <div class="studio" id="studio">
+    <div class="panel">
+      <p class="step">1 · Your photo</p>
+      <label class="drop" id="drop">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/><path d="M12 4v12"/><path d="m7 9 5-5 5 5"/></svg>
+        <strong id="dropText">Upload a room photo</strong>
+        <small>JPG or PNG · empty rooms work best</small>
+        <input type="file" id="file" accept="image/*" hidden>
+      </label>
 
-<section id="sell" aria-labelledby="sell-h" style="background:var(--surface)">
-  <div class="wrap split">
-    <div>
-      <div class="head">
-        <span class="eyebrow">Sell</span>
-        <h2 id="sell-h">Our six-step plan to sell your home.</h2>
+      <p class="step">2 · Room type</p>
+      <div class="chips" data-group="room">
+        <button class="chip" aria-pressed="true">Living room</button>
+        <button class="chip">Bedroom</button>
+        <button class="chip">Dining room</button>
+        <button class="chip">Kitchen</button>
+        <button class="chip">Home office</button>
+        <button class="chip">Lanai</button>
       </div>
-      <ol class="steps">
-        <li><div><h3>Selling consultation</h3><p>We learn your goals, timing, and what matters most, then build a plan around them.</p></div></li>
-        <li><div><h3>Pricing strategy</h3><p>We price from current market conditions and real comparable sales, so your home sells for the most it can.</p></div></li>
-        <li><div><h3>Marketing strategy</h3><p>Professional photos, MLS, social media, and our agents' buyer network, in English, Spanish, and Russian.</p></div></li>
-        <li><div><h3>Preparing your home</h3><p>Decluttering, curb appeal, and small fixes that make the best first impression.</p></div></li>
-        <li><div><h3>Negotiating the contract</h3><p>We review every offer with you: price, deposit, financing, inspections, and closing date.</p></div></li>
-        <li><div><h3>Managing to closing</h3><p>We handle the timeline from accepted offer to keys and keep you updated the way you prefer.</p></div></li>
-      </ol>
+
+      <p class="step">3 · Style</p>
+      <div class="chips" data-group="style">
+        <button class="chip" aria-pressed="true">Coastal</button>
+        <button class="chip">Modern</button>
+        <button class="chip">Luxury</button>
+        <button class="chip">Scandinavian</button>
+        <button class="chip">Farmhouse</button>
+        <button class="chip">Mid-century</button>
+      </div>
+
+      <button class="btn btn-ink go" id="go" disabled>Stage this room</button>
     </div>
-    <aside class="promise" id="value" aria-labelledby="value-h">
-      <q>We don't promise a sale. We promise to work hard, work smart, and bring a strategy that gets results.</q>
-      <small>Jorge Marino, Team Lead</small>
-      <h3 id="value-h" style="margin-top:8px">What's my home worth?</h3>
-      <form id="value-form">
-        <label class="field" for="v-addr"><span>Property address</span><input id="v-addr" required placeholder="1234 Gulf Shore Blvd, Naples, FL"></label>
-        <div class="two">
-          <label class="field" for="v-name"><span>Your name</span><input id="v-name" required></label>
-          <label class="field" for="v-phone"><span>Phone</span><input id="v-phone" type="tel" required></label>
+
+    <div class="panel stage">
+      <div class="viewer" id="viewer">
+        <div class="empty" id="empty">
+          <h3>Your staged room appears here</h3>
+          <p>Upload a photo to begin. Drag the slider to compare before and after.</p>
         </div>
-        <button class="btn btn-gold" type="submit">Get my free home value</button>
-        <p class="ok" id="value-ok" hidden>Thanks! We received your request and will call you within one business day.</p>
-      </form>
-    </aside>
-  </div>
-</section>
-
-<section class="build" id="build" aria-labelledby="build-h">
-  <div class="wrap">
-    <div class="head">
-      <span class="eyebrow">Build with us</span>
-      <h2 id="build-h">If you can dream it, we can build it.</h2>
-      <p class="lead">Browse more than 340 home models, from ADUs and guest houses to duplexes and family homes. Pick one, and we'll help you find the lot, the financing, and the builder. Our models are popular in Golden Gate Estates, Lehigh Acres, and Cape Coral.</p>
-    </div>
-    <div class="catalog" id="catalog">
-      <div class="filters" role="search" aria-label="Filter home models">
-        <label class="f-search">Model name<input id="m-q" type="search" placeholder="Search by name" autocomplete="off"></label>
-        <label>Bedrooms<select id="m-beds"><option value="0">Any</option><option value="1">1+</option><option value="2">2+</option><option value="3">3+</option><option value="4">4+</option><option value="5">5+</option></select></label>
-        <label>Bathrooms<select id="m-baths"><option value="0">Any</option><option value="2">2+</option><option value="3">3+</option><option value="4">4+</option></select></label>
-        <label>Garage<select id="m-garage"><option value="-1">Any</option><option value="1">1+ car</option><option value="2">2+ car</option><option value="3">3+ car</option></select></label>
-        <label>Living area<select id="m-size"><option value="">Any size</option><option value="0-1399">Under 1,400 sq ft</option><option value="1400-1699">1,400–1,700 sq ft</option><option value="1700-1999">1,700–2,000 sq ft</option><option value="2000-2399">2,000–2,400 sq ft</option><option value="2400-99999">2,400+ sq ft</option></select></label>
-        <label>Type<select id="m-type"><option value="">All types</option><option value="single">Single-family</option><option value="Duplex">Duplex</option><option value="Adu">ADU</option><option value="Guest House">Guest house</option></select></label>
-        <label>Sort by<select id="m-sort"><option value="feat">Popular</option><option value="asc">Size: small to large</option><option value="desc">Size: large to small</option><option value="name">Name: A to Z</option></select></label>
+        <div class="ba" id="ba">
+          <img id="before" alt="Original room">
+          <img id="after" class="after" alt="Virtually staged room">
+          <div class="handle" id="handle"></div>
+          <span class="tag l">Before</span><span class="tag r" id="tagR">Virtually staged</span>
+          <input type="range" id="slider" min="0" max="100" value="50" aria-label="Compare before and after">
+        </div>
+        <div class="loading" id="loading"><div class="spin"></div><span>Designing your room… about 20 seconds</span></div>
       </div>
-      <div class="cat-bar"><p id="m-count" aria-live="polite">Loading home models…</p><button type="button" class="linkbtn" id="m-reset">Clear filters</button></div>
-      <div class="mgrid" id="m-grid"></div>
-      <div class="cat-more"><button type="button" class="btn btn-ghost-dark" id="m-more" hidden>Show more models</button></div>
-    </div>
-    <aside class="reno" aria-label="Kitchens and renovations">
-      <div><span class="eyebrow">Kitchens &amp; renovations</span>
-      <h3>Finish your new home with Wooden Concept Renovations.</h3>
-      <p>Custom kitchens, cabinetry, closets, and woodwork from our family-owned renovation company in Naples.</p></div>
-      <a class="btn btn-gold" href="woodenconcept/">Visit Wooden Concept</a>
-    </aside>
-    <aside class="reno" aria-label="Virtual staging">
-      <div><span class="eyebrow">AI virtual staging</span>
-      <h3>See any room furnished with Marino Design.</h3>
-      <p>Upload a photo of an empty room, pick a style, and see it staged in seconds.</p></div>
-      <a class="btn btn-gold" href="marinodesign/">Open Marino Design</a>
-    </aside>
-    <p class="license" style="margin-top:24px">Builder license RG291104097 · Home designs by Olympus Designs Group. Renderings are for illustration; final plans, options and pricing are confirmed at contract.</p>
-  </div>
-</section>
-
-<section id="team" aria-labelledby="team-h">
-  <div class="wrap team-grid">
-    <div class="portrait"><img src="img/t-jorge.jpg" alt="Jorge Marino, Marino Group team lead" width="460" height="644"></div>
-    <div>
-      <div class="head">
-        <span class="eyebrow">Our Team</span>
-        <h2 id="team-h">Meet the Marino Group team.</h2>
+      <div class="bar">
+        <p class="note">Staged images are labeled “Virtually Staged” for MLS use.</p>
+        <button class="btn btn-line" id="dl" disabled>Download</button>
       </div>
-      <p class="lead">Born and raised in Cuba, Jorge started in real estate by buying his first home as a rental. Today he leads the Marino Group, a team of agents across Southwest Florida. Clients know him for honesty, hard work, and going the extra mile, and that is the standard every Marino Group agent lives by.</p>
-      <div class="members"><figure class="agent"><img src="img/t-mariam.jpg" alt="Mariam Leon" width="400" height="500" loading="lazy"><figcaption><b>Mariam Leon</b><small>Realtor® · Naples, FL</small></figcaption></figure><figure class="agent"><img src="img/t-kota.jpg" alt="Kota Olivera" width="400" height="500" loading="lazy"><figcaption><b>Kota Olivera</b><small>Realtor® · Cape Coral &amp; Port Charlotte</small></figcaption></figure><figure class="agent"><img src="img/t-maria.jpg" alt="Maria R. Ramos" width="400" height="500" loading="lazy"><figcaption><b>Maria R. Ramos</b><small>Realtor® · Naples, FL</small></figcaption></figure><figure class="agent"><img src="img/t-yailyn.jpg" alt="Yailyn Socarras" width="400" height="500" loading="lazy"><figcaption><b>Yailyn Socarras</b><small>Realtor® · Naples, FL</small></figcaption></figure><figure class="agent"><img src="img/t-tima.jpg" alt="Tima Azimova" width="400" height="500" loading="lazy"><figcaption><b>Tima Azimova</b><small>Realtor® · Naples, FL</small></figcaption></figure><figure class="agent"><img src="img/t-darlyn.jpg" alt="Darlyn Marino" width="400" height="500" loading="lazy"><figcaption><b>Darlyn Marino</b><small>Realtor® · Naples, FL</small></figcaption></figure><figure class="agent"><img src="img/t-alex.jpg" alt="Alex Guzman" width="400" height="500" loading="lazy"><figcaption><b>Alex Guzman</b><small>Realtor® · Naples, FL</small></figcaption></figure><figure class="agent"><img src="img/t-anabel.jpg" alt="Anabel Ledesma" width="400" height="500" loading="lazy"><figcaption><b>Anabel Ledesma</b><small>Realtor® · Estero, Fort Myers &amp; Lehigh Acres</small></figcaption></figure><figure class="agent"><img src="img/t-norma.jpg" alt="Norma Garza" width="400" height="500" loading="lazy"><figcaption><b>Norma Garza</b><small>Realtor® · Naples, FL</small></figcaption></figure></div></div>
+      <div class="msg" id="msg"></div>
     </div>
   </div>
-</section>
 
-<section class="reviews" id="reviews" aria-labelledby="rev-h">
-  <div class="wrap">
-    <div class="head">
-      <span class="eyebrow">Reviews</span>
-      <h2 id="rev-h">What our clients say.</h2>
+  <section class="blk" id="how">
+    <span class="eyebrow">How it works</span>
+    <h2>Three steps, one minute.</h2>
+    <div class="steps">
+      <div class="panel"><b>01</b><h3>Upload</h3><p>Take a straight, well-lit photo of the empty room from a corner.</p></div>
+      <div class="panel"><b>02</b><h3>Choose</h3><p>Pick the room type and a style that fits the home and the buyer.</p></div>
+      <div class="panel"><b>03</b><h3>Compare</h3><p>Slide between before and after, then download the labeled image.</p></div>
     </div>
-    <div class="quotes">
-      <figure><span class="stars" aria-label="5 stars">★★★★★</span><blockquote>"Jorge was a pleasure to work with. He went above and beyond to make our sale go through smoothly and quickly. We highly recommend Jorge Marino for any of your real estate needs in SW Florida."</blockquote><figcaption>S&amp;S FL Solutions LLC</figcaption></figure>
-      <figure><span class="stars" aria-label="5 stars">★★★★★</span><blockquote>"La mejor experiencia, superando cualquier expectativa. Jorge es una persona extremadamente profesional y honesta, siempre dispuesto a ir la milla extra por sus clientes."</blockquote><figcaption>Abner Garcia</figcaption></figure>
-      <figure><span class="stars" aria-label="5 stars">★★★★★</span><blockquote>"Jorge made the sale of my house easier than expected. He met and respected all of my requirements, and took the time to teach me about the opportunities in real estate."</blockquote><figcaption>Darlyn Perez</figcaption></figure>
-      <figure><span class="stars" aria-label="5 stars">★★★★★</span><blockquote>"Un excelente agente nos dedicó muchas horas a mi familia para hacer nuestro sueño realidad. Su profesionalidad, paciencia y confianza, lo mejor de lo mejor."</blockquote><figcaption>Rene Exposito</figcaption></figure>
-      <figure><span class="stars" aria-label="5 stars">★★★★★</span><blockquote>"Muy profesional, confiable, listo a toda hora para responder cualquier pregunta. Ha sido una experiencia espectacular, se lo recomiendo a todos."</blockquote><figcaption>Dunia Portal</figcaption></figure>
-      <figure style="background:transparent;border-style:dashed"><span class="eyebrow">Worked with us?</span><blockquote style="color:#bdb3a3">Your review helps another family find the right agent.</blockquote><a class="btn btn-gold" href="#contact" style="justify-self:start">Leave a review</a></figure>
-    </div>
-  </div>
-</section>
+  </section>
 
-<section id="store" aria-labelledby="store-h" style="background:var(--surface)">
-  <div class="wrap split">
-    <div class="head">
-      <span class="eyebrow">For agents · Marino Group Real Estate Supply</span>
-      <h2 id="store-h">Signs, posts, and open-house gear, installed for you.</h2>
-      <p class="lead">Our online store sells everything you put in front of a listing, printed with your name and brokerage. Add installation anywhere in Southwest Florida.</p>
-      <div class="hero-ctas"><a class="btn btn-gold" href="#store" id="store-link">Shop the Agent Store</a></div>
+  <section class="blk" id="mls">
+    <span class="eyebrow">Staging the right way</span>
+    <h2>Built for honest listings.</h2>
+    <div class="rules">
+      <div class="panel"><h3>What Marino Design adds</h3><ul><li>Furniture, rugs and lighting</li><li>Art, plants and décor</li><li>Lanai seating and dining sets</li></ul></div>
+      <div class="panel"><h3>What it never changes</h3><ul><li>Walls, floors, windows or views</li><li>Paint colors, fixtures or appliances</li><li>Landscaping, pools or the structure</li></ul></div>
     </div>
-    <div class="mls">
-      <span class="eyebrow">Popular packages</span>
-      <div class="mls-row">
-        <div class="stat"><b>$202.99</b><span>Full Listing Package: sign, rider, post + install</span></div>
-        <div class="stat"><b>$208.99</b><span>Open House Kit: A-frame, flag, 5 arrows</span></div>
-        <div class="stat"><b>$49.99</b><span>Sign installation in Southwest Florida</span></div>
-      </div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<section id="faq" aria-labelledby="faq-h">
-  <div class="wrap split">
-    <div class="head"><span class="eyebrow">Questions</span><h2 id="faq-h">Frequently asked questions.</h2><p class="lead">Can't find your answer? Call or text (239) 776-2393.</p></div>
-    <div>
-      <details><summary>How do I list my home with Marino Group?</summary><p>Call, text, or fill out the home-value form. We schedule a free consultation, show you what similar homes sold for, and agree on a plan before anything goes on the market.</p></details>
-      <details><summary>What areas do you serve?</summary><p>All of Southwest Florida: Collier, Lee, and Charlotte counties, including Naples, Golden Gate Estates, Marco Island, Bonita Springs, Estero, Fort Myers, Lehigh Acres, Cape Coral, and Port Charlotte.</p></details>
-      <details><summary>How do you price my home?</summary><p>We compare recent sales of similar homes nearby, adjust for condition, size, and features, and factor in current interest rates and buyer demand.</p></details>
-      <details><summary>Can you help me get a mortgage?</summary><p>Yes. We connect you with local lenders who can pre-approve you, so your offers are taken seriously.</p></details>
-      <details><summary>Can I build a new home with you?</summary><p>Yes. Choose a model, and we'll help you with the lot, the financing, and the build through our licensed builder partner.</p></details>
-      <details><summary>What languages do you speak?</summary><p>Our team speaks English, Spanish, and Russian, so you can work with us in the language you are most comfortable with.</p></details>
-    </div>
+  <div class="cta">
+    <div><h3>Listing a home with Marino Group?</h3><p>Ask us about staging and marketing your listing.</p></div>
+    <a class="btn btn-gold" href="../#contact">Talk to Marino Group</a>
   </div>
-</section>
-
-<section id="contact" aria-labelledby="contact-h" style="background:var(--surface)">
-  <div class="wrap split">
-    <div>
-      <div class="head"><span class="eyebrow">Contact</span><h2 id="contact-h">Let's talk about your next move.</h2></div>
-      <div class="contact-list">
-        <div><span>Call or text</span><b>(239) 776-2393</b></div>
-        <div><span>Email</span><b><a href="mailto:dhomeswfl@gmail.com">dhomeswfl@gmail.com</a></b></div>
-        <div><span>Serving</span><b>Collier, Lee &amp; Charlotte counties, FL</b></div>
-      </div>
-    </div>
-    <form id="contact-form" aria-label="Send us a message">
-      <div class="two">
-        <label class="field" for="c-name"><span>Name</span><input id="c-name" required></label>
-        <label class="field" for="c-phone"><span>Phone</span><input id="c-phone" type="tel"></label>
-      </div>
-      <label class="field" for="c-email"><span>Email</span><input id="c-email" type="email" required></label>
-      <label class="field" for="c-topic"><span>I want to</span><select id="c-topic"><option>Buy a home</option><option>Sell my home</option><option>Build a new home</option><option>Join the team</option><option>Something else</option></select></label>
-      <label class="field" for="c-msg"><span>Message</span><textarea id="c-msg" rows="4"></textarea></label>
-      <button class="btn btn-gold" type="submit" style="justify-self:start">Send message</button>
-      <p class="ok" id="contact-ok" hidden style="color:var(--gold)">Thanks! Your message was sent. We will get back to you shortly.</p>
-    </form>
-  </div>
-</section>
-</main>
+</div>
 
 <footer>
   <div class="wrap">
-    <div style="display:grid;gap:14px">
-      <svg viewBox="0 0 1200 520" width="170" role="img" aria-label="Marino Group"><use href="#mg-logo"/></svg>
-      <span class="broker">Brokered by Waterfront Realty Group, Inc.</span>
-      <p>Marino Group is a real estate team serving Southwest Florida. We put people before transactions.</p>
-    </div>
-    <div style="display:grid;gap:8px;align-content:start">
-      <span class="broker">Explore</span>
-      <a href="#buy">Buy</a><a href="#sell">Sell</a><a href="#build">Build</a><a href="#team">Our Team</a><a href="#store">Agent Store</a><a href="#contact">Contact</a>
-    </div>
-    <div style="display:grid;gap:8px;align-content:start">
-      <span class="broker">Follow</span>
-      <a href="https://www.facebook.com/DreamhomeRealty239/" target="_blank" rel="noopener">Facebook</a>
-      <a href="woodenconcept/">Wooden Concept Renovations</a>
-      <a href="marinodesign/">Marino Design</a>
-      <span>(239) 776-2393</span>
-    </div>
-    <div class="fine"><span>© 2026 Marino Group · Waterfront Realty Group, Inc. · Equal Housing Opportunity</span><span>Listing data from the SWFL MLS</span></div>
+    <span>© 2026 Marino Group · Waterfront Realty Group, Inc. · (239) 776-2393</span>
+    <span><a href="../">marinogroupswfl.com</a> · <a href="../woodenconcept/">Wooden Concept Renovations</a></span>
   </div>
 </footer>
 
 <script>
-const $=id=>document.getElementById(id);
-$("search").addEventListener("submit",e=>e.preventDefault());
-const FORM_URL="https://formsubmit.co/ajax/dhomeswfl@gmail.com";
-async function send(form,ok,subject,data){
-  const btn=form.querySelector("button[type=submit]");btn.disabled=true;
-  try{
-    const r=await fetch(FORM_URL,{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({_subject:subject,_template:"table",...data})});
-    if(!r.ok) throw new Error();
-    form.reset();$(ok).hidden=false;$(ok).textContent=$(ok).dataset.ok||$(ok).textContent;
-  }catch(err){$(ok).hidden=false;$(ok).dataset.ok=$(ok).textContent;$(ok).textContent="Sorry, that didn't send. Please call or text (239) 776-2393.";}
-  btn.disabled=false;
+// Set this to the staging server URL once it is live (POST {image, room, style} -> {image}).
+// While it is empty, the page runs in preview mode and sends requests to the team by email.
+const API_URL = "";
+const DAILY_LIMIT = 3;
+const EMAIL = "dhomeswfl@gmail.com";
+
+const $ = id => document.getElementById(id);
+let photo = null, stagedURL = null;
+
+document.querySelectorAll(".chips").forEach(g => g.addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if (!b) return;
+  g.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", c === b));
+}));
+const pick = g => document.querySelector(`[data-group=${g}] [aria-pressed=true]`).textContent;
+
+function load(file) {
+  if (!file || !file.type.startsWith("image/")) return;
+  const img = new Image();
+  img.onload = () => {
+    const s = Math.min(1, 1600 / Math.max(img.width, img.height));
+    const c = document.createElement("canvas");
+    c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+    c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+    photo = c.toDataURL("image/jpeg", 0.9);
+    $("before").src = $("after").src = photo;
+    $("after").style.visibility = "hidden"; $("handle").style.display = "none"; $("tagR").style.display = "none";
+    $("empty").style.display = "none"; $("ba").style.display = "block";
+    $("dropText").textContent = file.name.length > 28 ? file.name.slice(0, 25) + "…" : file.name;
+    $("go").disabled = false; $("dl").disabled = true; $("msg").style.display = "none";
+    URL.revokeObjectURL(img.src);
+  };
+  img.src = URL.createObjectURL(file);
 }
-$("value-form").addEventListener("submit",e=>{e.preventDefault();send(e.target,"value-ok","Home value request – Marino Group website",{Address:$("v-addr").value,Name:$("v-name").value,Phone:$("v-phone").value})});
-$("contact-form").addEventListener("submit",e=>{e.preventDefault();send(e.target,"contact-ok","New message – Marino Group website",{Name:$("c-name").value,Phone:$("c-phone").value,Email:$("c-email").value,"I want to":$("c-topic").value,Message:$("c-msg").value})});
+$("file").onchange = e => load(e.target.files[0]);
+const drop = $("drop");
+["dragenter", "dragover"].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave", "drop"].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", e => load(e.dataTransfer.files[0]));
 
-/* home model catalog */
-(function(){
-  const $=id=>document.getElementById(id), grid=$("m-grid"), more=$("m-more"), count=$("m-count");
-  const ctl=["m-q","m-beds","m-baths","m-garage","m-size","m-type","m-sort"].map($);
-  const PAGE=24; let all=[], list=[], shown=0;
-  const fmt=n=>n==null?"":n.toLocaleString("en-US");
-  const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-  function card(m){
-    const tag=m.ty.length?`<span class="mtag">${esc(m.ty.join(" · "))}</span>`:"";
-    const specs=[];
-    if(m.b!=null)specs.push(`${m.b} bed`);
-    if(m.ba!=null)specs.push(`${m.ba} bath`);
-    if(m.g!=null)specs.push(m.g?`${m.g}-car garage`:"No garage");
-    if(m.o)specs.push("Office/den");
-    if(m.w&&m.d)specs.push(`${m.w} W × ${m.d} D`);
-    const area=m.l?`${fmt(m.l)} sq ft living${m.t?` <small>· ${fmt(m.t)} sq ft total</small>`:""}`:"Details on request";
-    return `<article class="mcard"><figure><img src="img/models/${m.s}.webp" alt="${esc(m.n)} home model rendering" loading="lazy" decoding="async" width="640" height="${Math.round(640/m.r)}">${tag}</figure>
-<div class="mbody"><h3>${esc(m.n)}</h3><div class="marea">${area}</div><ul class="mspecs">${specs.map(x=>`<li>${x}</li>`).join("")}</ul>
-<button type="button" class="btn btn-gold" data-model="${esc(m.n)}">Ask about this model</button></div></article>`;
-  }
-  function apply(){
-    const q=ctl[0].value.trim().toUpperCase(), b=+ctl[1].value, ba=+ctl[2].value, g=+ctl[3].value, sz=ctl[4].value, ty=ctl[5].value, so=ctl[6].value;
-    const [lo,hi]=sz?sz.split("-").map(Number):[0,1e9];
-    list=all.filter(m=>(!q||m.n.includes(q))&&(!b||(m.b||0)>=b)&&(!ba||(m.ba||0)>=ba)&&(g<0||(m.g||0)>=g)
-      &&(!sz||(m.l!=null&&m.l>=lo&&m.l<=hi))&&(!ty||(ty==="single"?!m.ty.length:m.ty.includes(ty))));
-    const L=m=>m.l??1e9;
-    list.sort(so==="asc"?(a,c)=>L(a)-L(c):so==="desc"?(a,c)=>(c.l??0)-(a.l??0):so==="name"?(a,c)=>a.n.localeCompare(c.n):(a,c)=>(c.f-a.f)||a.n.localeCompare(c.n));
-    grid.innerHTML=""; shown=0; page();
-  }
-  function page(){
-    grid.insertAdjacentHTML("beforeend",list.slice(shown,shown+PAGE).map(card).join(""));
-    shown=Math.min(shown+PAGE,list.length);
-    count.textContent=list.length?`Showing ${shown} of ${list.length} home models`:"No models match these filters. Try clearing a filter.";
-    more.hidden=shown>=list.length;
-  }
-  ctl.forEach(c=>c.addEventListener(c.tagName==="INPUT"?"input":"change",apply));
-  more.addEventListener("click",page);
-  $("m-reset").addEventListener("click",()=>{ctl[0].value="";ctl.slice(1).forEach(c=>c.selectedIndex=0);apply();});
-  grid.addEventListener("click",e=>{
-    const btn=e.target.closest("[data-model]"); if(!btn)return;
-    $("c-topic").value="Build a new home";
-    $("c-msg").value=`Hi, I'm interested in the ${btn.dataset.model} home model. Please send me more information.`;
-    document.getElementById("contact").scrollIntoView({behavior:"smooth"});
-    setTimeout(()=>$("c-name").focus({preventScroll:true}),600);
+$("slider").oninput = e => {
+  const v = e.target.value;
+  $("after").style.clipPath = `inset(0 0 0 ${v}%)`; $("handle").style.left = v + "%";
+};
+
+function used() {
+  try { const d = JSON.parse(localStorage.getItem("md-use") || "{}"); return d.day === new Date().toDateString() ? d.n : 0; } catch { return 0; }
+}
+function bump() {
+  try { localStorage.setItem("md-use", JSON.stringify({ day: new Date().toDateString(), n: used() + 1 })); } catch {}
+}
+function say(html) { $("msg").innerHTML = html; $("msg").style.display = "block"; }
+
+function watermark(src) {
+  return new Promise((res, rej) => {
+    const img = new Image(); img.crossOrigin = "anonymous";
+    img.onload = () => {
+      const c = document.createElement("canvas"); c.width = img.width; c.height = img.height;
+      const x = c.getContext("2d"); x.drawImage(img, 0, 0);
+      const fs = Math.round(c.width * 0.022), pad = fs * 0.8, t = "VIRTUALLY STAGED";
+      x.font = `600 ${fs}px Figtree, sans-serif`;
+      const w = x.measureText(t).width + pad * 2, h = fs + pad;
+      x.fillStyle = "rgba(20,19,18,.72)"; x.fillRect(c.width - w - pad, c.height - h - pad, w, h);
+      x.fillStyle = "#fff"; x.textBaseline = "middle"; x.fillText(t, c.width - w - pad + pad, c.height - pad - h / 2);
+      res(c.toDataURL("image/jpeg", 0.92));
+    };
+    img.onerror = rej; img.src = src;
   });
-  fetch("models.json").then(r=>r.json()).then(d=>{all=d;apply();}).catch(()=>{count.textContent="Home models could not load. Please call (239) 776-2393.";});
-})();
-</script>
+}
 
+$("go").onclick = async () => {
+  if (!photo) return;
+  const room = pick("room"), style = pick("style");
+  if (!API_URL) {
+    const body = encodeURIComponent(`Hi Marino Group,\n\nI'd like a ${style.toLowerCase()} ${room.toLowerCase()} virtually staged. I'll attach the photo to this email.\n\nProperty address:\nName:\nPhone:`);
+    say(`<strong>Live AI staging is launching soon.</strong> In the meantime our team will stage it for you. <a href="mailto:${EMAIL}?subject=${encodeURIComponent("Marino Design staging request")}&body=${body}">Email us your photo</a> or call (239) 776-2393.`);
+    return;
+  }
+  if (used() >= DAILY_LIMIT) { say(`You've used today's ${DAILY_LIMIT} free stagings. Come back tomorrow, or <a href="../#contact">contact Marino Group</a> to stage a full listing.`); return; }
+  $("go").disabled = true; $("loading").style.display = "flex"; $("msg").style.display = "none";
+  try {
+    const r = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ image: photo, room, style }) });
+    if (!r.ok) throw new Error(await r.text());
+    const out = await r.json();
+    stagedURL = await watermark(out.image);
+    $("after").src = stagedURL; $("after").style.visibility = "visible";
+    $("handle").style.display = "block"; $("tagR").style.display = "block";
+    $("slider").value = 50; $("slider").oninput({ target: $("slider") });
+    $("dl").disabled = false; bump();
+  } catch (e) {
+    say("Something went wrong while staging. Please try again in a minute.");
+  } finally { $("loading").style.display = "none"; $("go").disabled = false; }
+};
+
+$("dl").onclick = () => {
+  if (!stagedURL) return;
+  const a = document.createElement("a"); a.href = stagedURL;
+  a.download = `Marino_Design_${pick("style")}_${pick("room")}.jpg`.replace(/\s+/g, "_"); a.click();
+};
+</script>
 </body>
 </html>
