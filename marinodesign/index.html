@@ -171,7 +171,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
         <div class="loading" id="loading"><div class="spin"></div><span>Designing your room… up to a minute</span></div>
       </div>
       <div class="bar">
-        <p class="note">Staged images are labeled “Virtually Staged” for MLS use.</p>
+        <p class="note">Tip: most MLS rules require noting “virtually staged” in the listing remarks or photo caption.</p>
         <button class="btn btn-line" id="dl" disabled>Download</button>
       </div>
       <div class="msg" id="msg"></div>
@@ -192,7 +192,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
     <span class="eyebrow">Photo packs</span>
     <h2>Stage a whole listing for less than one staged room.</h2>
     <div class="prices">
-      <div class="panel price"><h3>Starter</h3><div class="amt">$19</div><div class="per">10 staged photos · $1.90 each</div><ul><li>All rooms and styles</li><li>Labeled for MLS</li><li>Photos never expire</li></ul><button class="btn btn-line buy" data-pack="starter">Buy Starter</button></div>
+      <div class="panel price"><h3>Starter</h3><div class="amt">$19</div><div class="per">10 staged photos · $1.90 each</div><ul><li>All rooms and styles</li><li>Full-size, ready for MLS</li><li>Photos never expire</li></ul><button class="btn btn-line buy" data-pack="starter">Buy Starter</button></div>
       <div class="panel price best"><span class="flag">Most popular</span><h3>Pro</h3><div class="amt">$49</div><div class="per">30 staged photos · $1.63 each</div><ul><li>Enough for 2–3 listings</li><li>All rooms and styles</li><li>Photos never expire</li></ul><button class="btn btn-gold buy" data-pack="pro">Buy Pro</button></div>
       <div class="panel price"><h3>Agent</h3><div class="amt">$129</div><div class="per">100 staged photos · $1.29 each</div><ul><li>For busy agents and teams</li><li>All rooms and styles</li><li>Photos never expire</li></ul><button class="btn btn-line buy" data-pack="agent">Buy Agent</button></div>
     </div>
@@ -351,7 +351,7 @@ $("go").onclick = async () => {
     }
     if (!r.ok) throw new Error(await r.text());
     const out = await r.json();
-    stagedURL = await watermark(out.image);
+    stagedURL = out.image;
     $("after").src = stagedURL; $("after").style.visibility = "visible";
     $("handle").style.display = "block"; $("tagR").style.display = "block";
     $("slider").value = 50; $("slider").oninput({ target: $("slider") });
