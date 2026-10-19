@@ -105,13 +105,15 @@ const ROOM_ADD = {
   "Lanai": "outdoor patio furniture: lounge chairs or an outdoor sofa, a small table, potted plants, and an outdoor rug",
 };
 
-function prompt(room, style) {
+function prompt(room, style, note) {
   const add = ROOM_ADD[room] || ROOM_ADD["Living room"];
+  const extra = note ? `Also add: ${note}. ` : "";
   return `This is a real estate listing photo of a ${room.toLowerCase()}. Virtually stage it in a ${style.toLowerCase()} interior design style ` +
     `by ONLY ADDING movable furniture and decor: ${add}. ` +
     `Never remove, replace, move, resize, recolor or cover anything that is already in the photo. Keep every existing element exactly as it is: ` +
     `walls, ceiling, tray ceilings, floor and flooring, baseboards, doors, windows and the view outside, cabinets, kitchen island, countertops, backsplash, ` +
     `appliances, sinks, faucets, light fixtures, pendant lights, ceiling fans, vents, outlets, light switches, thermostats and paint colors. ` +
+    extra +
     `Place new items only on open floor space and empty wall space, at a realistic scale, where they make sense for the room. ` +
     `Keep the exact same camera angle, framing, perspective and lighting. Photorealistic professional real estate photography.`;
 }
@@ -130,7 +132,7 @@ async function rep(path, opts = {}, tries = 0) {
   return JSON.parse(t);
 }
 
-async function stage(dataUrl, room, style) {
+async function stage(dataUrl, room, style, note) {
   const m = /^data:(image\/(?:jpeg|png|webp));base64,(.+)$/.exec(dataUrl || "");
   if (!m) throw Object.assign(new Error("bad image"), { code: 400 });
   const fd = new FormData();
@@ -138,8 +140,8 @@ async function stage(dataUrl, room, style) {
   const file = await rep("/files", { method: "POST", body: fd });
   const url = file.urls.get;
   const input = MODEL.includes("kontext")
-    ? { prompt: prompt(room, style), input_image: url, aspect_ratio: "match_input_image", output_format: "jpg" }
-    : { prompt: prompt(room, style), image_input: [url], aspect_ratio: "match_input_image", output_format: "jpg" };
+    ? { prompt: prompt(room, style, note), input_image: url, aspect_ratio: "match_input_image", output_format: "jpg" }
+    : { prompt: prompt(room, style, note), image_input: [url], aspect_ratio: "match_input_image", output_format: "jpg" };
   let p = await rep(`/models/${MODEL}/predictions`, {
     method: "POST", headers: { "Content-Type": "application/json", Prefer: "wait=60" }, body: JSON.stringify({ input }),
   });
@@ -202,7 +204,8 @@ http.createServer(async (req, res) => {
     if (why === "busy") return send(res, 429, { error: "busy" }, origin);
   }
   try {
-    const image = await stage(body.image, room, style);
+    const note = typeof body.note === "string" ? body.note.replace(/[^\w\s,.'-]/g, "").trim().slice(0, 200) : "";
+    const image = await stage(body.image, room, style, note);
     let left;
     if (paid) { const used = await spend(paid.code).catch(e => { console.error("spend failed:", e.message); return paid.used + 1; }); left = paid.total - used; }
     else count(ip);
