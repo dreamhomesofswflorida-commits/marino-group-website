@@ -116,10 +116,15 @@ function prompt(room, style) {
     `Keep the exact same camera angle, framing, perspective and lighting. Photorealistic professional real estate photography.`;
 }
 
-async function rep(path, opts = {}) {
+async function rep(path, opts = {}, tries = 0) {
   const r = await fetch(path.startsWith("http") ? path : API + path, {
     ...opts, headers: { Authorization: `Bearer ${TOKEN}`, ...(opts.headers || {}) },
   });
+  if (r.status === 429 && tries < 6) {
+    const wait = (+(r.headers.get("retry-after")) || 5) + 1;
+    await new Promise(res => setTimeout(res, wait * 1000));
+    return rep(path, opts, tries + 1);
+  }
   const t = await r.text();
   if (!r.ok) throw new Error(`Replicate ${r.status}: ${t.slice(0, 300)}`);
   return JSON.parse(t);
