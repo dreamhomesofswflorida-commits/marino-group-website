@@ -96,13 +96,24 @@ function allow(ip) {
 }
 function count(ip) { total++; perIp.set(ip, (perIp.get(ip) || 0) + 1); }
 
+const ROOM_ADD = {
+  "Living room": "a sofa, accent chairs, a coffee table, side tables, a rug, floor or table lamps, and wall art on empty walls",
+  "Bedroom": "a bed with bedding, nightstands with lamps, a dresser, a rug, and wall art above the bed",
+  "Dining room": "a dining table with chairs, a rug under the table, a centerpiece, and wall art on empty walls",
+  "Kitchen": "only small finishing touches: bar stools at the island or counter overhang if there is one, a bowl of fruit, a vase of flowers, a cutting board and a few cookbooks on the counter. Add NO furniture that blocks the cabinets, and do not add, remove or change any cabinets, counters or appliances",
+  "Home office": "a desk with a chair, a bookshelf against an empty wall, a desk lamp, a rug, and plants",
+  "Lanai": "outdoor patio furniture: lounge chairs or an outdoor sofa, a small table, potted plants, and an outdoor rug",
+};
+
 function prompt(room, style) {
-  const r = room.toLowerCase();
-  return `Virtually stage this empty ${r} for a real estate listing in a ${style.toLowerCase()} interior design style. ` +
-    `Add realistic, well-proportioned furniture, a rug, lamps, art and tasteful decor that suit a ${r}. ` +
-    `Keep everything that is already in the photo exactly the same: walls, ceiling, floor, windows, doors, cabinets, ` +
-    `countertops, appliances, light fixtures, paint colors, the view outside and the camera angle. ` +
-    `Do not remove or change any architecture. Photorealistic professional real estate photography, natural light.`;
+  const add = ROOM_ADD[room] || ROOM_ADD["Living room"];
+  return `This is a real estate listing photo of a ${room.toLowerCase()}. Virtually stage it in a ${style.toLowerCase()} interior design style ` +
+    `by ONLY ADDING movable furniture and decor: ${add}. ` +
+    `Never remove, replace, move, resize, recolor or cover anything that is already in the photo. Keep every existing element exactly as it is: ` +
+    `walls, ceiling, tray ceilings, floor and flooring, baseboards, doors, windows and the view outside, cabinets, kitchen island, countertops, backsplash, ` +
+    `appliances, sinks, faucets, light fixtures, pendant lights, ceiling fans, vents, outlets, light switches, thermostats and paint colors. ` +
+    `Place new items only on open floor space and empty wall space, at a realistic scale, where they make sense for the room. ` +
+    `Keep the exact same camera angle, framing, perspective and lighting. Photorealistic professional real estate photography.`;
 }
 
 async function rep(path, opts = {}) {
@@ -122,8 +133,8 @@ async function stage(dataUrl, room, style) {
   const file = await rep("/files", { method: "POST", body: fd });
   const url = file.urls.get;
   const input = MODEL.includes("kontext")
-    ? { prompt: prompt(room, style), input_image: url, output_format: "jpg" }
-    : { prompt: prompt(room, style), image_input: [url], output_format: "jpg" };
+    ? { prompt: prompt(room, style), input_image: url, aspect_ratio: "match_input_image", output_format: "jpg" }
+    : { prompt: prompt(room, style), image_input: [url], aspect_ratio: "match_input_image", output_format: "jpg" };
   let p = await rep(`/models/${MODEL}/predictions`, {
     method: "POST", headers: { "Content-Type": "application/json", Prefer: "wait=60" }, body: JSON.stringify({ input }),
   });
