@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Client Portal | Marino Group</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../img/marino_logo_transparent_gold.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ===== CONNECT YOUR DATABASE =====
+   Leave both blank for demo mode. After creating a free Supabase project,
+   paste the Project URL and the anon public key (Settings > API) into the
+   two lines in the <script> below (SUPABASE_URL / SUPABASE_ANON_KEY). */
+:root{--bg:#f6f3ee;--surface:#fff;--sunk:#ece6dc;--fg:#1e1d1c;--muted:#655f56;--line:#ddd5c8;--ink:#1e1d1c;--on-ink:#f3ece0;--gold:#b8955d;--gold-soft:#d8c3a0;--gulf:#2f5d62;--ok:#3d7a4f;--warn:#a8642a;
+--display:"Jost","Futura","Century Gothic",Arial,sans-serif;--body:"Figtree","Segoe UI",Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141312;--surface:#1d1b19;--sunk:#25221f;--fg:#efe8dc;--muted:#a79e90;--line:#36322d;--ink:#0f0e0d;--gold:#d3b585;--gold-soft:#e3cfa9;--gulf:#7fb0b3;--ok:#7fbf8e;--warn:#e0a46a}}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 var(--body)}
+h1,h2,h3{font-family:var(--display);font-weight:400;letter-spacing:.01em;margin:0}
+a{color:var(--gulf)}
+button,input,select,textarea{font:inherit;color:inherit}
+.btn{display:inline-flex;align-items:center;gap:.4em;border:1px solid var(--line);background:var(--surface);padding:.55em 1em;border-radius:6px;cursor:pointer;text-decoration:none}
+.btn:hover{border-color:var(--gold)}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:#1e1d1c;font-weight:600}
+.btn.sm{padding:.3em .7em;font-size:13px}
+input,select,textarea{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:.55em .7em}
+label{display:block;font-size:13px;color:var(--muted);margin:.6em 0 .2em}
+header.top{display:flex;align-items:center;gap:16px;padding:14px 24px;background:var(--ink);color:var(--on-ink)}
+header.top img{height:34px}
+header.top .who{margin-left:auto;font-size:13px;opacity:.85;display:flex;gap:12px;align-items:center}
+header.top .btn{background:transparent;color:var(--on-ink);border-color:#4a4540}
+.demo-band{background:var(--gold-soft);color:#1e1d1c;text-align:center;font-size:13px;padding:6px 12px}
+main{max-width:1240px;margin:0 auto;padding:28px 24px 60px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:22px;overflow-x:auto}
+.tabs button{border:0;background:none;padding:10px 16px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap}
+.tabs button.on{color:var(--fg);border-color:var(--gold)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px}
+.grid2{display:grid;grid-template-columns:2fr 1fr;gap:20px}
+.muted{color:var(--muted)}.small{font-size:13px}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+/* login */
+.login{max-width:440px;margin:60px auto;text-align:center}
+.login .card{text-align:left;margin-top:24px}
+.demo-pick{display:grid;gap:8px;margin-top:14px}
+/* board */
+.board{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(220px,1fr);gap:12px;overflow-x:auto;padding-bottom:8px}
+.col{background:var(--sunk);border-radius:10px;padding:10px;min-height:200px}
+.col h3{font-size:14px;font-family:var(--body);font-weight:600;display:flex;justify-content:space-between;margin:2px 4px 10px}
+.deal{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:pointer}
+.deal:hover{border-color:var(--gold)}
+.deal b{display:block;font-weight:600;font-size:14px}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:20px;background:var(--sunk);color:var(--muted);margin-right:4px}
+.tag.buyer{background:#2f5d6222;color:var(--gulf)}.tag.seller{background:#b8955d26;color:var(--gold)}
+.bar{height:4px;background:var(--line);border-radius:4px;margin-top:8px;overflow:hidden}.bar i{display:block;height:100%;background:var(--gold)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.stat b{display:block;font-family:var(--display);font-size:26px;font-weight:400}
+/* drawer */
+.drawer{position:fixed;inset:0;background:#0007;display:flex;justify-content:flex-end;z-index:20}
+.drawer .panel{width:min(620px,100%);background:var(--bg);height:100%;overflow-y:auto;padding:24px}
+.row{display:flex;gap:10px;align-items:center}
+.list{list-style:none;padding:0;margin:8px 0}
+.list li{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.list li .grow{flex:1}
+.list input[type=checkbox]{width:18px;height:18px;accent-color:var(--gold)}
+.done{text-decoration:line-through;color:var(--muted)}
+.late{color:var(--warn);font-weight:600}
+/* timeline */
+.tl{list-style:none;padding:0;margin:0;position:relative}
+.tl li{position:relative;padding:0 0 18px 30px}
+.tl li:before{content:"";position:absolute;left:8px;top:6px;bottom:-6px;width:2px;background:var(--line)}
+.tl li:last-child:before{display:none}
+.tl li i{position:absolute;left:0;top:3px;width:18px;height:18px;border-radius:50%;border:2px solid var(--line);background:var(--surface)}
+.tl li.ok i{background:var(--gold);border-color:var(--gold)}
+.tl li.next i{border-color:var(--gold)}
+.hero-deal{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:end;margin-bottom:22px}
+.big{font-family:var(--display);font-size:34px;font-weight:300}
+.agent-card{display:flex;gap:14px;align-items:center}
+.agent-card img{width:64px;height:64px;border-radius:50%;object-fit:cover}
+table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);font-size:14px}th{color:var(--muted);font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--on-ink);padding:10px 18px;border-radius:8px;z-index:30}
+@media (max-width:860px){.grid2{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}main{padding:20px 16px}header.top{padding:12px 16px}header.top>span,#whoName{display:none}.big{font-size:26px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a href="../"><img src="../img/marino_logo_transparent_gold.png" alt="Marino Group"></a>
+  <span style="font-family:var(--display);letter-spacing:.12em;text-transform:uppercase;font-size:13px">Client Portal</span>
+  <div class="who" id="who" hidden><span id="whoName"></span><button class="btn sm" id="signOut">Sign out</button></div>
+</header>
+<div class="demo-band" id="demoBand" hidden>Demo mode with sample data. Changes are not saved.</div>
+<main id="app"></main>
+<div class="toast" id="toast" hidden></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+const SUPABASE_URL = "";       // e.g. https://abcd1234.supabase.co
+const SUPABASE_ANON_KEY = "";  // anon public key
+const OFFICE = {name:"Marino Group", phone:"(239) 776-2393", email:"dhomeswfl@gmail.com"};
+
+const STAGES = ["Lead","Showing / Listing Prep","Under Contract","Inspection","Financing & Appraisal","Clear to Close","Closed"];
+const MILESTONES = ["Contract signed","Escrow deposit delivered","Inspection period ends","Loan approval","Appraisal complete","Title commitment received","Final walk-through","Closing"];
+const AGENT_PHOTOS = {"dhomeswfl@gmail.com":"../img/t-jorge.jpg"};
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money = n => n ? "$" + Number(n).toLocaleString("en-US",{maximumFractionDigits:0}) : "—";
+const fmt = d => d ? new Date(d + "T12:00:00").toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "—";
+const today = () => new Date().toISOString().slice(0,10);
+const addDays = (d,n) => { const x = new Date(d + "T12:00:00"); x.setDate(x.getDate()+n); return x.toISOString().slice(0,10); };
+const uid = () => (crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2));
+function toast(m){ const t=$("#toast"); t.textContent=m; t.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>t.hidden=true,2600); }
+
+/* ---------- data layer: demo (memory) or Supabase ---------- */
+const LIVE = !!(SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase);
+const sb = LIVE ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+function demoData(){
+  const t = today();
+  const d1 = uid(), d2 = uid(), d3 = uid(), d4 = uid();
+  const ms = (deal, start, doneCount) => MILESTONES.map((name,i)=>({id:uid(),deal_id:deal,name,due_date:addDays(start,[0,3,15,25,28,30,34,35][i]),done:i<doneCount,client_visible:true,sort:i}));
+  return {
+    team_members:[{email:"dhomeswfl@gmail.com",full_name:"Jorge Marino",phone:"(239) 776-2393"}],
+    deals:[
+      {id:d1,address:"2728 Randall Blvd, Naples, FL 34120",side:"seller",stage:"Inspection",client_name:"Sample Seller",client_email:"client@example.com",agent_email:"dhomeswfl@gmail.com",price:625000,contract_date:addDays(t,-12),closing_date:addDays(t,23)},
+      {id:d2,address:"298 Castaways St, Marco Island, FL 34145",side:"seller",stage:"Showing / Listing Prep",client_name:"Sample Owner",client_email:"owner@example.com",agent_email:"dhomeswfl@gmail.com",price:3350000},
+      {id:d3,address:"5622 Deauville Ct, Cape Coral, FL",side:"buyer",stage:"Financing & Appraisal",client_name:"Sample Buyer",client_email:"buyer@example.com",agent_email:"dhomeswfl@gmail.com",price:410000,contract_date:addDays(t,-24),closing_date:addDays(t,11)},
+      {id:d4,address:"Golden Gate Estates lot, Naples",side:"buyer",stage:"Lead",client_name:"New Lead",client_email:"",agent_email:"dhomeswfl@gmail.com",price:null}
+    ],
+    milestones:[...ms(d1,addDays(t,-12),2),...ms(d3,addDays(t,-24),4)],
+    tasks:[
+      {id:uid(),deal_id:d1,title:"Send seller's disclosure to buyer's agent",owner:"agent",due_date:addDays(t,-1),done:false},
+      {id:uid(),deal_id:d1,title:"Leave keys / lockbox code for inspector",owner:"client",due_date:addDays(t,1),done:false},
+      {id:uid(),deal_id:d1,title:"Collect HOA estoppel letter",owner:"agent",due_date:addDays(t,6),done:false},
+      {id:uid(),deal_id:d3,title:"Upload latest bank statements to lender",owner:"client",due_date:addDays(t,2),done:true},
+      {id:uid(),deal_id:d3,title:"Shop homeowners and flood insurance quotes",owner:"client",due_date:addDays(t,4),done:false},
+      {id:uid(),deal_id:d3,title:"Confirm appraisal date with lender",owner:"agent",due_date:addDays(t,1),done:false},
+      {id:uid(),deal_id:d2,title:"Schedule professional photos",owner:"agent",due_date:addDays(t,3),done:false}
+    ],
+    documents:[
+      {id:uid(),deal_id:d1,name:"Executed contract.pdf",path:"",client_visible:true,uploaded_at:addDays(t,-12)},
+      {id:uid(),deal_id:d1,name:"Inspection report.pdf",path:"",client_visible:true,uploaded_at:addDays(t,-2)},
+      {id:uid(),deal_id:d3,name:"Pre-approval letter.pdf",path:"",client_visible:true,uploaded_at:addDays(t,-25)}
+    ],
+    homes:[
+      {id:uid(),client_name:"Sample Homeowner",client_email:"home@example.com",address:"1450 Sample Way, Naples, FL 34119",purchase_price:540000,purchase_date:"2022-06-15",current_value:655000,value_updated:addDays(t,-20),insurance_renewal:addDays(t,48),agent_email:"dhomeswfl@gmail.com",notes:""}
+    ]
+  };
+}
+let MEM = demoData();
+
+const db = {
+  async all(table){
+    if(!LIVE) return MEM[table].slice();
+    const {data,error} = await sb.from(table).select("*"); if(error) throw error; return data;
+  },
+  async insert(table,row){
+    if(!LIVE){ row = {id:uid(),...row}; MEM[table].push(row); return row; }
+    const {data,error} = await sb.from(table).insert(row).select().single(); if(error) throw error; return data;
+  },
+  async insertMany(table,rows){
+    if(!LIVE){ rows.forEach(r=>MEM[table].push({id:uid(),...r})); return; }
+    const {error} = await sb.from(table).insert(rows); if(error) throw error;
+  },
+  async update(table,id,patch){
+    if(!LIVE){ Object.assign(MEM[table].find(r=>r.id===id),patch); return; }
+    const {error} = await sb.from(table).update(patch).eq("id",id); if(error) throw error;
+  },
+  async remove(table,id){
+    if(!LIVE){ MEM[table] = MEM[table].filter(r=>r.id!==id); return; }
+    const {error} = await sb.from(table).delete().eq("id",id); if(error) throw error;
+  },
+  async upload(dealId,file){
+    if(!LIVE) return "";
+    const path = `${dealId}/${Date.now()}-${file.name.replace(/[^\w.\-]+/g,"_")}`;
+    const {error} = await sb.storage.from("deal-docs").upload(path,file); if(error) throw error; return path;
+  },
+  async fileUrl(path){
+    if(!LIVE || !path) return null;
+    const {data,error} = await sb.storage.from("deal-docs").createSignedUrl(path,300); if(error) throw error; return data.signedUrl;
+  }
+};
+
+/* ---------- state ---------- */
+const S = {user:null, role:null, tab:null, data:null};
+async function loadAll(){
+  const [team,deals,milestones,tasks,documents,homes] = await Promise.all(["team_members","deals","milestones","tasks","documents","homes"].map(t=>db.all(t)));
+  S.data = {team,deals,milestones,tasks,documents,homes};
+}
+const msOf = id => S.data.milestones.filter(m=>m.deal_id===id).sort((a,b)=>a.sort-b.sort);
+const tasksOf = id => S.data.tasks.filter(t=>t.deal_id===id).sort((a,b)=>(a.done-b.done)||String(a.due_date).localeCompare(String(b.due_date)));
+const docsOf = id => S.data.documents.filter(d=>d.deal_id===id);
+const agentOf = email => S.data.team.find(a=>a.email===email) || {full_name:OFFICE.name,phone:OFFICE.phone,email:OFFICE.email};
+const progress = id => { const m = msOf(id); return m.length ? Math.round(100*m.filter(x=>x.done).length/m.length) : 0; };
+
+/* ---------- auth ---------- */
+async function start(){
+  $("#demoBand").hidden = LIVE;
+  if(LIVE){
+    const {data:{session}} = await sb.auth.getSession();
+    if(session) return enter(session.user.email);
+    sb.auth.onAuthStateChange((_e,s)=>{ if(s && !S.user) enter(s.user.email); });
+  }
+  renderLogin();
+}
+async function enter(email, demoRole){
+  S.user = email.toLowerCase();
+  try{ await loadAll(); }catch(e){ console.error(e); toast("Could not load data: " + e.message); }
+  if(demoRole) S.role = demoRole;
+  else S.role = S.data.team.some(a=>a.email.toLowerCase()===S.user) ? "agent" : "client";
+  $("#who").hidden = false; $("#whoName").textContent = S.role==="agent" ? agentOf(S.user).full_name : S.user;
+  S.tab = S.role==="agent" ? "board" : null;
+  render();
+}
+$("#signOut").onclick = async ()=>{ if(LIVE) await sb.auth.signOut(); S.user=null; MEM=demoData(); $("#who").hidden=true; renderLogin(); };
+
+function renderLogin(){
+  $("#app").innerHTML = `
+  <div class="login">
+    <div class="eyebrow">Marino Group</div>
+    <h1 class="big">Your home, every step</h1>
+    <p class="muted">Track your purchase or sale, see documents and dates, and keep an eye on your home's value after closing.</p>
+    <div class="card">
+      ${LIVE ? `
+      <form id="loginForm">
+        <label for="em">Email address</label>
+        <input id="em" type="email" required placeholder="you@email.com" autocomplete="email">
+        <button class="btn gold" style="margin-top:12px;width:100%;justify-content:center">Email me a sign-in link</button>
+        <p class="small muted" style="margin:10px 0 0">No password needed. Use the email your agent has on file.</p>
+      </form>` : `
+      <b>Preview the portal</b>
+      <p class="small muted" style="margin:4px 0 0">Logins turn on once the database is connected. Pick a view to explore with sample data:</p>
+      <div class="demo-pick">
+        <button class="btn" data-demo="agent">Agent / team view</button>
+        <button class="btn" data-demo="client">Client view (seller under contract)</button>
+        <button class="btn" data-demo="home">Homeowner dashboard</button>
+      </div>`}
+    </div>
+    <p class="small muted" style="margin-top:18px">Questions? Call ${OFFICE.phone}</p>
+  </div>`;
+  if(LIVE){
+    $("#loginForm").onsubmit = async e=>{
+      e.preventDefault();
+      const email = $("#em").value.trim();
+      const {error} = await sb.auth.signInWithOtp({email, options:{emailRedirectTo: location.origin + location.pathname}});
+      if(error) return toast(error.message);
+      $("#loginForm").innerHTML = `<p>Check <b>${esc(email)}</b> for your sign-in link.</p>`;
+    };
+  } else {
+    document.querySelectorAll("[data-demo]").forEach(b=>b.onclick=()=>{
+      const r = b.dataset.demo;
+      enter(r==="agent" ? "dhomeswfl@gmail.com" : r==="client" ? "client@example.com" : "home@example.com", r==="agent"?"agent":"client");
+    });
+  }
+}
+
+/* ---------- render ---------- */
+function render(){
+  if(S.role==="agent") return renderAgent();
+  return renderClient();
+}
+
+function renderAgent(){
+  const tabs = [["board","Transaction board"],["tasks","My tasks"],["homes","Homeowners"],["new","+ New deal"]];
+  const active = S.data.deals.filter(d=>d.stage!=="Closed");
+  const pending = active.filter(d=>STAGES.indexOf(d.stage)>=2);
+  const t = today();
+  const openTasks = S.data.tasks.filter(x=>!x.done && x.owner==="agent");
+  const closingSoon = pending.filter(d=>d.closing_date && d.closing_date <= addDays(t,30));
+  let body = "";
+  if(S.tab==="board"){
+    body = `
+    <div class="stats">
+      <div class="stat"><b>${active.length}</b><span class="small muted">Active deals</span></div>
+      <div class="stat"><b>${pending.length}</b><span class="small muted">Under contract</span></div>
+      <div class="stat"><b>${money(pending.reduce((s,d)=>s+(+d.price||0),0))}</b><span class="small muted">Pending volume</span></div>
+      <div class="stat"><b>${closingSoon.length}</b><span class="small muted">Closing in 30 days</span></div>
+    </div>
+    <div class="board">${STAGES.map(st=>{
+      const ds = S.data.deals.filter(d=>d.stage===st);
+      return `<div class="col"><h3>${st}<span class="muted">${ds.length}</span></h3>${ds.map(dealCard).join("")}</div>`;
+    }).join("")}</div>`;
+  }
+  if(S.tab==="tasks"){
+    const rows = S.data.tasks.filter(x=>!x.done).sort((a,b)=>String(a.due_date).localeCompare(String(b.due_date)));
+    body = `<div class="card"><h2 style="font-size:22px">Open tasks</h2>
+      <ul class="list">${rows.map(x=>{const d=S.data.deals.find(z=>z.id===x.deal_id)||{};return `
+        <li><input type="checkbox" data-task="${x.id}"><span class="grow">${esc(x.title)}<br><span class="small muted">${esc(d.address)} · ${x.owner==="client"?"Client task":"Agent task"}</span></span>
+        <span class="small ${x.due_date && x.due_date<t?"late":"muted"}">${fmt(x.due_date)}</span></li>`}).join("") || "<li class='muted'>Nothing open.</li>"}</ul></div>`;
+  }
+  if(S.tab==="homes"){
+    body = `<div class="card"><div class="row" style="justify-content:space-between"><h2 style="font-size:22px">Past clients' homes</h2><button class="btn sm" id="addHome">+ Add home</button></div>
+      <p class="small muted">Each owner sees a dashboard with value, equity and Florida home reminders. Update the value whenever you run a CMA.</p>
+      <table><tr><th>Owner</th><th>Address</th><th>Bought</th><th>Value</th><th>Updated</th><th></th></tr>
+      ${S.data.homes.map(h=>`<tr><td>${esc(h.client_name)}<br><span class="small muted">${esc(h.client_email)}</span></td><td>${esc(h.address)}</td><td>${money(h.purchase_price)}<br><span class="small muted">${fmt(h.purchase_date)}</span></td><td>${money(h.current_value)}</td><td class="small">${fmt(h.value_updated)}</td><td><button class="btn sm" data-edithome="${h.id}">Edit</button></td></tr>`).join("")}
+      </table></div><div id="homeForm"></div>`;
+  }
+  if(S.tab==="new"){
+    body = `<div class="card" style="max-width:640px"><h2 style="font-size:22px">New deal</h2>
+      <form id="dealForm">
+        <label>Property address</label><input name="address" required>
+        <div class="row"><div style="flex:1"><label>Side</label><select name="side"><option value="buyer">Buyer</option><option value="seller">Seller</option></select></div>
+        <div style="flex:1"><label>Stage</label><select name="stage">${STAGES.map(s=>`<option>${s}</option>`).join("")}</select></div></div>
+        <div class="row"><div style="flex:1"><label>Client name</label><input name="client_name"></div><div style="flex:1"><label>Client email (gives them portal access)</label><input name="client_email" type="email"></div></div>
+        <div class="row"><div style="flex:1"><label>Price</label><input name="price" type="number" min="0" step="1000"></div>
+        <div style="flex:1"><label>Contract date</label><input name="contract_date" type="date"></div><div style="flex:1"><label>Closing date</label><input name="closing_date" type="date"></div></div>
+        <label class="row" style="color:var(--fg);gap:8px"><input type="checkbox" name="tpl" checked style="width:auto"> Add the standard Florida contract timeline (adjust dates after)</label>
+        <button class="btn gold" style="margin-top:14px">Create deal</button>
+      </form></div>`;
+  }
+  $("#app").innerHTML = `<div class="tabs">${tabs.map(([k,l])=>`<button data-tab="${k}" class="${S.tab===k?"on":""}">${l}</button>`).join("")}</div>${body}`;
+  document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab;render();});
+  document.querySelectorAll("[data-deal]").forEach(b=>b.onclick=()=>openDeal(b.dataset.deal));
+  bindTaskBoxes();
+  if($("#dealForm")) $("#dealForm").onsubmit = createDeal;
+  if($("#addHome")) $("#addHome").onclick = ()=>homeForm();
+  document.querySelectorAll("[data-edithome]").forEach(b=>b.onclick=()=>homeForm(S.data.homes.find(h=>h.id===b.dataset.edithome)));
+}
+
+function dealCard(d){
+  const p = progress(d.id);
+  return `<div class="deal" data-deal="${d.id}"><b>${esc(d.address.split(",")[0])}</b>
+    <span class="tag ${d.side}">${d.side}</span><span class="small muted">${esc(d.client_name||"")}</span>
+    <div class="small muted" style="margin-top:4px">${money(d.price)}${d.closing_date?` · closes ${fmt(d.closing_date)}`:""}</div>
+    ${msOf(d.id).length?`<div class="bar"><i style="width:${p}%"></i></div>`:""}</div>`;
+}
+
+function bindTaskBoxes(){
+  document.querySelectorAll("[data-task]").forEach(c=>c.onchange=async()=>{
+    try{ await db.update("tasks",c.dataset.task,{done:c.checked}); S.data.tasks.find(x=>x.id===c.dataset.task).done=c.checked; render(); if(S.openDeal) openDeal(S.openDeal); }catch(e){ toast(e.message); c.checked=!c.checked; }
+  });
+}
+
+async function createDeal(e){
+  e.preventDefault();
+  const f = Object.fromEntries(new FormData(e.target));
+  const row = {address:f.address,side:f.side,stage:f.stage,client_name:f.client_name||null,client_email:(f.client_email||"").trim().toLowerCase()||null,
+    agent_email:S.user,price:f.price?+f.price:null,contract_date:f.contract_date||null,closing_date:f.closing_date||null};
+  try{
+    const deal = await db.insert("deals",row);
+    if(f.tpl){
+      const base = f.contract_date || today();
+      const offs = [0,3,15,25,28,30,-1,0];
+      await db.insertMany("milestones",MILESTONES.map((name,i)=>({deal_id:deal.id,name,sort:i,client_visible:true,done:false,
+        due_date: i>=6 && f.closing_date ? addDays(f.closing_date,offs[i]) : (i<6 ? addDays(base,offs[i]) : null)})));
+    }
+    await loadAll(); S.tab="board"; render(); openDeal(deal.id); toast("Deal created");
+  }catch(err){ toast(err.message); }
+}
+
+function openDeal(id){
+  S.openDeal = id;
+  const d = S.data.deals.find(x=>x.id===id); if(!d) return;
+  const t = today();
+  const el = document.createElement("div"); el.className="drawer"; el.id="drawer";
+  el.innerHTML = `<div class="panel">
+    <div class="row" style="justify-content:space-between"><span class="tag ${d.side}">${d.side}</span><button class="btn sm" id="closeD">Close</button></div>
+    <h2 style="font-size:24px;margin-top:10px">${esc(d.address)}</h2>
+    <p class="muted small">${esc(d.client_name||"No client yet")} ${d.client_email?`· ${esc(d.client_email)}`:""}</p>
+    <div class="row" style="flex-wrap:wrap">
+      <div style="flex:1;min-width:160px"><label>Stage</label><select id="stageSel">${STAGES.map(s=>`<option ${s===d.stage?"selected":""}>${s}</option>`).join("")}</select></div>
+      <div style="flex:1;min-width:120px"><label>Price</label><input id="priceIn" type="number" value="${d.price??""}"></div>
+      <div style="flex:1;min-width:140px"><label>Closing</label><input id="closeIn" type="date" value="${d.closing_date??""}"></div>
+    </div>
+    <div class="row" style="margin-top:10px;flex-wrap:wrap">
+      <div style="flex:1;min-width:200px"><label>Client email</label><input id="cemIn" type="email" value="${esc(d.client_email??"")}"></div>
+      <button class="btn sm" id="saveD" style="align-self:end">Save</button>
+      <button class="btn sm" id="invite" style="align-self:end">Copy client invite</button>
+    </div>
+
+    <h3 style="margin-top:24px;font-size:18px">Timeline</h3>
+    <ul class="list">${msOf(id).map(m=>`<li><input type="checkbox" data-ms="${m.id}" ${m.done?"checked":""}><span class="grow ${m.done?"done":""}">${esc(m.name)}</span>
+      <input type="date" data-msdate="${m.id}" value="${m.due_date??""}" style="width:150px"></li>`).join("") || "<li class='muted small'>No milestones.</li>"}</ul>
+    <form id="msAdd" class="row"><input name="name" placeholder="Add milestone" required><input name="due" type="date" style="width:160px"><button class="btn sm">Add</button></form>
+
+    <h3 style="margin-top:24px;font-size:18px">Tasks</h3>
+    <ul class="list">${tasksOf(id).map(x=>`<li><input type="checkbox" data-task="${x.id}" ${x.done?"checked":""}><span class="grow ${x.done?"done":""}">${esc(x.title)} <span class="tag">${x.owner}</span></span>
+      <span class="small ${!x.done&&x.due_date&&x.due_date<t?"late":"muted"}">${fmt(x.due_date)}</span><button class="btn sm" data-deltask="${x.id}" title="Remove">×</button></li>`).join("") || "<li class='muted small'>No tasks.</li>"}</ul>
+    <form id="taskAdd" class="row" style="flex-wrap:wrap"><input name="title" placeholder="New task" required style="flex:2;min-width:180px"><select name="owner" style="width:110px"><option value="agent">Agent</option><option value="client">Client</option></select><input name="due" type="date" style="width:150px"><button class="btn sm">Add</button></form>
+
+    <h3 style="margin-top:24px;font-size:18px">Documents</h3>
+    <ul class="list">${docsOf(id).map(x=>`<li><span class="grow">${esc(x.name)}${x.client_visible?"":" <span class='tag'>team only</span>"}</span><span class="small muted">${fmt(String(x.uploaded_at).slice(0,10))}</span>${x.path?`<button class="btn sm" data-open="${esc(x.path)}">Open</button>`:""}</li>`).join("") || "<li class='muted small'>No documents.</li>"}</ul>
+    <form id="docAdd" class="row" style="flex-wrap:wrap"><input type="file" name="file" required style="flex:2;min-width:200px"><label class="row small" style="margin:0;gap:6px;color:var(--fg)"><input type="checkbox" name="vis" checked style="width:auto"> Client can see</label><button class="btn sm">Upload</button></form>
+    <p style="margin-top:28px"><button class="btn sm" id="delDeal" style="color:var(--warn)">Delete deal</button></p>
+  </div>`;
+  $("#drawer")?.remove(); document.body.appendChild(el);
+  const close = ()=>{ el.remove(); S.openDeal=null; };
+  $("#closeD").onclick = close; el.onclick = e=>{ if(e.target===el) close(); };
+  $("#saveD").onclick = async()=>{
+    const patch = {stage:$("#stageSel").value,price:$("#priceIn").value?+$("#priceIn").value:null,closing_date:$("#closeIn").value||null,client_email:$("#cemIn").value.trim().toLowerCase()||null};
+    try{ await db.update("deals",id,patch); Object.assign(d,patch); render(); openDeal(id); toast("Saved"); }catch(e){ toast(e.message); }
+  };
+  $("#invite").onclick = ()=>{
+    const msg = `Hi ${d.client_name||""}, you can follow every step of ${d.address.split(",")[0]} in our client portal: ${location.origin}${location.pathname}\nSign in with this email (${d.client_email||"your email"}). No password needed. — ${agentOf(S.user).full_name}, Marino Group`;
+    navigator.clipboard?.writeText(msg).then(()=>toast("Invite copied. Paste it in a text or email."),()=>prompt("Copy this invite:",msg));
+  };
+  el.querySelectorAll("[data-ms]").forEach(c=>c.onchange=async()=>{ try{ await db.update("milestones",c.dataset.ms,{done:c.checked}); S.data.milestones.find(m=>m.id===c.dataset.ms).done=c.checked; render(); openDeal(id);}catch(e){toast(e.message);} });
+  el.querySelectorAll("[data-msdate]").forEach(c=>c.onchange=async()=>{ try{ await db.update("milestones",c.dataset.msdate,{due_date:c.value||null}); S.data.milestones.find(m=>m.id===c.dataset.msdate).due_date=c.value||null; toast("Date updated");}catch(e){toast(e.message);} });
+  el.querySelectorAll("[data-deltask]").forEach(b=>b.onclick=async()=>{ try{ await db.remove("tasks",b.dataset.deltask); S.data.tasks=S.data.tasks.filter(x=>x.id!==b.dataset.deltask); openDeal(id);}catch(e){toast(e.message);} });
+  el.querySelectorAll("[data-open]").forEach(b=>b.onclick=async()=>{ try{ const u=await db.fileUrl(b.dataset.open); if(u) window.open(u,"_blank"); }catch(e){toast(e.message);} });
+  $("#msAdd").onsubmit = async e=>{ e.preventDefault(); const f=Object.fromEntries(new FormData(e.target));
+    try{ await db.insert("milestones",{deal_id:id,name:f.name,due_date:f.due||null,done:false,client_visible:true,sort:msOf(id).length}); await loadAll(); openDeal(id);}catch(err){toast(err.message);} };
+  $("#taskAdd").onsubmit = async e=>{ e.preventDefault(); const f=Object.fromEntries(new FormData(e.target));
+    try{ await db.insert("tasks",{deal_id:id,title:f.title,owner:f.owner,due_date:f.due||null,done:false}); await loadAll(); render(); openDeal(id);}catch(err){toast(err.message);} };
+  $("#docAdd").onsubmit = async e=>{ e.preventDefault(); const file=e.target.file.files[0]; if(!file) return;
+    try{ const path = await db.upload(id,file); await db.insert("documents",{deal_id:id,name:file.name,path,client_visible:e.target.vis.checked,uploaded_at:new Date().toISOString()}); await loadAll(); openDeal(id); toast("Uploaded");}catch(err){toast(err.message);} };
+  $("#delDeal").onclick = async()=>{ if(!confirm("Delete this deal and its timeline, tasks and documents list?")) return;
+    try{ await db.remove("deals",id); await loadAll(); close(); render(); toast("Deal deleted"); }catch(e){toast(e.message);} };
+  bindTaskBoxes();
+}
+
+function homeForm(h){
+  h = h || {};
+  $("#homeForm").innerHTML = `<div class="card" style="margin-top:16px;max-width:640px"><h3 style="font-size:18px">${h.id?"Edit":"Add"} home</h3>
+    <form id="hf">
+      <div class="row"><div style="flex:1"><label>Owner name</label><input name="client_name" value="${esc(h.client_name??"")}"></div><div style="flex:1"><label>Owner email</label><input name="client_email" type="email" required value="${esc(h.client_email??"")}"></div></div>
+      <label>Address</label><input name="address" required value="${esc(h.address??"")}">
+      <div class="row"><div style="flex:1"><label>Purchase price</label><input name="purchase_price" type="number" value="${h.purchase_price??""}"></div><div style="flex:1"><label>Purchase date</label><input name="purchase_date" type="date" value="${h.purchase_date??""}"></div></div>
+      <div class="row"><div style="flex:1"><label>Current value (your CMA)</label><input name="current_value" type="number" value="${h.current_value??""}"></div><div style="flex:1"><label>Insurance renewal</label><input name="insurance_renewal" type="date" value="${h.insurance_renewal??""}"></div></div>
+      <button class="btn gold" style="margin-top:12px">Save</button>
+    </form></div>`;
+  $("#hf").onsubmit = async e=>{
+    e.preventDefault(); const f = Object.fromEntries(new FormData(e.target));
+    const row = {client_name:f.client_name||null,client_email:f.client_email.trim().toLowerCase(),address:f.address,purchase_price:f.purchase_price?+f.purchase_price:null,purchase_date:f.purchase_date||null,
+      current_value:f.current_value?+f.current_value:null,insurance_renewal:f.insurance_renewal||null,agent_email:h.agent_email||S.user};
+    if(row.current_value !== (h.current_value??null)) row.value_updated = today();
+    try{ h.id ? await db.update("homes",h.id,row) : await db.insert("homes",row); await loadAll(); render(); toast("Saved"); }catch(err){ toast(err.message); }
+  };
+  $("#homeForm").scrollIntoView({behavior:"smooth"});
+}
+
+/* ---------- client & homeowner ---------- */
+function renderClient(){
+  const deals = S.data.deals.filter(d=>(d.client_email||"").toLowerCase()===S.user);
+  const homes = S.data.homes.filter(h=>(h.client_email||"").toLowerCase()===S.user);
+  if(!deals.length && !homes.length){
+    $("#app").innerHTML = `<div class="login"><h1 class="big">Welcome</h1><p class="muted">We don't see a file under ${esc(S.user)} yet. Ask your agent to add this email, or call ${OFFICE.phone}.</p></div>`;
+    return;
+  }
+  const items = [...deals.map(d=>["d",d]),...homes.map(h=>["h",h])];
+  if(!S.tab || !items.some(([k,x])=>x.id===S.tab)) S.tab = items[0][1].id;
+  const [kind,item] = items.find(([k,x])=>x.id===S.tab);
+  const tabs = items.length>1 ? `<div class="tabs">${items.map(([k,x])=>`<button data-tab="${x.id}" class="${S.tab===x.id?"on":""}">${esc(x.address.split(",")[0])}</button>`).join("")}</div>` : "";
+  $("#app").innerHTML = tabs + (kind==="d" ? clientDeal(item) : homeDash(item));
+  document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab;render();});
+  document.querySelectorAll("[data-open]").forEach(b=>b.onclick=async()=>{ try{ const u=await db.fileUrl(b.dataset.open); if(u) window.open(u,"_blank"); else toast("Demo document"); }catch(e){toast(e.message);} });
+  bindTaskBoxes();
+}
+
+function agentBlock(email){
+  const a = agentOf(email);
+  return `<div class="card"><div class="eyebrow">Your agent</div><div class="agent-card" style="margin-top:10px">
+    ${AGENT_PHOTOS[a.email]?`<img src="${AGENT_PHOTOS[a.email]}" alt="">`:""}<div><b>${esc(a.full_name)}</b><br>
+    <a href="tel:${esc((a.phone||OFFICE.phone).replace(/\D/g,""))}">${esc(a.phone||OFFICE.phone)}</a><br>
+    <a href="mailto:${esc(a.email)}">${esc(a.email)}</a></div></div></div>`;
+}
+
+function clientDeal(d){
+  const ms = msOf(d.id), t = today();
+  const nextIdx = ms.findIndex(m=>!m.done);
+  const days = d.closing_date ? Math.ceil((new Date(d.closing_date+"T12:00:00")-new Date())/864e5) : null;
+  const mine = tasksOf(d.id).filter(x=>x.owner==="client");
+  return `
+  <div class="hero-deal"><div><div class="eyebrow">${d.side==="buyer"?"Your purchase":"Your sale"} · ${esc(d.stage)}</div><h1 class="big">${esc(d.address)}</h1></div>
+    ${days!==null && d.stage!=="Closed" ? `<div style="text-align:right"><div class="big">${days>0?days:0}</div><div class="small muted">days to closing · ${fmt(d.closing_date)}</div></div>`:""}</div>
+  <div class="grid2">
+    <div class="card"><h2 style="font-size:20px;margin-bottom:14px">Timeline</h2>
+      ${ms.length ? `<ul class="tl">${ms.map((m,i)=>`<li class="${m.done?"ok":i===nextIdx?"next":""}"><i></i><b style="font-weight:${i===nextIdx?600:400}">${esc(m.name)}</b><br><span class="small muted">${m.done?"Done":fmt(m.due_date)}${i===nextIdx?" · next up":""}</span></li>`).join("")}</ul>`
+        : `<p class="muted">Your agent will post key dates here once you're under contract.</p>`}
+    </div>
+    <div style="display:grid;gap:20px;align-content:start">
+      ${agentBlock(d.agent_email)}
+      <div class="card"><h2 style="font-size:18px">Your to-dos</h2>
+        <ul class="list">${mine.map(x=>`<li><input type="checkbox" data-task="${x.id}" ${x.done?"checked":""}><span class="grow ${x.done?"done":""}">${esc(x.title)}</span><span class="small ${!x.done&&x.due_date&&x.due_date<t?"late":"muted"}">${fmt(x.due_date)}</span></li>`).join("") || "<li class='muted small'>Nothing for you right now.</li>"}</ul></div>
+      <div class="card"><h2 style="font-size:18px">Documents</h2>
+        <ul class="list">${docsOf(d.id).filter(x=>x.client_visible).map(x=>`<li><span class="grow">${esc(x.name)}</span><button class="btn sm" data-open="${esc(x.path)}">Open</button></li>`).join("") || "<li class='muted small'>No documents yet.</li>"}</ul></div>
+    </div>
+  </div>`;
+}
+
+function homeDash(h){
+  const eq = h.current_value && h.purchase_price ? h.current_value - h.purchase_price : null;
+  const pct = eq!==null ? (100*eq/h.purchase_price).toFixed(1) : null;
+  const now = new Date(), y = now.getFullYear(), t = today();
+  const nextDate = (m,d)=>{ let x=`${y}-${m}-${d}`; if(x<t) x=`${y+1}-${m}-${d}`; return x; };
+  const reminders = [
+    {d:nextDate("03","01"),t:"Homestead exemption deadline",n:"File with the county Property Appraiser by March 1 if this is your primary home and you haven't yet."},
+    {d:nextDate("05","15"),t:"Hurricane season prep",n:"Season runs June 1 to November 30. Check shutters, generator, trees, and your insurance deductibles."},
+    {d:nextDate("04","01"),t:"A/C service",n:"Service before the summer heat; a second check in fall is common in Southwest Florida."},
+    ...(h.insurance_renewal?[{d:h.insurance_renewal,t:"Insurance renewal",n:"Shop your homeowners and flood policies 45 days ahead. A wind mitigation inspection may lower your premium."}]:[]),
+    {d:nextDate("11","01"),t:"Property tax bills",n:"Tax bills go out in November; paying in November earns the largest early-payment discount."}
+  ].sort((a,b)=>a.d.localeCompare(b.d));
+  const appraiser = /lee county|cape coral|fort myers|lehigh|bonita/i.test(h.address) ? ["Lee County Property Appraiser","https://www.leepa.org/"] : ["Collier County Property Appraiser","https://www.collierappraiser.com/"];
+  return `
+  <div class="hero-deal"><div><div class="eyebrow">Your home</div><h1 class="big">${esc(h.address)}</h1></div></div>
+  <div class="stats">
+    <div class="stat"><b>${money(h.current_value)}</b><span class="small muted">Estimated value · ${fmt(h.value_updated)}</span></div>
+    <div class="stat"><b>${money(h.purchase_price)}</b><span class="small muted">Purchased ${fmt(h.purchase_date)}</span></div>
+    <div class="stat"><b>${eq!==null?(eq>=0?"+":"")+money(Math.abs(eq)).replace("$", eq<0?"-$":"$"):"—"}</b><span class="small muted">Change in value${pct?` (${pct}%)`:""}</span></div>
+    <div class="stat"><b>${h.insurance_renewal?fmt(h.insurance_renewal):"—"}</b><span class="small muted">Insurance renewal</span></div>
+  </div>
+  <div class="grid2">
+    <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Coming up</h2>
+      <ul class="list">${reminders.map(r=>`<li style="align-items:start"><span class="small" style="min-width:96px;color:var(--gold);font-weight:600">${fmt(r.d)}</span><span class="grow"><b style="font-weight:600">${r.t}</b><br><span class="small muted">${r.n}</span></span></li>`).join("")}</ul>
+    </div>
+    <div style="display:grid;gap:20px;align-content:start">
+      ${agentBlock(h.agent_email)}
+      <div class="card"><h2 style="font-size:18px">Thinking about your next move?</h2>
+        <p class="small muted">The estimate above comes from your agent's market analysis, not an automated model. Ask for a fresh one anytime.</p>
+        <a class="btn gold" href="mailto:${esc(agentOf(h.agent_email).email)}?subject=${encodeURIComponent("Updated value for "+h.address)}">Request an updated value</a>
+        <p class="small" style="margin-top:12px"><a href="${appraiser[1]}" target="_blank" rel="noopener">${appraiser[0]}</a> · assessed value and tax records</p>
+      </div>
+    </div>
+  </div>`;
+}
+
+start();
+</script>
+</body>
+</html>
