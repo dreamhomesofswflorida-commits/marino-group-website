@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="Marino Group, a real estate team brokered by Waterfront Realty Group, Inc., helping families buy, sell, and build homes in Collier, Lee, and Charlotte counties, Florida.">
 <link rel="icon" href="img/marino_logo_transparent_gold.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#141312">
+<link rel="apple-touch-icon" href="/img/app/icon-192.png">
 <title>Marino Group | Southwest Florida Real Estate</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Figtree:wght@400;500;600&family=Poppins:wght@500&display=swap">
@@ -199,7 +202,7 @@ footer .fine{grid-column:1/-1;border-top:1px solid #2e2b27;padding-top:22px;disp
   <div class="wrap">
     <a href="#home" aria-label="Marino Group home"><svg class="logo" viewBox="0 0 1200 520" role="img" aria-label="Marino Group"><use href="#mg-logo"/></svg></a>
     <nav class="nav" aria-label="Main">
-      <a href="#buy">Buy</a><a href="#sell">Sell</a><a href="#build">Build</a><a href="#team">Our Team</a><a href="#reviews">Reviews</a><a href="#store">Agent Store</a><a href="#contact">Contact</a>
+      <a href="#buy">Buy</a><a href="homes/">Search Homes</a><a href="areas/">Areas</a><a href="#sell">Sell</a><a href="#build">Build</a><a href="#team">Our Team</a><a href="#reviews">Reviews</a><a href="#contact">Contact</a>
     </nav>
     <span class="esp">English · Español · Русский</span>
     <a class="call" href="tel:+12397762393">(239) 776-2393</a>
@@ -222,7 +225,7 @@ footer .fine{grid-column:1/-1;border-top:1px solid #2e2b27;padding-top:22px;disp
       <label for="s-beds">Beds
         <select id="s-beds"><option>Any</option><option>2+</option><option>3+</option><option>4+</option><option>5+</option></select>
       </label>
-      <a class="btn" href="https://matrix.swflamls.com/Matrix/public/IDX.aspx?idx=90081c45" target="_blank" rel="noopener">Search homes</a>
+      <button class="btn" type="submit">Search homes</button>
     </form>
     <div class="hero-ctas">
       <a class="btn btn-gold" href="#value">What's my home worth?</a>
@@ -232,7 +235,7 @@ footer .fine{grid-column:1/-1;border-top:1px solid #2e2b27;padding-top:22px;disp
   <div class="horizon" aria-hidden="true"><div class="sun"></div><div class="sea"><div class="glint"></div></div></div>
 </section>
 
-<div class="areas"><div class="wrap"><b>We serve</b><span>Naples</span><span>Golden Gate Estates</span><span>Marco Island</span><span>Bonita Springs</span><span>Estero</span><span>Fort Myers</span><span>Lehigh Acres</span><span>Cape Coral</span><span>Port Charlotte</span></div></div>
+<div class="areas"><div class="wrap"><b>We serve</b><a href="areas/naples/" style="text-decoration:none">Naples</a><a href="areas/golden-gate-estates/" style="text-decoration:none">Golden Gate Estates</a><a href="areas/marco-island/" style="text-decoration:none">Marco Island</a><a href="areas/bonita-springs/" style="text-decoration:none">Bonita Springs</a><a href="areas/estero/" style="text-decoration:none">Estero</a><a href="areas/fort-myers/" style="text-decoration:none">Fort Myers</a><a href="areas/lehigh-acres/" style="text-decoration:none">Lehigh Acres</a><a href="areas/cape-coral/" style="text-decoration:none">Cape Coral</a><a href="areas/port-charlotte/" style="text-decoration:none">Port Charlotte</a></div></div>
 
 <section id="buy" aria-labelledby="buy-h">
   <div class="wrap split">
@@ -240,7 +243,7 @@ footer .fine{grid-column:1/-1;border-top:1px solid #2e2b27;padding-top:22px;disp
       <span class="eyebrow">Buy</span>
       <h2 id="buy-h">Every home on the Southwest Florida MLS, updated daily.</h2>
       <p class="lead">Search live listings straight from the SWFL MLS. Save the ones you like, and we'll set up showings the same week, including evenings and weekends.</p>
-      <div class="hero-ctas"><a class="btn btn-gold" href="https://matrix.swflamls.com/Matrix/public/IDX.aspx?idx=90081c45" target="_blank" rel="noopener">Open live MLS search</a><a class="btn btn-ghost" href="#contact">Schedule a showing</a></div>
+      <div class="hero-ctas"><a class="btn btn-gold" href="homes/">Search all homes</a><a class="btn btn-ghost" href="#contact">Schedule a showing</a></div>
     </div>
     <div class="mls">
       <span class="eyebrow">How we help buyers</span>
@@ -427,13 +430,15 @@ footer .fine{grid-column:1/-1;border-top:1px solid #2e2b27;padding-top:22px;disp
     </div>
     <div style="display:grid;gap:8px;align-content:start">
       <span class="broker">Explore</span>
-      <a href="#buy">Buy</a><a href="#sell">Sell</a><a href="#build">Build</a><a href="#team">Our Team</a><a href="#store">Agent Store</a><a href="#contact">Contact</a>
+      <a href="#buy">Buy</a><a href="homes/">Search Homes</a><a href="areas/">Area Guides</a><a href="#sell">Sell</a><a href="#build">Build</a><a href="#team">Our Team</a><a href="#store">Agent Store</a><a href="#contact">Contact</a>
     </div>
     <div style="display:grid;gap:8px;align-content:start">
       <span class="broker">Follow</span>
       <a href="https://www.facebook.com/DreamhomeRealty239/" target="_blank" rel="noopener">Facebook</a>
       <a href="woodenconcept/">Wooden Concept Renovations</a>
       <a href="marinodesign/">Marino Design</a>
+      <a href="app/">Get the Marino Group app</a>
+      <a href="portal/">Client Portal</a>
       <span>(239) 776-2393</span>
     </div>
     <div class="fine"><span>© 2026 Marino Group · Waterfront Realty Group, Inc. · Equal Housing Opportunity</span><span>Listing data from the SWFL MLS</span></div>
@@ -442,7 +447,9 @@ footer .fine{grid-column:1/-1;border-top:1px solid #2e2b27;padding-top:22px;disp
 
 <script>
 const $=id=>document.getElementById(id);
-$("search").addEventListener("submit",e=>e.preventDefault());
+$("search").addEventListener("submit",e=>{e.preventDefault();const q=new URLSearchParams(),a=$("s-area").value,m=$("s-price").value.replace(/[^0-9]/g,""),b=$("s-beds").value;
+  if(a&&!a.startsWith("All"))q.set("area",a);if(m)q.set("max",m);if(b!=="Any")q.set("beds",b);location.href="homes/"+(q.toString()?"?"+q:"");});
+if("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(()=>{});
 const FORM_URL="https://formsubmit.co/ajax/dhomeswfl@gmail.com";
 async function send(form,ok,subject,data){
   const btn=form.querySelector("button[type=submit]");btn.disabled=true;
