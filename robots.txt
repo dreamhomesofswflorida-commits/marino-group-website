@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /portal/
+Disallow: /showings/signin/
+Sitemap: https://marinogroupswfl.com/sitemap.xml
