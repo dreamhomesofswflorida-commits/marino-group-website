@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Marino Showings | Marino Group</title>
+<meta name="description" content="Marino Showings: licensed agents cover your buyer showings and open houses. Post a request or pick up a job near you.">
+<link rel="icon" href="/img/marino_logo_transparent_gold.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#141312">
+<link rel="apple-touch-icon" href="/img/app/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+:root{--bg:#f6f3ee;--surface:#fff;--sunk:#ece6dc;--fg:#1e1d1c;--muted:#655f56;--line:#ddd5c8;--ink:#141312;--on-ink:#f3ece0;--gold:#b8955d;--gold-soft:#d8c3a0;--gulf:#2f5d62;
+--ok:#2f7a4c;--ok-soft:#dcefe2;--warn:#a2601d;--warn-soft:#f6e6d0;--bad:#b3261e;--bad-soft:#f6dcd9;
+--display:"Jost","Futura","Century Gothic",Arial,sans-serif;--body:"Figtree","Segoe UI",Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141312;--surface:#1d1b19;--sunk:#25221f;--fg:#efe8dc;--muted:#a79e90;--line:#36322d;--gold:#d3b585;--gold-soft:#e3cfa9;--gulf:#7fb0b3;
+--ok:#76c391;--ok-soft:#18301f;--warn:#e3a35f;--warn-soft:#3a2a14;--bad:#f08a80;--bad-soft:#3d1c19;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141312;--surface:#1d1b19;--sunk:#25221f;--fg:#efe8dc;--muted:#a79e90;--line:#36322d;--gold:#d3b585;--gold-soft:#e3cfa9;--gulf:#7fb0b3;--ok:#76c391;--ok-soft:#18301f;--warn:#e3a35f;--warn-soft:#3a2a14;--bad:#f08a80;--bad-soft:#3d1c19;color-scheme:dark}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html,body{margin:0}body{background:var(--bg);color:var(--fg);font:15px/1.5 var(--body)}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;letter-spacing:-.01em}
+a{color:var(--gulf)}button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:780px;margin:0 auto;padding-inline:16px}
+header.top{position:sticky;top:0;z-index:5;background:var(--ink);color:var(--on-ink)}
+.brandrow{display:flex;align-items:center;gap:12px;padding-block:12px 4px}
+.brandrow svg.logo{width:104px;height:auto}
+.brandrow .t{font:500 13px var(--display);letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft)}
+.brandrow .who{margin-left:auto;font-size:13px;opacity:.85;display:flex;gap:10px;align-items:center}
+.brandrow .who button{background:none;border:1px solid #4a4540;color:var(--on-ink);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:13px}
+nav.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+nav.tabs button{border:0;background:none;color:#bdb3a3;font:500 14px var(--body);padding:10px 12px;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;display:flex;gap:6px;align-items:center}
+nav.tabs button[aria-selected="true"]{color:var(--on-ink);border-color:var(--gold)}
+.count{font-size:11px;background:#3a3631;border-radius:99px;padding:0 7px}
+.demo{background:var(--gold-soft);color:#1e1d1c;text-align:center;font-size:13px;padding:6px 12px}
+main{padding-block:20px 60px;display:flex;flex-direction:column;gap:16px}
+.lede h2{font-size:clamp(24px,5vw,32px);font-weight:300;line-height:1.15}.lede p{color:var(--muted);margin:6px 0 0;max-width:60ch}
+.notice{background:var(--warn-soft);border-radius:10px;padding:10px 14px;font-size:14px}
+.quick{display:flex;gap:6px;flex-wrap:wrap}
+.quick button{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:7px 14px;cursor:pointer;font-weight:500}
+.quick button[aria-pressed="true"]{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.filters label{display:flex;flex-direction:column;gap:3px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);flex:1 1 140px;min-width:0}
+input,select,textarea{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 10px;width:100%;min-width:0;font-size:15px}
+textarea{min-height:80px;resize:vertical}
+.list{display:flex;flex-direction:column;gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.row1{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.addr{font-weight:700;font-size:16px;overflow-wrap:anywhere}
+.when{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pay{text-align:right;flex:none}.pay b{display:block;font:500 24px var(--display);color:var(--gold);line-height:1}.pay span{font-size:11px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;font-weight:600;padding:2px 9px;border-radius:99px;background:var(--sunk);color:var(--muted)}
+.chip.type{background:var(--ink);color:var(--on-ink)}.chip.ok{background:var(--ok-soft);color:var(--ok)}.chip.warn{background:var(--warn-soft);color:var(--warn)}
+.pill{font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.st-open{background:var(--sunk);color:var(--fg)}.st-accepted,.st-confirmed{background:var(--warn-soft);color:var(--warn)}.st-checkedin{background:#b8955d33;color:var(--gold)}
+.st-completed{background:var(--ok-soft);color:var(--ok)}.st-cancelled{background:var(--bad-soft);color:var(--bad)}
+.meta{display:grid;grid-template-columns:max-content 1fr;gap:3px 12px;font-size:13px;margin:0}.meta dt{color:var(--muted)}.meta dd{margin:0;overflow-wrap:anywhere}
+.notes{font-size:14px;background:var(--sunk);border-radius:8px;padding:8px 10px;margin:0;overflow-wrap:anywhere}
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--line);background:var(--surface);font:600 14px var(--body);padding:9px 14px;border-radius:9px;cursor:pointer;text-decoration:none;color:var(--fg);display:inline-flex;align-items:center;gap:6px}
+.btn.primary{background:var(--ink);border-color:var(--ink);color:var(--on-ink)}.btn.gold{background:var(--gold-soft);border-color:var(--gold-soft);color:#1e1d1c}
+.btn.danger{color:var(--bad);border-color:var(--bad-soft)}.btn[disabled]{opacity:.5;cursor:not-allowed}
+.check{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--muted)}.check input{width:auto;margin-top:3px}
+.empty{text-align:center;padding:32px 16px;border:1.5px dashed var(--line);border-radius:12px;color:var(--muted)}
+.empty h3{color:var(--fg);font-size:18px;margin-bottom:4px}
+form.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+form.grid>label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;min-width:0}
+.s6{grid-column:span 6}.s4{grid-column:span 4}.s3{grid-column:span 3}.s2{grid-column:span 2}
+@media (max-width:560px){.s4,.s3{grid-column:span 6}.s2{grid-column:span 3}}
+fieldset{border:0;padding:0;margin:0}legend{font-size:13px;font-weight:600;margin-bottom:6px;padding:0}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg label{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:99px;padding:6px 12px;cursor:pointer;font-size:14px;background:var(--surface)}
+.seg input{width:auto;margin:0}.seg label:has(input:checked){border-color:var(--ink);background:var(--ink);color:var(--on-ink)}
+.box{display:flex;flex-direction:column;gap:10px;background:var(--sunk);border-radius:10px;padding:12px}
+.box label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600}.box label.check{flex-direction:row;font-weight:400}
+.pick{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media (max-width:460px){.pick{grid-template-columns:1fr}}
+.pickbtn{text-align:left;border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column;gap:3px}
+.pickbtn strong{font:500 17px var(--display)}.pickbtn span{font-size:13px;color:var(--muted)}
+.pickbtn[aria-pressed="true"]{border-color:var(--gold);background:#b8955d1a}
+.hint{margin:0;font-size:12px;color:var(--muted)}
+.totals{grid-column:span 6;display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:12px}
+.totals b{font:500 24px var(--display);color:var(--gold)}
+h3.sec{font:500 16px var(--display);color:var(--muted);margin-top:6px}
+.stars{display:flex;gap:2px}.stars button{border:0;background:none;font-size:22px;color:var(--line);cursor:pointer;padding:2px}.stars button.on{color:var(--gold)}
+.fb{display:flex;flex-direction:column;gap:8px;background:var(--sunk);border-radius:10px;padding:12px}.fb label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600}
+.agentrow{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.agentrow small{display:block;color:var(--muted);font-size:12px}
+.qr{display:flex;gap:14px;align-items:center;background:var(--sunk);border-radius:10px;padding:12px;flex-wrap:wrap}
+.qr .code{background:#fff;padding:8px;border-radius:8px;line-height:0}
+.signins{font-size:13px;width:100%;border-collapse:collapse}.signins td,.signins th{text-align:left;padding:6px 4px;border-bottom:1px solid var(--line)}.signins th{color:var(--muted);font-weight:600}
+.login{max-width:440px;margin:30px auto;text-align:center;display:grid;gap:14px}
+footer{color:var(--muted);font-size:12px;text-align:center;padding-bottom:32px}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--on-ink);padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px;max-width:calc(100% - 32px);opacity:0;pointer-events:none;transition:opacity .2s;z-index:30}
+#toast.show{opacity:1}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mg-logo" viewBox="0 0 1200 520">
+    <text x="120" y="300" font-family="Poppins, Jost, sans-serif" font-weight="500" font-size="176" letter-spacing="42" fill="#D8C3A0">MARIN</text>
+    <circle cx="985" cy="238" r="66" fill="none" stroke="#F6D9A0" stroke-width="40" opacity=".18"/>
+    <circle cx="985" cy="238" r="66" fill="none" stroke="#FFF3DC" stroke-width="13"/>
+    <text x="600" y="420" text-anchor="middle" font-family="Poppins, Jost, sans-serif" font-weight="500" font-size="64" letter-spacing="26" fill="#D8C3A0">GROUP</text>
+  </symbol>
+</svg>
+<header class="top"><div class="wrap">
+  <div class="brandrow">
+    <a href="/" aria-label="Marino Group home"><svg class="logo" viewBox="0 0 1200 520"><use href="#mg-logo"/></svg></a>
+    <span class="t">Showings</span>
+    <div class="who" id="who" hidden><span id="whoName"></span><button id="signOut">Sign out</button></div>
+  </div>
+  <nav class="tabs" role="tablist" id="tabs" hidden>
+    <button role="tab" data-tab="open">Opportunities <span class="count" id="c-open">0</span></button>
+    <button role="tab" data-tab="new">Request</button>
+    <button role="tab" data-tab="mine">My jobs <span class="count" id="c-mine">0</span></button>
+    <button role="tab" data-tab="profile">Profile</button>
+  </nav>
+</div></header>
+<div class="demo" id="demoBand" hidden>Demo mode with sample agents and jobs. Changes are not saved.</div>
+<main class="wrap" id="app"></main>
+<footer class="wrap">Marino Showings · Jorge Marino LLC · Waterfront Realty Group, Inc. · <a href="/">marinogroupswfl.com</a></footer>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="/js/config.js"></script>
+<script>
+const {SUPABASE_URL, SUPABASE_ANON_KEY, OFFICE} = window.MG_CONFIG;
+const LIVE = !!(SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase);
+const sb = LIVE ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+const MEMBERSHIP = 14.99, TRIAL_DAYS = 30;
+const STATES = "AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY".split(" ");
+const TZS = ["ET","CT","MT","PT","AKT","HT"];
+const TASKS = {showing:"Buyer showing",rental:"Rental showing",openhouse:"Open house",photos:"Photography",lockbox:"Lockbox run",check:"Property check",access:"Vendor access"};
+const LANGS = {en:"English",es:"Español",ru:"Русский",pt:"Português",fr:"Français",ht:"Kreyòl",de:"Deutsch",it:"Italiano",zh:"中文",ar:"العربية"};
+const AGR = {sa4:"SA-4 Showing Agreement",ebba:"Exclusive Buyer Brokerage (EBBA)",other:"Other written agreement",unrep:"Unrepresented buyer (listing side)"};
+const LTYPE = {sa:"Sales associate",bk:"Broker",ba:"Broker associate"};
+const REJECT = {notfound:"License not found",name:"Name doesn't match",inactive:"License not active",expired:"License expired"};
+const LOOKUP = {FL:"https://www.myfloridalicense.com/"};
+
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money = n => "$" + Number(n||0).toLocaleString("en-US",{maximumFractionDigits:2});
+const today = () => new Date().toISOString().slice(0,10);
+const addDays = (d,n) => { const x = new Date(d+"T12:00:00"); x.setDate(x.getDate()+n); return x.toISOString().slice(0,10); };
+const uid = () => crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2);
+const fmtDate = d => new Date(d+"T12:00:00").toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});
+const fmtTime = t => { if(!t) return ""; const [h,m] = t.split(":").map(Number); return `${(h%12)||12}:${String(m).padStart(2,"0")} ${h<12?"AM":"PM"}`; };
+function toast(m){ const t=$("#toast"); t.textContent=m; t.classList.add("show"); clearTimeout(toast.t); toast.t=setTimeout(()=>t.classList.remove("show"),2800); }
+
+/* ---------- demo data ---------- */
+function demo(){
+  const t = today(), me = "u-jorge", kota = "u-kota", mike = "u-mike", sara = "u-sara";
+  const A = (id,email,name,phone,brokerage,lic,st,status,langs,created,extra={}) => ({id,email,name,phone,brokerage,license_no:lic,license_state:st,license_type:"sa",license_exp:addDays(t,400),proof_path:"demo",langs,available:true,status,member_until:null,rating_sum:0,rating_count:0,created_at:created,...extra});
+  const agents = [
+    A(me,"dhomeswfl@gmail.com","Jorge Marino","(239) 776-2393","Waterfront Realty Group, Inc.","SL3412345","FL","verified",["en","es"],addDays(t,-90),{rating_sum:19,rating_count:4}),
+    A(kota,"kota@example.com","Kota Olivera","(239) 555-0141","Waterfront Realty Group, Inc.","SL3498765","FL","verified",["en","es","ru"],addDays(t,-60),{rating_sum:14,rating_count:3}),
+    A(mike,"mike@example.com","Mike Chen","(239) 555-0177","Gulf Coast Homes Realty","SL3455555","FL","verified",["en","zh"],addDays(t,-12),{rating_sum:9,rating_count:2}),
+    A(sara,"sara@example.com","Sara Ruiz","(305) 555-0102","Bay Realty","SL3466666","FL","pending",["en","es"],addDays(t,-1))
+  ];
+  const J = (o) => ({id:uid(),assignee:null,tz:"ET",state:"FL",lang:"en",unit:"",zip:"",mls:"",buyer_met:true,agr_type:null,agr_path:null,agr_attest:false,end_time:null,signs:null,kit:null,notes:"",status:"open",checked_in_at:null,fb_interest:null,fb_price:null,fb_notes:null,fb_visitors:null,fb_leads:null,rating:null,created_at:new Date().toISOString(),...o});
+  const oh = uid();
+  const jobs = [
+    J({requester:mike,kind:"showing",task:"showing",date:addDays(t,1),time:"10:30",address:"1820 SW 25th St",city:"Cape Coral",zip:"33914",mls:"226031122",lang:"es",agr_type:"sa4",agr_path:"demo",agr_attest:true,notes:"Lockbox on the lanai door. Buyer cares about the seawall and the boat lift.",pay:60}),
+    J({requester:kota,kind:"openhouse",task:"openhouse",date:addDays(t,4),time:"11:00",end_time:"14:00",address:"2728 Randall Blvd",city:"Naples",zip:"34120",signs:"host",kit:true,notes:"Flyers on the kitchen island. Turn on all lights and the A/C.",pay:120}),
+    J({requester:mike,kind:"showing",task:"rental",date:addDays(t,2),time:"16:00",address:"4410 Lee Blvd",city:"Lehigh Acres",zip:"33971",buyer_met:false,agr_type:"unrep",notes:"Tenant applicant, show and collect application link.",pay:40}),
+    J({requester:kota,kind:"showing",task:"showing",date:addDays(t,1),time:"14:00",address:"298 Castaways St",city:"Marco Island",zip:"34145",assignee:me,status:"confirmed",agr_type:"ebba",agr_path:"demo",agr_attest:true,notes:"Gate code 2580. Buyer is relocating from Chicago.",pay:85}),
+    J({id:oh,requester:me,kind:"openhouse",task:"openhouse",date:addDays(t,6),time:"12:00",end_time:"15:00",address:"5622 Deauville Ct",city:"Cape Coral",assignee:kota,status:"accepted",signs:"up",kit:true,notes:"Signs already out. Please send me every sign-in.",pay:110}),
+    J({requester:me,kind:"showing",task:"showing",date:addDays(t,-2),time:"09:30",address:"1450 Sample Way",city:"Naples",assignee:mike,status:"completed",agr_type:"sa4",agr_path:"demo",agr_attest:true,fb_interest:4,fb_price:"fair",fb_notes:"Loved the kitchen, worried about the roof age. Wants to see it again with family.",pay:55})
+  ];
+  const signins = [
+    {id:uid(),job_id:oh,name:"Ana Torres",phone:"(239) 555-0190",email:"ana@example.com",has_agent:"no",timeline:"0–3 months",notes:"Wants a pool home",created_at:new Date().toISOString()},
+    {id:uid(),job_id:oh,name:"David Moore",phone:"(239) 555-0123",email:"",has_agent:"yes",timeline:"Just looking",notes:"",created_at:new Date().toISOString()}
+  ];
+  return {agents,jobs,signins,team:["dhomeswfl@gmail.com"],me};
+}
+let MEM = demo();
+
+/* ---------- data layer ---------- */
+const db = {
+  async load(){
+    if(!LIVE) return {agents:MEM.agents,jobs:MEM.jobs,signins:MEM.signins,team:MEM.team};
+    const [a,j,s,t] = await Promise.all([sb.from("sh_agents").select("*"),sb.from("sh_jobs").select("*"),sb.from("sh_signins").select("*"),sb.from("team_members").select("email")]);
+    for(const r of [a,j,s]) if(r.error) throw r.error;
+    return {agents:a.data,jobs:j.data,signins:s.data,team:(t.data||[]).map(x=>x.email.toLowerCase())};
+  },
+  async saveProfile(row){
+    if(!LIVE){ const i=MEM.agents.findIndex(a=>a.id===row.id); if(i<0) MEM.agents.push({status:"pending",rating_sum:0,rating_count:0,member_until:null,created_at:new Date().toISOString(),...row}); else { const o=MEM.agents[i]; const lic=["license_no","license_state","license_type","license_exp","proof_path"].some(k=>row[k]!==o[k]); Object.assign(o,row); if(lic && !S.admin) o.status="pending"; } return; }
+    const ex = S.agents.find(a=>a.id===row.id), {id, email, ...rest} = row;
+    const r = ex ? await sb.from("sh_agents").update(rest).eq("id",id) : await sb.from("sh_agents").insert(row);
+    if(r.error) throw r.error;
+  },
+  async postJob(row){ if(!LIVE){ MEM.jobs.push({id:uid(),assignee:null,status:"open",created_at:new Date().toISOString(),...row}); return; }
+    const r = await sb.from("sh_jobs").insert(row); if(r.error) throw r.error; },
+  async updateJob(id,patch){ if(!LIVE){ Object.assign(MEM.jobs.find(j=>j.id===id),patch); return; }
+    const r = await sb.from("sh_jobs").update(patch).eq("id",id); if(r.error) throw r.error; },
+  async accept(id){ if(!LIVE){ const j=MEM.jobs.find(x=>x.id===id); if(j.status!=="open") return false; j.assignee=S.me.id; j.status="accepted"; return true; }
+    const r = await sb.rpc("sh_accept",{job:id}); if(r.error) throw r.error; return r.data; },
+  async rate(id,stars){ if(!LIVE){ const j=MEM.jobs.find(x=>x.id===id); j.rating=stars; const a=MEM.agents.find(x=>x.id===j.assignee); a.rating_sum+=stars; a.rating_count++; return; }
+    const r = await sb.rpc("sh_rate",{job:id,stars}); if(r.error) throw r.error; },
+  async review(agent,status,reason){ if(!LIVE){ Object.assign(MEM.agents.find(a=>a.id===agent),{status,reject_reason:reason||null}); return; }
+    const r = await sb.rpc("sh_review",{agent,new_status:status,reason:reason||null}); if(r.error) throw r.error; },
+  async setMember(agent,until){ if(!LIVE){ MEM.agents.find(a=>a.id===agent).member_until=until; return; }
+    const r = await sb.rpc("sh_set_member",{agent,until}); if(r.error) throw r.error; },
+  async upload(file){ if(!LIVE) return "demo";
+    const path = `${S.me.id}/${Date.now()}-${file.name.replace(/[^\w.\-]+/g,"_")}`;
+    const r = await sb.storage.from("showings").upload(path,file); if(r.error) throw r.error; return path; },
+  async fileUrl(path){ if(!LIVE || path==="demo") return null;
+    const r = await sb.storage.from("showings").createSignedUrl(path,300); if(r.error) throw r.error; return r.data.signedUrl; }
+};
+
+/* ---------- state ---------- */
+const S = {tab:"open", quick:"", flt:{state:"",type:"",lang:""}, pick:"showing", authId:null, email:null, me:null, agents:[], jobs:[], signins:[], team:[], admin:false};
+const agent = id => S.agents.find(a=>a.id===id) || {name:"Agent",rating_count:0};
+const stars = a => a.rating_count ? `★ ${(a.rating_sum/a.rating_count).toFixed(1)} (${a.rating_count})` : "No ratings yet";
+const verified = a => a && a.status==="verified" && (!a.license_exp || a.license_exp >= today());
+function membership(a){
+  if(!a) return {k:"none"};
+  if(S.team.includes((a.email||"").toLowerCase())) return {k:"team",label:"Free for the Marino Group team"};
+  if(a.member_until && a.member_until >= today()) return {k:"member",label:`Membership active until ${fmtDate(a.member_until)}`};
+  const left = TRIAL_DAYS - Math.floor((Date.now()-new Date(a.created_at||Date.now()))/864e5);
+  return left>0 ? {k:"trial",label:`Free trial: ${left} day${left===1?"":"s"} left`} : {k:"none",label:`Posting requests needs a membership (${money(MEMBERSHIP)}/month). Picking up jobs is always free.`};
+}
+const isLate = j => j.assignee && (new Date(`${j.date}T${j.time||"00:00"}`) - Date.now()) < 2*3600e3;
+
+async function refresh(){
+  try{ Object.assign(S, await db.load()); }catch(e){ console.error(e); toast("Couldn't load: "+e.message); }
+  S.me = S.agents.find(a=>a.id===S.authId) || null;
+  S.admin = S.team.includes((S.email||"").toLowerCase());
+  render();
+}
+
+/* ---------- auth ---------- */
+async function start(){
+  $("#demoBand").hidden = LIVE;
+  if(!LIVE){ S.authId = MEM.me; S.email = "dhomeswfl@gmail.com"; return enter(); }
+  const {data:{session}} = await sb.auth.getSession();
+  if(session){ S.authId=session.user.id; S.email=session.user.email; return enter(); }
+  sb.auth.onAuthStateChange((_e,s)=>{ if(s && !S.authId){ S.authId=s.user.id; S.email=s.user.email; enter(); } });
+  $("#app").innerHTML = `<div class="login">
+    <div class="lede"><h2>Showings and open houses, covered by licensed agents.</h2><p>Pick up a job near you, or post one when you can't make it. Your buyer stays your client.</p></div>
+    <form id="lf" class="card" style="text-align:left"><label style="display:grid;gap:4px;font-size:13px;font-weight:600">Email<input id="lem" type="email" required autocomplete="email"></label>
+    <button class="btn primary" style="justify-content:center">Email me a sign-in link</button><p class="hint">No password. The same login works for the Marino Group client portal.</p></form></div>`;
+  $("#lf").onsubmit = async e=>{ e.preventDefault(); const email=$("#lem").value.trim();
+    const {error} = await sb.auth.signInWithOtp({email,options:{emailRedirectTo:location.origin+location.pathname}});
+    if(error) return toast(error.message); $("#lf").innerHTML=`<p>Check <b>${esc(email)}</b> for your sign-in link.</p>`; };
+}
+async function enter(){
+  $("#tabs").hidden=false; $("#who").hidden=false;
+  await refresh();
+  $("#whoName").textContent = S.me ? S.me.name : S.email;
+  if(!S.me){ S.tab="profile"; render(); }
+}
+$("#signOut").onclick = async()=>{ if(LIVE){ await sb.auth.signOut(); location.reload(); } else { MEM=demo(); toast("Demo reset"); refresh(); } };
+$$("#tabs [data-tab]").forEach(b=>b.onclick=()=>{ S.tab=b.dataset.tab; render(); scrollTo(0,0); });
+
+/* ---------- render ---------- */
+function render(){
+  $$("#tabs [data-tab]").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===S.tab));
+  const open = S.jobs.filter(j=>j.status==="open"&&j.date>=today());
+  $("#c-open").textContent = open.length;
+  $("#c-mine").textContent = S.me ? S.jobs.filter(j=>(j.assignee===S.me.id||j.requester===S.me.id)&&!["completed","cancelled"].includes(j.status)).length : 0;
+  ({open:vOpen,new:vNew,mine:vMine,profile:vProfile})[S.tab]();
+}
+function gate(){
+  if(!S.me) return `<div class="notice">Finish your agent profile first. <a href="#" data-goto="profile">Go to profile</a></div>`;
+  if(!verified(S.me)) return `<div class="notice">${S.me.status==="rejected"?`License not approved: ${esc(REJECT[S.me.reject_reason]||S.me.reject_reason||"")}. Fix your details and save again.`:"Your license is being checked. You can browse, and you'll be able to post and accept jobs once it's approved."}</div>`;
+  return "";
+}
+function bindGoto(){ $$("[data-goto]").forEach(a=>a.onclick=e=>{e.preventDefault();S.tab=a.dataset.goto;render();}); }
+
+function jobCard(j, mode){
+  const req = agent(j.requester), cov = j.assignee ? agent(j.assignee) : null;
+  const chips = [`<span class="chip type">${TASKS[j.task]||j.task}</span>`];
+  if(j.lang && j.lang!=="en") chips.push(`<span class="chip">${LANGS[j.lang]||j.lang} needed</span>`);
+  if(j.kind==="showing" && j.task==="showing"){
+    if(j.agr_type==="unrep") chips.push(`<span class="chip warn">Unrepresented buyer</span>`);
+    else if(j.agr_attest) chips.push(`<span class="chip ok">Buyer agreement on file</span>`);
+    chips.push(`<span class="chip">${j.buyer_met?"Buyer met in person":"Buyer not met yet"}</span>`);
+  }
+  if(j.kind==="openhouse"){
+    if(j.signs==="host") chips.push(`<span class="chip">Host places signs</span>`);
+    if(j.kit) chips.push(`<span class="chip">Flyers & sign-in on site</span>`);
+  }
+  const when = `${fmtDate(j.date)} · ${fmtTime(j.time)}${j.end_time?`–${fmtTime(j.end_time)}`:""} ${j.tz||""}`;
+  const map = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${j.address} ${j.city} ${j.state} ${j.zip||""}`)}`;
+  let body = `<div class="row1"><div style="min-width:0"><div class="when">${when}</div><div class="addr">${esc(j.address)}${j.unit?` #${esc(j.unit)}`:""}</div>
+    <div class="when">${esc(j.city)}, ${esc(j.state)} ${esc(j.zip||"")}${j.mls?` · MLS ${esc(j.mls)}`:""}</div></div>
+    <div class="pay"><b>${money(j.pay)}</b><span>${mode==="open"?"you earn":"agent pay"}</span></div></div>
+    <div class="chips">${chips.join("")}${mode!=="open"?`<span class="pill st-${j.status}">${j.status==="checkedin"?"Checked in":j.status[0].toUpperCase()+j.status.slice(1)}</span>`:""}</div>`;
+  if(j.notes) body += `<p class="notes">${esc(j.notes)}</p>`;
+  body += `<dl class="meta"><dt>Requested by</dt><dd>${esc(req.name)} · ${esc(req.brokerage||"")} · ${stars(req)}</dd>
+    ${cov?`<dt>Covering agent</dt><dd>${esc(cov.name)} · <a href="tel:${esc((cov.phone||"").replace(/\D/g,""))}">${esc(cov.phone||"")}</a> · ${stars(cov)}</dd>`:""}
+    ${mode==="cov"?`<dt>Requester phone</dt><dd><a href="tel:${esc((req.phone||"").replace(/\D/g,""))}">${esc(req.phone||"")}</a></dd>`:""}
+    ${j.checked_in_at?`<dt>Checked in</dt><dd>${new Date(j.checked_in_at).toLocaleString("en-US",{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"})}</dd>`:""}</dl>`;
+  let act = `<a class="btn" href="${map}" target="_blank" rel="noopener">Directions</a>`;
+  if(mode==="open"){
+    if(j.requester===S.me?.id) act += `<span class="hint">Your request</span>`;
+    else body += `<label class="check"><input type="checkbox" data-c1="${j.id}"> I'll schedule this with the listing side</label>
+      ${j.task==="showing"?`<label class="check"><input type="checkbox" data-c2="${j.id}"> I won't solicit or sign this buyer</label>`:""}`,
+      act += `<button class="btn primary" data-accept="${j.id}" ${verified(S.me)?"":"disabled"}>Accept</button>`;
+  }
+  if(mode==="cov"){
+    if(j.status==="accepted") act += `<button class="btn primary" data-st="${j.id}:confirmed">Mark confirmed with seller</button>`;
+    if(j.status==="confirmed") act += `<button class="btn primary" data-st="${j.id}:checkedin">Check in at property</button>`;
+    if(["accepted","confirmed"].includes(j.status)) act += `<button class="btn danger" data-release="${j.id}">Release job</button>`;
+    if(j.status==="checkedin") body += fbForm(j);
+  }
+  if(mode==="req"){
+    if(!["completed","cancelled"].includes(j.status)) act += `<button class="btn danger" data-cancel="${j.id}">Cancel request</button>`;
+    if(j.agr_path) act += `<button class="btn" data-file="${esc(j.agr_path)}">View agreement</button>`;
+  }
+  if(j.status==="completed") body += fbView(j, mode);
+  if(j.kind==="openhouse" && mode!=="open" && j.status!=="cancelled") body += ohBlock(j);
+  return `<article class="card">${body}<div class="actions">${act}</div></article>`;
+}
+function fbForm(j){
+  if(j.kind==="openhouse") return `<div class="fb" data-fb="${j.id}"><b>Open house report</b>
+    <div class="row1" style="gap:10px"><label style="flex:1">Visitors<input type="number" min="0" name="fb_visitors"></label><label style="flex:1">Buyers without an agent<input type="number" min="0" name="fb_leads"></label></div>
+    <label>Notes for the listing agent<textarea name="fb_notes"></textarea></label><button class="btn primary" data-done="${j.id}">Send report & complete</button></div>`;
+  return `<div class="fb" data-fb="${j.id}"><b>Showing feedback</b>
+    <label>Buyer interest (1–5)<select name="fb_interest"><option value="">Pick</option>${[1,2,3,4,5].map(n=>`<option>${n}</option>`).join("")}</select></label>
+    <label>Price opinion<select name="fb_price"><option value="">Pick</option><option value="low">Below value</option><option value="fair">Fair</option><option value="high">Overpriced</option></select></label>
+    <label>What did the buyer say?<textarea name="fb_notes"></textarea></label><button class="btn primary" data-done="${j.id}">Send feedback & complete</button></div>`;
+}
+function fbView(j, mode){
+  const P = {low:"Below value",fair:"Fair",high:"Overpriced"};
+  let h = `<div class="fb"><b>${j.kind==="openhouse"?"Open house report":"Showing feedback"}</b>`;
+  h += j.kind==="openhouse" ? `<span>Visitors: ${j.fb_visitors??"—"} · Buyers without an agent: ${j.fb_leads??"—"}</span>` : `<span>Interest: ${j.fb_interest??"—"}/5 · Price: ${P[j.fb_price]||"—"}</span>`;
+  if(j.fb_notes) h += `<span>${esc(j.fb_notes)}</span>`;
+  if(mode==="req") h += j.rating ? `<span class="hint">You rated this agent ${"★".repeat(j.rating)}</span>`
+    : `<span style="font-size:13px;font-weight:600">Rate the covering agent</span><div class="stars" data-rate="${j.id}">${[1,2,3,4,5].map(n=>`<button data-n="${n}" aria-label="${n} stars">★</button>`).join("")}</div>`;
+  return h + `</div>`;
+}
+function ohBlock(j){
+  const url = `${location.origin}/showings/signin/?job=${j.id}`;
+  const list = S.signins.filter(s=>s.job_id===j.id);
+  return `<div class="qr"><div class="code" data-qr="${esc(url)}"></div><div style="flex:1;min-width:180px;display:grid;gap:6px">
+    <b>Visitor sign-in</b><span class="hint">Print this QR code or show it on a tablet at the door. Every sign-in shows up here for both agents.</span>
+    <div class="actions"><a class="btn" href="${url}" target="_blank" rel="noopener">Open sign-in page</a><button class="btn" data-copy="${esc(url)}">Copy link</button></div></div></div>
+    ${list.length?`<table class="signins"><tr><th>Visitor</th><th>Contact</th><th>Agent?</th><th>Timeline</th></tr>${list.map(s=>`<tr><td>${esc(s.name)}${s.notes?`<br><span class="hint">${esc(s.notes)}</span>`:""}</td><td>${esc(s.phone||"")}<br>${esc(s.email||"")}</td><td>${s.has_agent==="yes"?"Has agent":"No agent"}</td><td>${esc(s.timeline||"")}</td></tr>`).join("")}</table>`:`<p class="hint">No sign-ins yet.</p>`}`;
+}
+
+/* --- Opportunities --- */
+function vOpen(){
+  let list = S.jobs.filter(j=>j.status==="open" && j.date>=today());
+  if(S.quick) list = list.filter(j=>j.kind===S.quick);
+  if(S.flt.state) list = list.filter(j=>j.state===S.flt.state);
+  if(S.flt.type) list = list.filter(j=>j.task===S.flt.type);
+  if(S.flt.lang) list = list.filter(j=>j.lang===S.flt.lang);
+  list.sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+  $("#app").innerHTML = `${gate()}
+  <div class="lede"><h2>Showings and open houses, covered by licensed agents.</h2><p>Pick up a job near you, or post one when you can't make it. Your buyer stays your client.</p></div>
+  <div class="quick">${[["","All"],["showing","Buyer showings"],["openhouse","Open houses"]].map(([k,l])=>`<button data-q="${k}" aria-pressed="${S.quick===k}">${l}</button>`).join("")}</div>
+  <div class="filters">
+    <label>State<select id="f-state"><option value="">All</option>${STATES.map(s=>`<option ${S.flt.state===s?"selected":""}>${s}</option>`).join("")}</select></label>
+    <label>Task<select id="f-type"><option value="">All</option>${Object.entries(TASKS).map(([k,l])=>`<option value="${k}" ${S.flt.type===k?"selected":""}>${l}</option>`).join("")}</select></label>
+    <label>Language needed<select id="f-lang"><option value="">Any</option>${Object.entries(LANGS).map(([k,l])=>`<option value="${k}" ${S.flt.lang===k?"selected":""}>${l}</option>`).join("")}</select></label>
+  </div>
+  <div class="list">${list.map(j=>jobCard(j,"open")).join("") || `<div class="empty"><h3>No open requests here yet</h3><p>Post the first one and licensed agents nearby can pick it up.</p><p><button class="btn primary" data-goto="new">Post a request</button></p></div>`}</div>`;
+  $$("[data-q]").forEach(b=>b.onclick=()=>{S.quick=b.dataset.q;render();});
+  ["state","type","lang"].forEach(k=>$("#f-"+k).onchange=e=>{S.flt[k]=e.target.value;render();});
+  $$("[data-accept]").forEach(b=>b.onclick=async()=>{
+    const id=b.dataset.accept, c1=$(`[data-c1="${id}"]`), c2=$(`[data-c2="${id}"]`);
+    if(!c1.checked || (c2 && !c2.checked)) return toast("Check the boxes above to accept");
+    try{ const ok = await db.accept(id); toast(ok?"Accepted. Book it with the listing side, then mark it confirmed.":"Another agent just took this one"); await refresh(); }catch(e){ toast(e.message); }
+  });
+  bindGoto();
+}
+
+/* --- Request --- */
+function vNew(){
+  const m = membership(S.me), oh = S.pick==="openhouse";
+  const canPost = verified(S.me) && m.k!=="none";
+  const tasks = oh ? ["openhouse"] : ["showing","rental","photos","lockbox","check","access"];
+  $("#app").innerHTML = `${gate()}
+  <form class="grid" id="fn" novalidate>
+    <div class="s6 lede"><h2>${oh?"Can't make your open house?":"Request coverage"}</h2><p>${oh?"Set the hours and pay. A licensed agent hosts it, sends you every sign-in and reports back.":"Set the time and pay. The first licensed agent to accept takes it."}</p></div>
+    <div class="s6 pick"><button type="button" class="pickbtn" data-pick="showing" aria-pressed="${!oh}"><strong>Cover my buyer showing</strong><span>An agent shows the home to your buyer.</span></button>
+      <button type="button" class="pickbtn" data-pick="openhouse" aria-pressed="${oh}"><strong>Cover my open house</strong><span>An agent hosts your open house.</span></button></div>
+    ${oh?"":`<fieldset class="s6"><legend>Task</legend><div class="seg">${tasks.map((k,i)=>`<label><input type="radio" name="task" value="${k}" ${i?"":"checked"}>${TASKS[k]}</label>`).join("")}</div></fieldset>`}
+    <label class="s2">Date<input type="date" name="date" min="${today()}" required></label>
+    <label class="s2">${oh?"Starts":"Time"}<input type="time" name="time" required></label>
+    <label class="s2">Time zone<select name="tz">${TZS.map(z=>`<option>${z}</option>`).join("")}</select></label>
+    <label class="s4">Street address<input name="address" autocomplete="street-address" required></label>
+    <label class="s2">Unit<input name="unit"></label>
+    <label class="s3">City<input name="city" required></label>
+    <label class="s2">State<select name="state">${STATES.map(s=>`<option ${s==="FL"?"selected":""}>${s}</option>`).join("")}</select></label>
+    <label class="s2">ZIP<input name="zip" inputmode="numeric" maxlength="10"></label>
+    <label class="s2">MLS #<input name="mls"></label>
+    <label class="s2">Language needed<select name="lang">${Object.entries(LANGS).map(([k,l])=>`<option value="${k}">${l}</option>`).join("")}</select></label>
+    ${oh?`<div class="s6 box"><b>Open house details</b>
+      <label>Ends<input type="time" name="end_time" value="15:00"></label>
+      <fieldset><legend>Signs</legend><div class="seg"><label><input type="radio" name="signs" value="host" checked>Host puts out signs</label><label><input type="radio" name="signs" value="up">Signs already up</label></div></fieldset>
+      <label class="check"><input type="checkbox" name="kit" checked> Flyers and a sign-in sheet will be at the property</label>
+      <p class="hint">Visitors sign in with a QR code, and every sign-in comes back to you.</p></div>`
+    :`<fieldset class="s6" id="metbox"><legend>Have you met the buyer in person?</legend><div class="seg"><label><input type="radio" name="met" value="yes" checked>Yes</label><label><input type="radio" name="met" value="no">No</label></div></fieldset>
+      <div class="s6 box" id="agrbox"><fieldset><legend>Written buyer agreement</legend><div class="seg">${Object.entries(AGR).map(([k,l],i)=>`<label><input type="radio" name="agr" value="${k}" ${i?"":"checked"}>${l}</label>`).join("")}</div></fieldset>
+        <label id="agrfile">Upload signed copy (PDF or photo)<input type="file" name="agrfile" accept="application/pdf,image/*"></label>
+        <label class="check" id="agratt"><input type="checkbox" name="attest"> I confirm my buyer signed this agreement before the showing</label>
+        <p class="hint">Only you can open the copy. The covering agent sees that it's on file.</p></div>`}
+    <label class="s6">Notes for the agent<textarea name="notes" placeholder="Lockbox location, gate code, what the buyer cares about…"></textarea></label>
+    <label class="s2">Pay to agent<input type="number" name="pay" min="1" step="1" placeholder="$" required></label>
+    <div class="s4" style="display:flex;flex-direction:column;justify-content:center;gap:4px">
+      <p class="hint" style="color:${m.k==="none"?"var(--warn)":"var(--ok)"};font-weight:600">${esc(m.label||"")}</p>
+      <p class="hint">Membership: ${money(MEMBERSHIP)}/month, unlimited requests. Picking up jobs is always free. You pay the agent directly.</p>
+      <p class="hint">Cancel within 2 hours of the start and the agent still gets 50%.</p></div>
+    <div class="totals"><div><span class="hint">Pay to agent</span><br><b id="tp">$0</b></div><button class="btn primary" type="submit" ${canPost?"":"disabled"}>Post request</button></div>
+  </form>`;
+  $$("[data-pick]").forEach(b=>b.onclick=()=>{S.pick=b.dataset.pick;render();});
+  const f = $("#fn");
+  f.pay.oninput = ()=>$("#tp").textContent = money(f.pay.value);
+  const syncTask = ()=>{ if(oh) return; const t=f.task.value, show=t==="showing"; $("#agrbox").hidden=!show; $("#metbox").hidden=!show;
+    const unrep = show && f.agr.value==="unrep"; $("#agrfile").hidden=unrep; $("#agratt").hidden=unrep; };
+  f.onchange = syncTask; syncTask();
+  f.onsubmit = async e=>{
+    e.preventDefault(); const v = Object.fromEntries(new FormData(f));
+    if(!v.date||!v.time||!v.address||!v.city||!(+v.pay>0)) return toast("Fill in date, time, address, city and the pay you offer.");
+    if(oh && v.end_time && v.end_time<=v.time) return toast("End time must be after the start time.");
+    const task = oh ? "openhouse" : v.task;
+    const row = {requester:S.me.id,kind:oh?"openhouse":"showing",task,date:v.date,time:v.time,tz:v.tz,address:v.address.trim(),unit:v.unit||null,city:v.city.trim(),state:v.state,zip:v.zip||null,mls:v.mls||null,lang:v.lang,notes:v.notes||null,pay:+v.pay};
+    if(oh) Object.assign(row,{end_time:v.end_time||null,signs:v.signs,kit:!!v.kit});
+    if(!oh && task==="showing"){
+      row.buyer_met = v.met==="yes"; row.agr_type = v.agr;
+      if(v.agr!=="unrep"){
+        const file = f.agrfile.files[0];
+        if(!file || !v.attest) return toast("Pick the agreement, upload the signed copy and confirm it.");
+        if(file.size>20e6) return toast("Upload failed. Try a smaller file (max 20 MB).");
+        try{ toast("Uploading…"); row.agr_path = await db.upload(file); row.agr_attest = true; }catch(err){ return toast(err.message); }
+      }
+    }
+    try{ await db.postJob(row); toast("Request posted"); S.tab="mine"; await refresh(); }catch(err){ toast(err.message); }
+  };
+  bindGoto();
+}
+
+/* --- My jobs --- */
+function vMine(){
+  if(!S.me){ $("#app").innerHTML = gate(); bindGoto(); return; }
+  const sort = (a,b)=>(["completed","cancelled"].includes(a.status)-["completed","cancelled"].includes(b.status)) || (a.date+a.time).localeCompare(b.date+b.time);
+  const cov = S.jobs.filter(j=>j.assignee===S.me.id).sort(sort), req = S.jobs.filter(j=>j.requester===S.me.id).sort(sort);
+  $("#app").innerHTML = `<h3 class="sec">Jobs I'm covering</h3><div class="list">${cov.map(j=>jobCard(j,"cov")).join("")||`<div class="empty">Nothing here yet.</div>`}</div>
+    <h3 class="sec">Requests I posted</h3><div class="list">${req.map(j=>jobCard(j,"req")).join("")||`<div class="empty">Nothing here yet.</div>`}</div>`;
+  $$("[data-qr]").forEach(el=>{ if(window.QRCode) new QRCode(el,{text:el.dataset.qr,width:112,height:112,correctLevel:QRCode.CorrectLevel.M}); });
+  $$("[data-copy]").forEach(b=>b.onclick=()=>navigator.clipboard?.writeText(b.dataset.copy).then(()=>toast("Link copied")));
+  $$("[data-st]").forEach(b=>b.onclick=async()=>{ const [id,st]=b.dataset.st.split(":"); const patch={status:st}; if(st==="checkedin") patch.checked_in_at=new Date().toISOString();
+    try{ await db.updateJob(id,patch); toast(st==="checkedin"?"Checked in":"Marked confirmed"); await refresh(); }catch(e){ toast(e.message); } });
+  $$("[data-release]").forEach(b=>b.onclick=async()=>{ if(b.dataset.sure!=="1"){ b.dataset.sure="1"; b.textContent="Tap again to release"; return; }
+    try{ await db.updateJob(b.dataset.release,{assignee:null,status:"open"}); toast("Released. It's back on the board."); await refresh(); }catch(e){ toast(e.message); } });
+  $$("[data-cancel]").forEach(b=>b.onclick=async()=>{ const j=S.jobs.find(x=>x.id===b.dataset.cancel);
+    if(b.dataset.sure!=="1"){ b.dataset.sure="1"; b.textContent = isLate(j) ? `Under 2 hours: agent gets 50% (${money(j.pay/2)}). Tap again` : "Tap again to cancel"; return; }
+    try{ await db.updateJob(j.id,{status:"cancelled"}); toast(isLate(j)?`Cancelled. Late cancellation: agent receives 50% (${money(j.pay/2)})`:"Request cancelled"); await refresh(); }catch(e){ toast(e.message); } });
+  $$("[data-done]").forEach(b=>b.onclick=async()=>{ const box=$(`[data-fb="${b.dataset.done}"]`), patch={status:"completed"};
+    box.querySelectorAll("[name]").forEach(el=>{ patch[el.name] = el.value==="" ? null : (el.type==="number"||el.name==="fb_interest" ? +el.value : el.value); });
+    try{ await db.updateJob(b.dataset.done,patch); toast("Completed. Thanks!"); await refresh(); }catch(e){ toast(e.message); } });
+  $$("[data-rate]").forEach(box=>box.querySelectorAll("button").forEach(btn=>{
+    btn.onmouseenter=()=>box.querySelectorAll("button").forEach(x=>x.classList.toggle("on",+x.dataset.n<=+btn.dataset.n));
+    btn.onclick=async()=>{ try{ await db.rate(box.dataset.rate,+btn.dataset.n); toast("Thanks for rating"); await refresh(); }catch(e){ toast(e.message); } }; }));
+  $$("[data-file]").forEach(b=>b.onclick=async()=>{ try{ const u=await db.fileUrl(b.dataset.file); u?window.open(u,"_blank"):toast("Demo file"); }catch(e){ toast(e.message); } });
+}
+
+/* --- Profile + admin --- */
+function vProfile(){
+  const a = S.me || {langs:["en"],license_state:"FL",license_type:"sa",available:true};
+  const m = membership(S.me);
+  const status = !S.me ? `<div class="notice">Create your profile. Requesting agents see it before you cover their showing.</div>`
+    : `<div class="chips"><span class="pill ${verified(a)?"st-completed":a.status==="rejected"?"st-cancelled":"st-accepted"}">${verified(a)?"License verified":a.status==="rejected"?"License not approved":"License check pending"}</span>
+       ${m.label?`<span class="chip ${m.k==="none"?"warn":"ok"}">${esc(m.label)}</span>`:""}<span class="chip">${stars(a)}</span></div>`;
+  $("#app").innerHTML = `<form class="grid" id="fp" novalidate>
+    <div class="s6 lede"><h2>Your agent profile</h2><p>Requesting agents see this before you show their buyer.</p></div>
+    <div class="s6">${status}${a.status==="rejected"?`<p class="hint" style="color:var(--bad);margin-top:6px">${esc(REJECT[a.reject_reason]||a.reject_reason||"")}. Fix your details and save again.</p>`:""}</div>
+    <label class="s4">Full name<input name="name" value="${esc(a.name||"")}" autocomplete="name" required></label>
+    <label class="s2">Mobile<input name="phone" type="tel" value="${esc(a.phone||"")}" autocomplete="tel" required></label>
+    <label class="s3">Brokerage<input name="brokerage" value="${esc(a.brokerage||"")}" required></label>
+    <label class="s3">License #<input name="license_no" value="${esc(a.license_no||"")}" required></label>
+    <label class="s2">Licensed in<select name="license_state">${STATES.map(s=>`<option ${a.license_state===s?"selected":""}>${s}</option>`).join("")}</select></label>
+    <label class="s2">License type<select name="license_type">${Object.entries(LTYPE).map(([k,l])=>`<option value="${k}" ${a.license_type===k?"selected":""}>${l}</option>`).join("")}</select></label>
+    <label class="s2">License expires<input type="date" name="license_exp" value="${a.license_exp||""}" required></label>
+    <label class="s6">Photo of your license or your state's license lookup page<input type="file" name="proof" accept="application/pdf,image/*">${a.proof_path?`<span class="hint" style="color:var(--ok)">Proof uploaded ✓</span>`:""}</label>
+    <fieldset class="s6"><legend>Languages you speak</legend><div class="seg">${Object.entries(LANGS).map(([k,l])=>`<label><input type="checkbox" name="langs" value="${k}" ${(a.langs||[]).includes(k)?"checked":""}>${l}</label>`).join("")}</div></fieldset>
+    <label class="s6 check" style="flex-direction:row"><input type="checkbox" name="available" ${a.available!==false?"checked":""}> I'm available to cover showings and open houses</label>
+    <div class="totals"><span class="hint">Changing license details sends your profile back for review.</span><button class="btn primary" type="submit">Save profile</button></div>
+  </form>
+  <div class="card" id="admin" ${S.admin?"":"hidden"}><h3 style="font-size:20px">Agent verification</h3>
+    <p class="hint">Look up each license on the official state record before approving. Approval lasts until the license expires.</p><div id="alist"></div></div>`;
+  const f = $("#fp");
+  f.onsubmit = async e=>{
+    e.preventDefault(); const v = new FormData(f);
+    const row = {id:S.authId,email:S.email,name:v.get("name").trim(),phone:v.get("phone").trim(),brokerage:v.get("brokerage").trim(),license_no:v.get("license_no").trim(),
+      license_state:v.get("license_state"),license_type:v.get("license_type"),license_exp:v.get("license_exp")||null,langs:v.getAll("langs"),available:!!v.get("available"),proof_path:a.proof_path||null};
+    if(!row.name||!row.phone||!row.license_no||!row.license_exp) return toast("Add your name, phone, license number and expiration date.");
+    const file = f.proof.files[0];
+    if(!file && !row.proof_path) return toast("Upload a photo of your license or the state lookup page.");
+    try{
+      if(file){ toast("Uploading…"); row.proof_path = await db.upload(file); }
+      await db.saveProfile(row);
+      toast("Profile saved"); await refresh(); $("#whoName").textContent = S.me?.name||S.email;
+    }catch(err){ toast(err.message); }
+  };
+  if(S.admin) adminList();
+}
+function adminList(){
+  const rank = {pending:0,rejected:1,verified:2};
+  const list = S.agents.slice().sort((x,y)=>rank[x.status]-rank[y.status]||String(x.name).localeCompare(y.name));
+  $("#alist").innerHTML = list.map(x=>{ const m=membership(x); return `<div class="agentrow"><div style="min-width:0"><b>${esc(x.name)}</b>
+    <small>${esc(x.brokerage||"")} · ${LTYPE[x.license_type]||""} ${esc(x.license_no||"")} (${esc(x.license_state||"")}) · expires ${x.license_exp?fmtDate(x.license_exp):"—"}</small>
+    <small>${esc(x.email||"")} · ${esc(m.label||"")}</small></div>
+    <div class="actions"><span class="pill ${x.status==="verified"?"st-completed":x.status==="rejected"?"st-cancelled":"st-accepted"}">${x.status}</span>
+      ${x.proof_path?`<button class="btn" data-file="${esc(x.proof_path)}">Proof</button>`:`<span class="hint">No proof</span>`}
+      ${LOOKUP[x.license_state]?`<a class="btn" href="${LOOKUP[x.license_state]}" target="_blank" rel="noopener">Check state record</a>`:""}
+      ${x.status!=="verified"?`<button class="btn primary" data-ok="${x.id}">Approve</button>`:""}
+      <select data-rej="${x.id}" style="width:auto"><option value="">Reject…</option>${Object.entries(REJECT).map(([k,l])=>`<option value="${k}">${l}</option>`).join("")}</select>
+      ${m.k!=="team"?`<button class="btn" data-mem="${x.id}">+1 month membership</button>`:""}</div></div>`; }).join("") || `<p class="hint">No agents yet.</p>`;
+  $$("[data-ok]").forEach(b=>b.onclick=async()=>{ try{ await db.review(b.dataset.ok,"verified"); toast("Approved"); await refresh(); }catch(e){ toast(e.message); } });
+  $$("[data-rej]").forEach(s=>s.onchange=async()=>{ if(!s.value) return; try{ await db.review(s.dataset.rej,"rejected",s.value); toast("Rejected"); await refresh(); }catch(e){ toast(e.message); } });
+  $$("[data-mem]").forEach(b=>b.onclick=async()=>{ const x=S.agents.find(a=>a.id===b.dataset.mem); const base = x.member_until && x.member_until>today() ? x.member_until : today();
+    try{ await db.setMember(x.id, addDays(base,30)); toast("Membership extended 30 days"); await refresh(); }catch(e){ toast(e.message); } });
+  $$("#alist [data-file]").forEach(b=>b.onclick=async()=>{ try{ const u=await db.fileUrl(b.dataset.file); u?window.open(u,"_blank"):toast("Demo file"); }catch(e){ toast(e.message); } });
+}
+
+start();
+</script>
+</body>
+</html>

@@ -9,10 +9,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ===== CONNECT YOUR DATABASE =====
-   Leave both blank for demo mode. After creating a free Supabase project,
-   paste the Project URL and the anon public key (Settings > API) into the
-   two lines in the <script> below (SUPABASE_URL / SUPABASE_ANON_KEY). */
 :root{--bg:#f6f3ee;--surface:#fff;--sunk:#ece6dc;--fg:#1e1d1c;--muted:#655f56;--line:#ddd5c8;--ink:#1e1d1c;--on-ink:#f3ece0;--gold:#b8955d;--gold-soft:#d8c3a0;--gulf:#2f5d62;--ok:#3d7a4f;--warn:#a8642a;
 --display:"Jost","Futura","Century Gothic",Arial,sans-serif;--body:"Figtree","Segoe UI",Arial,sans-serif}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141312;--surface:#1d1b19;--sunk:#25221f;--fg:#efe8dc;--muted:#a79e90;--line:#36322d;--ink:#0f0e0d;--gold:#d3b585;--gold-soft:#e3cfa9;--gulf:#7fb0b3;--ok:#7fbf8e;--warn:#e0a46a}}
@@ -95,10 +91,9 @@ table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:8px 6px;
 <div class="toast" id="toast" hidden></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/js/config.js"></script>
 <script>
-const SUPABASE_URL = "";       // e.g. https://abcd1234.supabase.co
-const SUPABASE_ANON_KEY = "";  // anon public key
-const OFFICE = {name:"Marino Group", phone:"(239) 776-2393", email:"dhomeswfl@gmail.com"};
+const {SUPABASE_URL, SUPABASE_ANON_KEY, OFFICE} = window.MG_CONFIG;  // settings live in /js/config.js
 
 const STAGES = ["Lead","Showing / Listing Prep","Under Contract","Inspection","Financing & Appraisal","Clear to Close","Closed"];
 const MILESTONES = ["Contract signed","Escrow deposit delivered","Inspection period ends","Loan approval","Appraisal complete","Title commitment received","Final walk-through","Closing"];
