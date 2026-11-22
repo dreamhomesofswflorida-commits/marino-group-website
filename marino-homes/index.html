@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Marino Homes | Southwest Florida Home Search</title>
+<meta name="description" content="Marino Homes: search homes for sale across Southwest Florida on a map, save favorites and book a tour with a local Marino Group agent.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#141312">
+<link rel="icon" href="/img/marino_logo_transparent_gold.png">
+<link rel="apple-touch-icon" href="/img/app/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Figtree:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{--bg:#f6f3ee;--surface:#fff;--sunk:#ece6dc;--fg:#1e1d1c;--muted:#655f56;--line:#ddd5c8;--ink:#141312;--on-ink:#f3ece0;--gold:#0c7f52;--gold-soft:#34e098;--gulf:#2f5d62;--ok:#2f7a4c;--bad:#b3261e;
+--display:"Jost","Futura","Century Gothic",Arial,sans-serif;--body:"Figtree","Segoe UI",Arial,sans-serif;--bar:58px;--tabs:58px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141312;--surface:#1d1b19;--sunk:#25221f;--fg:#efe8dc;--muted:#a79e90;--line:#36322d;--gold:#34e098;--gold-soft:#34e098;--gulf:#7fb0b3;--ok:#76c391;--bad:#f08a80;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141312;--surface:#1d1b19;--sunk:#25221f;--fg:#efe8dc;--muted:#a79e90;--line:#36322d;--gold:#34e098;--gold-soft:#34e098;--gulf:#7fb0b3;--ok:#76c391;--bad:#f08a80;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}[hidden]{display:none!important}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);font:15px/1.5 var(--body);overflow:hidden}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;letter-spacing:-.01em}
+button,input,select,textarea{font:inherit;color:inherit}a{color:var(--gulf)}
+/* top bar */
+.bar{height:var(--bar);background:var(--ink);color:var(--on-ink);display:flex;align-items:center;gap:14px;padding:0 16px;position:relative;z-index:1200}
+.brand{display:flex;align-items:baseline;gap:8px;text-decoration:none;color:var(--gold-soft);font:500 19px var(--display);letter-spacing:.2em;white-space:nowrap}
+.brand b{font-weight:300;color:#fff;letter-spacing:.2em}
+.searchbox{flex:1;max-width:520px;position:relative}
+.searchbox input{width:100%;border:0;border-radius:999px;padding:10px 16px 10px 40px;background:#2a2724;color:var(--on-ink);font-size:15px}
+.searchbox input::placeholder{color:#a79e90}
+.searchbox svg{position:absolute;left:14px;top:50%;translate:0 -50%;width:17px;height:17px;stroke:#a79e90;fill:none;stroke-width:2}
+.bar .phone{margin-left:auto;color:var(--gold-soft);text-decoration:none;font:500 14px var(--display);white-space:nowrap}
+.preview{background:#d9f7ea;color:#10231b;text-align:center;font-size:12.5px;padding:4px 10px;position:relative;z-index:1100}
+/* filter row */
+.filters{display:flex;gap:8px;padding:10px 16px;background:var(--surface);border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none;position:relative;z-index:1000}
+.filters::-webkit-scrollbar{display:none}
+.filters select,.fbtn{flex:none;width:auto;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px;font-size:14px;cursor:pointer;white-space:nowrap}
+.fbtn.on{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+.fbtn.save{background:var(--gold-soft);border-color:var(--gold-soft);color:#1e1d1c;font-weight:600}
+/* layout */
+.view{position:absolute;inset:0}
+#shell{position:fixed;inset:0;display:flex;flex-direction:column}
+#main{flex:1;position:relative;min-height:0}
+#map{height:100%;background:var(--sunk);z-index:1}
+#listwrap{overflow-y:auto;height:100%;padding:14px 16px 24px;border-left:1px solid var(--line)}
+.listhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.listhead h1{font-size:22px}.listhead select{width:auto;flex:none;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:6px 8px;font-size:13px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;position:relative;display:flex;flex-direction:column}
+.card.hl{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold)}
+.card figure{margin:0;aspect-ratio:16/10;background:var(--sunk);position:relative}
+.card img{width:100%;height:100%;object-fit:cover;display:block}
+.badge{position:absolute;left:10px;top:10px;background:var(--ink);color:var(--on-ink);font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px}
+.badge.new{background:var(--ok);color:#fff}.badge.cut{background:var(--bad);color:#fff}.badge.oh{background:var(--gold-soft);color:#10231b}
+.heart{position:absolute;right:8px;top:8px;width:36px;height:36px;border-radius:50%;border:0;background:#0006;display:grid;place-items:center;cursor:pointer}
+.heart svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2}.heart.on svg{fill:#e8546b;stroke:#e8546b}
+.card .body{padding:12px 14px 14px;display:grid;gap:2px}
+.price{font:500 21px var(--display)}
+.facts{font-size:14px}.facts b{font-weight:600}
+.addr{font-size:13.5px;color:var(--muted)}
+.court{font-size:11px;color:var(--muted);margin-top:4px}
+.empty{padding:40px 16px;text-align:center;color:var(--muted);border:1.5px dashed var(--line);border-radius:14px}
+/* map pins */
+.pin{background:var(--ink);color:#fff3dc;font:600 12px var(--body);padding:3px 8px;border-radius:999px;border:2px solid #fff;white-space:nowrap;box-shadow:0 2px 6px #0005;transform:translate(-50%,-50%);display:inline-block}
+.pin.hl,.pin:hover{background:var(--gold-soft);color:#10231b;z-index:999}
+.pin.saved{background:#c23a55;color:#fff}
+.leaflet-div-icon{background:none;border:0}
+.maptoggle{display:none}
+/* generic pages */
+.page{overflow-y:auto;height:100%;padding:22px 16px 30px}.page .in{max-width:820px;margin:0 auto;display:grid;gap:18px}
+.eyebrow{font:500 12px var(--display);letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.title{font-size:30px;font-weight:300}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+.rowitem{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}.rowitem:last-child{border:0}
+.rowitem .g{flex:1;min-width:0}.rowitem small{color:var(--muted);display:block}
+.btn{display:inline-flex;justify-content:center;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:11px 18px;font-weight:600;cursor:pointer;text-decoration:none;color:var(--fg)}
+.btn.dark{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}.btn.gold{background:var(--gold-soft);border-color:var(--gold-soft);color:#1e1d1c}
+.btn.sm{padding:6px 12px;font-size:13px}
+.links{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.links a{display:block;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;text-decoration:none;color:var(--fg)}
+.links a b{font:500 17px var(--display);display:block}.links a span{font-size:13px;color:var(--muted)}
+/* tabs */
+.tabs{height:var(--tabs);background:var(--surface);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding-bottom:env(safe-area-inset-bottom);position:relative;z-index:1200}
+.tabs button{border:0;background:none;display:grid;justify-items:center;align-content:center;gap:1px;font-size:11px;color:var(--muted);cursor:pointer}
+.tabs svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.tabs button.on{color:var(--fg)}.tabs button.on svg{stroke:var(--gold)}
+/* sheets */
+.scrim{position:fixed;inset:0;background:#0008;z-index:2000;display:flex;justify-content:center;align-items:flex-end}
+.sheet{background:var(--bg);width:min(560px,100%);max-height:92%;overflow-y:auto;border-radius:18px 18px 0 0;padding:18px}
+.sheet h2{font-size:22px;margin-bottom:10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 13px;font-size:14px;cursor:pointer}
+.chip.on{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+label.f{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+input,select,textarea{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;font-size:15px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* detail */
+#detail{position:fixed;inset:0;background:var(--bg);z-index:1500;overflow-y:auto}
+.dbar{position:sticky;top:0;z-index:2;background:var(--ink);color:var(--on-ink);display:flex;align-items:center;gap:10px;padding:10px 14px}
+.dbar button{background:none;border:1px solid #4a4540;color:var(--on-ink);border-radius:999px;padding:7px 14px;cursor:pointer;font-size:14px}
+.dbar .sp{flex:1}
+.gallery{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:4px;background:#000;scrollbar-width:none}
+.gallery::-webkit-scrollbar{display:none}
+.gallery img{flex:none;width:min(100%,760px);aspect-ratio:16/10;object-fit:cover;scroll-snap-align:start}
+.dwrap{max-width:1080px;margin:0 auto;padding:20px 16px 60px;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,1fr);gap:24px;align-items:start}
+.dprice{font:400 38px var(--display)}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.kv div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px}.kv small{display:block;color:var(--muted);font-size:12px}.kv b{font-weight:600}
+.side{display:grid;gap:16px;position:sticky;top:64px}
+.side form{display:grid;gap:10px}
+.pay{font:500 28px var(--display);color:var(--gold)}
+.ok{color:var(--ok);font-size:14px}
+#toast{position:fixed;left:50%;bottom:calc(var(--tabs) + 16px);translate:-50% 0;background:var(--ink);color:var(--on-ink);padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px;z-index:3000;opacity:0;pointer-events:none;transition:opacity .2s;max-width:calc(100% - 32px)}
+#toast.show{opacity:1}
+@media (max-width:860px){
+  .bar .phone{display:none}.brand{font-size:15px;gap:6px}.listhead h1{font-size:18px}.bar{gap:10px;padding:0 12px}
+  #split{display:block!important;position:relative}
+  #map,#listwrap{position:absolute;inset:0;border:0}
+  #split.showmap #listwrap{display:none}#split:not(.showmap) #map{visibility:hidden}
+  .maptoggle{display:inline-flex;position:absolute;left:50%;bottom:16px;translate:-50% 0;z-index:900;background:var(--ink);color:var(--on-ink);border:0;border-radius:999px;padding:11px 20px;font-weight:600;box-shadow:0 4px 14px #0006;cursor:pointer}
+  .dwrap{grid-template-columns:1fr}.side{position:static}.dprice{font-size:32px}
+}
+</style>
+</head>
+<body>
+<div id="shell">
+  <header class="bar">
+    <a class="brand" href="/marino-homes/" aria-label="Marino Homes"><span>MARIN<b>O</b></span><span style="font-size:.62em;letter-spacing:.3em">HOMES</span></a>
+    <label class="searchbox"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <input id="q" type="search" placeholder="City, ZIP or address" autocomplete="off" aria-label="Search by city, ZIP or address"></label>
+    <a class="phone" href="tel:+12397762393">(239) 776-2393</a>
+  </header>
+  <div class="preview" id="preview" hidden>Private preview. These are sample listings, not real homes for sale.</div>
+  <div id="main">
+    <!-- SEARCH -->
+    <section class="view" id="v-search" style="display:flex;flex-direction:column;height:100%">
+    </section>
+    <!-- SAVED -->
+    <section class="view page" id="v-saved" hidden><div class="in">
+      <div><div class="eyebrow">Saved</div><h1 class="title">Your homes and searches</h1></div>
+      <div><h2 style="font-size:20px;margin-bottom:10px">Saved homes</h2><div class="cards" id="savedHomes"></div></div>
+      <div class="box"><h2 style="font-size:20px">Saved searches</h2><div id="savedSearches"></div></div>
+      <div class="box"><h2 style="font-size:20px">Get new matches by email</h2>
+        <p style="color:var(--muted);font-size:14px;margin:4px 0 12px">Send your saved searches to a Marino Group agent and we'll email you new listings as they hit the market.</p>
+        <form id="alertForm" style="display:grid;gap:10px"><div class="two"><label class="f">Name<input name="name" required autocomplete="name"></label><label class="f">Phone<input name="phone" type="tel" autocomplete="tel"></label></div>
+          <label class="f">Email<input name="email" type="email" required autocomplete="email"></label><button class="btn dark">Send me new listings</button><p class="ok" id="alertOk" hidden></p></form></div>
+    </div></section>
+    <!-- SELL -->
+    <section class="view page" id="v-sell" hidden><div class="in">
+      <div><div class="eyebrow">Sell</div><h1 class="title">What's your home worth?</h1><p style="color:var(--muted);margin-top:6px">A free value from a local agent who knows your street, not an automated guess.</p></div>
+      <form id="sellForm" class="box" style="display:grid;gap:10px">
+        <label class="f">Property address<input name="address" required autocomplete="street-address"></label>
+        <div class="two"><label class="f">Name<input name="name" required autocomplete="name"></label><label class="f">Phone<input name="phone" type="tel" required autocomplete="tel"></label></div>
+        <label class="f">Email<input name="email" type="email" autocomplete="email"></label>
+        <label class="f">When are you thinking of selling?<select name="when"><option>0–3 months</option><option>3–6 months</option><option>6–12 months</option><option>Just curious</option></select></label>
+        <button class="btn dark">Get my home value</button><p class="ok" id="sellOk" hidden></p></form>
+    </div></section>
+    <!-- MORE -->
+    <section class="view page" id="v-more" hidden><div class="in">
+      <div><div class="eyebrow">Marino Group</div><h1 class="title">Everything in one place</h1></div>
+      <div class="links">
+        <a href="/#build"><b>Build a new home</b><span>341 home models from our builder partner</span></a>
+        <a href="/areas/"><b>Area guides</b><span>Nine Southwest Florida towns</span></a>
+        <a href="/portal/"><b>Client portal</b><span>Track your purchase or sale</span></a>
+        <a href="/showings/"><b>Marino Showings</b><span>For agents: get showings covered</span></a>
+        <a href="/#team"><b>Our team</b><span>English · Español · Русский</span></a>
+        <a href="tel:+12397762393"><b>Call or text us</b><span>(239) 776-2393</span></a>
+      </div>
+      <p style="font-size:12px;color:var(--muted);text-align:center">Marino Homes by Marino Group · Brokered by Waterfront Realty Group, Inc. · Equal Housing Opportunity</p>
+    </div></section>
+  </div>
+  <nav class="tabs" aria-label="Marino Homes">
+    <button data-tab="search" class="on"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>Search</button>
+    <button data-tab="saved"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.600-7 10-7 10z"/></svg>Saved</button>
+    <button data-tab="sell"><svg viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.500" cy="8.500" r="1.300"/></svg>Sell</button>
+    <button data-tab="more"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>More</button>
+  </nav>
+</div>
+<div id="detail" hidden></div>
+<div id="sheetHost"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* ===== LISTINGS SOURCE =====
+   "sample" reads sample-listings.json (private preview).
+   When the full-MLS IDX data feed is on, set mode to "idx" and fill in loadIdx() below
+   so it returns the same fields: id, addr, city, zip, county, lat, lng, price, beds, baths,
+   sqft, type, year, lot, hoa, flood, days, status, feats[], photos[] (full URLs), broker, desc. */
+const SOURCE = { mode: "sample", sampleUrl: "/marino-homes/sample-listings.json" };
+async function loadIdx(){ throw new Error("IDX feed not connected yet"); }
+const FORM_URL = "https://formsubmit.co/ajax/dhomeswfl@gmail.com";
+
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const esc = t => String(t ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money = n => "$" + Number(n).toLocaleString("en-US",{maximumFractionDigits:0});
+const short = n => n>=1e6 ? "$"+(n/1e6).toFixed(n%1e6?2:0).replace(/0$/,"")+"M" : "$"+Math.round(n/1000)+"K";
+const photo = p => /^https?:/.test(p) ? p : `/img/models/${p}.webp`;
+function toast(m){ const t=$("#toast"); t.textContent=m; t.classList.add("show"); clearTimeout(toast.t); toast.t=setTimeout(()=>t.classList.remove("show"),2600); }
+const store = { get(k,d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d; }catch(e){ return d; } }, set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} } };
+
+const FEATS = ["Waterfront","Gulf access","No bridges to Gulf","Pool","No HOA","New construction","1+ acre lot","Impact windows"];
+const PRICES = [200,300,400,500,600,750,1000,1500,2000,3000,5000].map(x=>x*1000);
+const S = { all:[], list:[], f:{q:"",min:"",max:"",beds:"",baths:"",type:"",feats:[]}, sort:"new", saved:store.get("mh_saved",[]), searches:store.get("mh_searches",[]), map:null, pins:{} };
+
+/* ---------- search view markup ---------- */
+$("#v-search").innerHTML = `
+  <div class="filters">
+    <select id="f-min" aria-label="Minimum price"><option value="">Min price</option>${PRICES.map(p=>`<option value="${p}">${money(p)}+</option>`).join("")}</select>
+    <select id="f-max" aria-label="Maximum price"><option value="">Max price</option>${PRICES.map(p=>`<option value="${p}">Up to ${money(p)}</option>`).join("")}</select>
+    <select id="f-beds" aria-label="Bedrooms"><option value="">Beds</option>${[1,2,3,4,5].map(n=>`<option value="${n}">${n}+ beds</option>`).join("")}</select>
+    <select id="f-baths" aria-label="Bathrooms"><option value="">Baths</option>${[1,2,3,4].map(n=>`<option value="${n}">${n}+ baths</option>`).join("")}</select>
+    <select id="f-type" aria-label="Home type"><option value="">Home type</option><option>Single-family</option><option>Condo</option><option>Villa / townhouse</option></select>
+    <button class="fbtn" id="moreBtn">More filters</button>
+    <button class="fbtn" id="clearBtn">Clear</button>
+    <button class="fbtn save" id="saveSearch">Save search</button>
+  </div>
+  <div style="flex:1;position:relative;min-height:0"><div id="split" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(380px,46%);height:100%">
+    <div id="map"></div>
+    <div id="listwrap"><div class="listhead"><h1 id="count">Homes for sale</h1>
+      <select id="sort" aria-label="Sort"><option value="new">Newest</option><option value="lo">Price: low to high</option><option value="hi">Price: high to low</option><option value="big">Largest</option></select></div>
+      <div class="cards" id="cards"></div></div>
+  </div><button class="maptoggle" id="mapToggle">Map</button></div>`;
+
+/* ---------- data ---------- */
+async function load(){
+  try{ S.all = SOURCE.mode==="idx" ? await loadIdx() : await (await fetch(SOURCE.sampleUrl)).json(); }
+  catch(e){ S.all=[]; $("#cards").innerHTML=`<div class="empty">Listings could not load. Please call (239) 776-2393.</div>`; }
+  $("#preview").hidden = SOURCE.mode!=="sample";
+}
+function apply(){
+  const f=S.f, q=f.q.trim().toLowerCase();
+  S.list = S.all.filter(l =>
+    (!q || `${l.addr} ${l.city} ${l.zip} ${l.county}`.toLowerCase().includes(q)) &&
+    (!f.min || l.price>=+f.min) && (!f.max || l.price<=+f.max) &&
+    (!f.beds || l.beds>=+f.beds) && (!f.baths || l.baths>=+f.baths) &&
+    (!f.type || l.type===f.type) && f.feats.every(x=>l.feats.includes(x)));
+  const by={new:(a,b)=>a.days-b.days,lo:(a,b)=>a.price-b.price,hi:(a,b)=>b.price-a.price,big:(a,b)=>b.sqft-a.sqft}[S.sort];
+  S.list.sort(by);
+  renderList(); renderMap(true);
+  $("#moreBtn").classList.toggle("on",f.feats.length>0);
+  $("#moreBtn").textContent = f.feats.length ? `More filters (${f.feats.length})` : "More filters";
+}
+const badge = l => ({New:`<span class="badge new">New</span>`,"Price cut":`<span class="badge cut">Price cut</span>`,"Open house":`<span class="badge oh">Open house</span>`}[l.status]||"");
+function card(l){
+  return `<article class="card" data-id="${l.id}"><figure><img src="${photo(l.photos[0])}" alt="" loading="lazy">${badge(l)}
+    <button class="heart ${S.saved.includes(l.id)?"on":""}" data-heart="${l.id}" aria-label="Save home"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.600-7 10-7 10z"/></svg></button></figure>
+    <div class="body"><div class="price">${money(l.price)}</div>
+    <div class="facts"><b>${l.beds}</b> bd · <b>${l.baths}</b> ba · <b>${l.sqft.toLocaleString()}</b> sq ft · ${esc(l.type)}</div>
+    <div class="addr">${esc(l.addr)}, ${esc(l.city)}, FL ${esc(l.zip)}</div>
+    <div class="court">Listing courtesy of ${esc(l.broker)}</div></div></article>`;
+}
+function renderList(){
+  const where = S.f.q.trim() ? ` matching "${S.f.q.trim()}"` : " in Southwest Florida";
+  $("#count").textContent = `${S.list.length} home${S.list.length===1?"":"s"}${where}`;
+  $("#cards").innerHTML = S.list.map(card).join("") || `<div class="empty"><b>No homes match yet.</b><br>Try a wider price range or fewer filters, or save this search and we'll email you when one comes up.</div>`;
+}
+function renderMap(fit){
+  if(!window.L) return;
+  if(!S.map){
+    S.map = L.map("map",{zoomControl:true,attributionControl:true}).setView([26.45,-81.8],9);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(S.map);
+    S.layer = L.layerGroup().addTo(S.map);
+  }
+  S.layer.clearLayers(); S.pins={};
+  S.list.forEach(l=>{
+    const m = L.marker([l.lat,l.lng],{icon:L.divIcon({html:`<span class="pin ${S.saved.includes(l.id)?"saved":""}" data-pin="${l.id}">${short(l.price)}</span>`,iconSize:[0,0]}),keyboard:false});
+    m.on("click",()=>openDetail(l.id)); m.addTo(S.layer); S.pins[l.id]=m;
+  });
+  if(fit && S.list.length) S.map.fitBounds(L.latLngBounds(S.list.map(l=>[l.lat,l.lng])).pad(.15),{maxZoom:14});
+}
+/* list <-> map highlight */
+$("#cards").addEventListener("mouseover",e=>{ const c=e.target.closest(".card"); $$(".pin.hl").forEach(p=>p.classList.remove("hl")); if(c) document.querySelector(`[data-pin="${c.dataset.id}"]`)?.classList.add("hl"); });
+document.addEventListener("click",e=>{
+  const h=e.target.closest("[data-heart]"); if(h){ e.stopPropagation(); toggleSave(h.dataset.heart); return; }
+  const c=e.target.closest(".card[data-id]"); if(c) openDetail(c.dataset.id);
+});
+function toggleSave(id){
+  const i=S.saved.indexOf(id); i<0 ? S.saved.push(id) : S.saved.splice(i,1); store.set("mh_saved",S.saved);
+  toast(i<0?"Saved to your homes":"Removed from saved");
+  $$(`[data-heart="${id}"]`).forEach(b=>b.classList.toggle("on",i<0));
+  document.querySelector(`[data-pin="${id}"]`)?.classList.toggle("saved",i<0);
+  if(!$("#v-saved").hidden) renderSaved();
+}
+
+/* ---------- filters ---------- */
+const bind=(id,k)=>$(id).addEventListener("change",e=>{S.f[k]=e.target.value;apply();});
+bind("#f-min","min");bind("#f-max","max");bind("#f-beds","beds");bind("#f-baths","baths");bind("#f-type","type");
+$("#sort").addEventListener("change",e=>{S.sort=e.target.value;apply();});
+let qt; $("#q").addEventListener("input",e=>{clearTimeout(qt);qt=setTimeout(()=>{S.f.q=e.target.value;go("search");apply();},200);});
+function syncControls(){ $("#q").value=S.f.q; $("#f-min").value=S.f.min; $("#f-max").value=S.f.max; $("#f-beds").value=S.f.beds; $("#f-baths").value=S.f.baths; $("#f-type").value=S.f.type; }
+$("#clearBtn").onclick=()=>{S.f={q:"",min:"",max:"",beds:"",baths:"",type:"",feats:[]};syncControls();apply();};
+function sheet(html){ const el=document.createElement("div"); el.className="scrim"; el.innerHTML=`<div class="sheet" role="dialog" aria-modal="true">${html}</div>`; el.onclick=e=>{if(e.target===el)el.remove();}; $("#sheetHost").appendChild(el); return el; }
+$("#moreBtn").onclick=()=>{
+  const el=sheet(`<h2>More filters</h2><p style="color:var(--muted);font-size:14px;margin:0 0 12px">The details that matter in Southwest Florida.</p>
+    <div class="chips">${FEATS.map(x=>`<button class="chip ${S.f.feats.includes(x)?"on":""}" data-x="${x}">${x}</button>`).join("")}</div>
+    <p style="margin:18px 0 0;display:flex;gap:10px"><button class="btn dark" id="mfDone" style="flex:1">Show homes</button><button class="btn" id="mfClear">Reset</button></p>`);
+  el.querySelectorAll(".chip").forEach(c=>c.onclick=()=>c.classList.toggle("on"));
+  el.querySelector("#mfClear").onclick=()=>el.querySelectorAll(".chip").forEach(c=>c.classList.remove("on"));
+  el.querySelector("#mfDone").onclick=()=>{S.f.feats=[...el.querySelectorAll(".chip.on")].map(c=>c.dataset.x);el.remove();apply();};
+};
+function describe(f){
+  const p=[]; if(f.q) p.push(`"${f.q}"`); if(f.min&&f.max) p.push(`${money(f.min)} – ${money(f.max)}`); else if(f.max) p.push(`up to ${money(f.max)}`); else if(f.min) p.push(`${money(f.min)}+`);
+  if(f.beds) p.push(`${f.beds}+ beds`); if(f.baths) p.push(`${f.baths}+ baths`); if(f.type) p.push(f.type); if(f.feats.length) p.push(f.feats.join(", "));
+  return p.join(" · ") || "All Southwest Florida homes";
+}
+$("#saveSearch").onclick=()=>{ S.searches.unshift({id:Date.now(),f:JSON.parse(JSON.stringify(S.f))}); S.searches=S.searches.slice(0,12); store.set("mh_searches",S.searches); toast("Search saved. Find it under Saved."); };
+$("#mapToggle").onclick=()=>{ const sp=$("#split"); const on=!sp.classList.contains("showmap"); sp.classList.toggle("showmap",on); $("#mapToggle").textContent=on?"List":"Map"; if(on) setTimeout(()=>{S.map.invalidateSize(); if(S.list.length) S.map.fitBounds(L.latLngBounds(S.list.map(l=>[l.lat,l.lng])).pad(.15),{maxZoom:14});},50); };
+
+/* ---------- tabs ---------- */
+function go(tab){
+  ["search","saved","sell","more"].forEach(t=>{ const v=$("#v-"+t); if(t==="search") v.style.display = tab==="search"?"flex":"none"; else v.hidden = t!==tab; });
+  $$(".tabs button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
+  if(tab==="saved") renderSaved();
+  if(tab==="search") setTimeout(()=>S.map&&S.map.invalidateSize(),50);
+}
+$$(".tabs button").forEach(b=>b.onclick=()=>go(b.dataset.tab));
+function renderSaved(){
+  const homes=S.all.filter(l=>S.saved.includes(l.id));
+  $("#savedHomes").innerHTML = homes.map(card).join("") || `<div class="empty">Tap the heart on any home to save it here.</div>`;
+  $("#savedSearches").innerHTML = S.searches.map(s=>`<div class="rowitem"><div class="g"><b>${esc(describe(s.f))}</b></div><button class="btn sm" data-run="${s.id}">View</button><button class="btn sm" data-del="${s.id}" aria-label="Delete search">×</button></div>`).join("") || `<p style="color:var(--muted);font-size:14px;margin:8px 0 0">No saved searches yet. Set your filters and tap "Save search."</p>`;
+  $$("[data-run]").forEach(b=>b.onclick=()=>{ S.f=JSON.parse(JSON.stringify(S.searches.find(s=>s.id==b.dataset.run).f)); syncControls(); go("search"); apply(); });
+  $$("[data-del]").forEach(b=>b.onclick=()=>{ S.searches=S.searches.filter(s=>s.id!=b.dataset.del); store.set("mh_searches",S.searches); renderSaved(); });
+}
+
+/* ---------- forms ---------- */
+async function send(subject,data){ const r=await fetch(FORM_URL,{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({_subject:subject,_template:"table",...data})}); if(!r.ok) throw new Error("send failed"); }
+function wire(form,okEl,subject,extra,okText){
+  form.addEventListener("submit",async e=>{ e.preventDefault(); const btn=form.querySelector("button"); btn.disabled=true;
+    const data=Object.fromEntries(new FormData(form)); okEl.hidden=false;
+    try{ await send(subject,{...data,...(extra?extra():{})}); form.reset(); okEl.textContent=okText; }
+    catch(_){ okEl.textContent="Sorry, that didn't send. Please call or text (239) 776-2393."; }
+    btn.disabled=false; });
+}
+wire($("#sellForm"),$("#sellOk"),"Home value request – Marino Homes",null,"Thanks! A Marino Group agent will contact you with your home's value.");
+wire($("#alertForm"),$("#alertOk"),"Listing alerts request – Marino Homes",()=>({Searches:S.searches.map(s=>describe(s.f)).join(" | ")||describe(S.f),"Saved homes":S.all.filter(l=>S.saved.includes(l.id)).map(l=>`${l.addr}, ${l.city}`).join(" | ")}),"Done. We'll email you new listings that match.");
+
+/* ---------- listing detail ---------- */
+function monthly(price,downPct,rate,years){ const P=price*(1-downPct/100), r=rate/100/12, n=years*12; return r ? P*r/(1-Math.pow(1+r,-n)) : P/n; }
+function openDetail(id){
+  const l=S.all.find(x=>x.id===id); if(!l) return;
+  history.replaceState(null,"","#home="+id);
+  const d=$("#detail"), ppsf=Math.round(l.price/l.sqft);
+  d.innerHTML=`<div class="dbar"><button id="dBack">‹ Back</button><span class="sp"></span><button id="dShare">Share</button>
+      <button id="dSave">${S.saved.includes(id)?"♥ Saved":"♡ Save"}</button></div>
+    <div class="gallery">${l.photos.map(p=>`<img src="${photo(p)}" alt="" loading="lazy">`).join("")}</div>
+    <div class="dwrap"><div style="display:grid;gap:18px">
+      <div><div class="dprice">${money(l.price)}</div>
+        <div style="font-size:17px"><b>${l.beds}</b> bd · <b>${l.baths}</b> ba · <b>${l.sqft.toLocaleString()}</b> sq ft</div>
+        <div style="color:var(--muted)">${esc(l.addr)}, ${esc(l.city)}, FL ${esc(l.zip)}</div>
+        <div class="chips" style="margin-top:10px">${[l.status,...l.feats].map(x=>`<span class="chip" style="cursor:default">${esc(x)}</span>`).join("")}</div></div>
+      <div class="kv">
+        <div><small>Home type</small><b>${esc(l.type)}</b></div><div><small>Year built</small><b>${l.year}</b></div>
+        <div><small>Price per sq ft</small><b>${money(ppsf)}</b></div><div><small>HOA</small><b>${l.hoa?money(l.hoa)+"/mo":"None"}</b></div>
+        <div><small>Flood zone</small><b>${esc(l.flood)}</b></div><div><small>County</small><b>${esc(l.county)}</b></div>
+        ${l.lot?`<div><small>Lot</small><b>${esc(l.lot)}</b></div>`:""}<div><small>Days on market</small><b>${l.days}</b></div></div>
+      <div><h2 style="font-size:20px;margin-bottom:6px">About this home</h2><p style="margin:0">${esc(l.desc)}</p></div>
+      <div class="box"><h2 style="font-size:20px">Monthly payment</h2>
+        <div class="pay" id="payOut"></div><p style="font-size:12px;color:var(--muted);margin:2px 0 12px">Principal and interest${l.hoa?" plus HOA":""}. Taxes and insurance are not included. This is an estimate, not a loan offer.</p>
+        <div class="two"><label class="f">Down payment %<input id="pDown" type="number" min="0" max="100" value="20"></label><label class="f">Interest rate %<input id="pRate" type="number" min="0" step="0.125" value="6.5"></label></div>
+        <label class="f" style="margin-top:10px">Loan term<select id="pTerm"><option value="30">30 years</option><option value="15">15 years</option></select></label></div>
+      <p style="font-size:12px;color:var(--muted)">Listing courtesy of ${esc(l.broker)}. Information is deemed reliable but not guaranteed.
+        <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${l.addr} ${l.city} FL ${l.zip}`)}" target="_blank" rel="noopener">Directions</a> ·
+        <a href="https://msc.fema.gov/portal/home" target="_blank" rel="noopener">FEMA flood map</a></p>
+    </div>
+    <aside class="side"><div class="box"><h2 style="font-size:20px">Tour this home</h2>
+      <form id="tourForm"><label class="f">Preferred day<input name="day" type="date" min="${new Date().toISOString().slice(0,10)}"></label>
+        <label class="f">Name<input name="name" required autocomplete="name"></label>
+        <div class="two"><label class="f">Phone<input name="phone" type="tel" required autocomplete="tel"></label><label class="f">Email<input name="email" type="email" autocomplete="email"></label></div>
+        <label class="f">Message<textarea name="message" rows="2">I'd like to see ${esc(l.addr)}.</textarea></label>
+        <button class="btn dark">Request a tour</button><p class="ok" id="tourOk" hidden></p></form></div>
+      <div class="box" style="display:flex;gap:12px;align-items:center"><img src="/img/t-jorge.jpg" alt="" style="width:52px;height:52px;border-radius:50%;object-fit:cover">
+        <div style="flex:1"><b>Marino Group</b><br><span style="font-size:13px;color:var(--muted)">English · Español · Русский</span></div>
+        <a class="btn sm" href="tel:+12397762393">Call</a><a class="btn sm" href="sms:+12397762393">Text</a></div></aside></div>`;
+  d.hidden=false; d.scrollTop=0;
+  const calc=()=>{ const m=monthly(l.price,+$("#pDown").value||0,+$("#pRate").value||0,+$("#pTerm").value)+(l.hoa||0); $("#payOut").textContent=money(m)+"/mo"; };
+  ["#pDown","#pRate","#pTerm"].forEach(s=>$(s).addEventListener("input",calc)); calc();
+  $("#dBack").onclick=closeDetail;
+  $("#dSave").onclick=()=>{ toggleSave(id); $("#dSave").textContent=S.saved.includes(id)?"♥ Saved":"♡ Save"; };
+  $("#dShare").onclick=async()=>{ const url=location.href; try{ if(navigator.share) await navigator.share({title:`${l.addr}, ${l.city}`,url}); else { await navigator.clipboard.writeText(url); toast("Link copied"); } }catch(_){} };
+  wire($("#tourForm"),$("#tourOk"),"Tour request – Marino Homes",()=>({Listing:`${l.id} – ${l.addr}, ${l.city} FL ${l.zip}`,Price:money(l.price)}),"Thanks! An agent will confirm your tour shortly.");
+}
+function closeDetail(){ $("#detail").hidden=true; history.replaceState(null,"",location.pathname); }
+addEventListener("keydown",e=>{ if(e.key==="Escape"){ const sh=$("#sheetHost .scrim"); if(sh) sh.remove(); else if(!$("#detail").hidden) closeDetail(); } });
+
+/* ---------- start ---------- */
+(async()=>{
+  const p=new URLSearchParams(location.search);
+  if(p.get("area")) S.f.q=p.get("area"); if(p.get("max")) S.f.max=p.get("max"); if(p.get("beds")) S.f.beds=parseInt(p.get("beds"))||"";
+  S.f.feats=p.getAll("f").filter(x=>FEATS.includes(x));
+  await load(); syncControls(); apply();
+  const m=location.hash.match(/home=([\w-]+)/); if(m) openDetail(m[1]);
+})();
+</script>
+</body>
+</html>
