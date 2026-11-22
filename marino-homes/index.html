@@ -134,6 +134,7 @@ details p{color:var(--muted);margin-top:8px}
   <div id="main">
     <section class="view" id="v-search" style="display:flex;flex-direction:column">
       <div class="filters">
+        <select class="pill on" id="f-kind" aria-label="For sale or for rent"><option value="sale">For sale</option><option value="rent">For rent</option></select>
         <select class="pill" id="f-max" aria-label="Maximum price"></select>
         <select class="pill" id="f-beds" aria-label="Bedrooms"></select>
         <button class="pill" id="moreBtn">Filters</button>
@@ -144,8 +145,9 @@ details p{color:var(--muted);margin-top:8px}
       <div style="flex:1;position:relative;min-height:0"><div id="split">
         <div id="map"></div>
         <div id="listwrap"><div class="listhead"><h1 id="count">Homes for sale</h1>
-          <select id="sort" aria-label="Sort"><option value="new">Newest</option><option value="lo">Price: low to high</option><option value="hi">Price: high to low</option><option value="big">Largest</option></select></div>
-          <div class="cards" id="cards"></div></div>
+          <select id="sort" aria-label="Sort"><option value="lo">Price: low to high</option><option value="hi">Price: high to low</option><option value="big">Largest</option></select></div>
+          <div class="cards" id="cards"></div>
+          <p class="fine" id="idxnote" hidden style="text-align:left;margin-top:28px">The data relating to real estate for sale on this web site comes in part from the Internet Data Exchange of Southwest Florida MLS, Ltd. The information being provided is for consumers' personal, non-commercial use and may not be used for any purpose other than to identify prospective properties consumers may be interested in purchasing. Information herein deemed reliable but not guaranteed. © 2026 Southwest Florida MLS, Ltd.</p></div>
       </div><button class="maptoggle" id="mapToggle">Map</button></div>
     </section>
 
@@ -211,7 +213,8 @@ details p{color:var(--muted);margin-top:8px}
    When the full-MLS IDX data feed is on, set mode to "idx" and fill in loadIdx() below
    so it returns the same fields: id, addr, city, zip, county, lat, lng, price, beds, baths,
    sqft, type, year, lot, hoa, flood, days, status, feats[], photos[] (full URLs), broker, desc. */
-const SOURCE = { mode: "sample", sampleUrl: "/marino-homes/sample-listings.json" };
+const SOURCE = { mode: "own", ownUrl: "/marino-homes/listings.json", sampleUrl: "/marino-homes/sample-listings.json" };
+/* "own" = Marino Group's own listings, copied from the team's SWFL MLS IDX feed (listings.json). */
 async function loadIdx(){ throw new Error("IDX feed not connected yet"); }
 const FORM_URL = "https://formsubmit.co/ajax/dhomeswfl@gmail.com";
 
@@ -219,6 +222,8 @@ const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAl
 const esc = t => String(t ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const money = n => "$" + Number(n).toLocaleString("en-US",{maximumFractionDigits:0});
 const short = n => n>=1e6 ? "$"+(n/1e6).toFixed(n%1e6?2:0).replace(/0$/,"")+"M" : "$"+Math.round(n/1000)+"K";
+const priceOf = l => money(l.price) + (l.kind==="rent" ? "/mo" : "");
+const factsOf = l => l.beds==null ? [l.type, l.lot].filter(Boolean).join(" · ") : `${l.bedLabel||l.beds} bd · ${l.baths} ba · ${l.sqft.toLocaleString()} sq ft`;
 const photo = p => /^https?:/.test(p) ? p : `/img/models/${p}.webp`;
 function toast(m){ const t=$("#toast"); t.textContent=m; t.classList.add("show"); clearTimeout(toast.t); toast.t=setTimeout(()=>t.classList.remove("show"),2400); }
 const store = { get(k,d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d; }catch(e){ return d; } }, set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} } };
@@ -253,24 +258,28 @@ $("#links").innerHTML = LINKS.map(([t,d,u])=>`<a class="row" href="${u}"${u.star
 /* ---------- search ---------- */
 const FEATS = ["Waterfront","Gulf access","No bridges to Gulf","Pool","No HOA","New construction","1+ acre lot","Impact windows"];
 const PRICES = [200,300,400,500,600,750,1000,1500,2000,3000,5000].map(x=>x*1000);
-const BLANK = () => ({q:"",min:"",max:"",beds:"",baths:"",type:"",feats:[]});
-const S = { all:[], list:[], f:BLANK(), sort:"new", saved:store.get("mh_saved",[]), searches:store.get("mh_searches",[]), map:null };
-$("#f-max").innerHTML = `<option value="">Any price</option>${PRICES.map(p=>`<option value="${p}">Up to ${money(p)}</option>`).join("")}`;
+const BLANK = () => ({kind:S?.f?.kind||"sale",q:"",min:"",max:"",beds:"",baths:"",type:"",feats:[]});
+var S; S = { all:[], list:[], f:{kind:"sale",q:"",min:"",max:"",beds:"",baths:"",type:"",feats:[]}, sort:"lo", saved:store.get("mh_saved",[]), searches:store.get("mh_searches",[]), map:null };
+const RENTS = [1500,2000,2500,3000,4000,5000,7500,10000];
+function priceOptions(){ const list = S.f.kind==="rent" ? RENTS : PRICES; $("#f-max").innerHTML = `<option value="">Any price</option>${list.map(p=>`<option value="${p}">Up to ${money(p)}${S.f.kind==="rent"?"/mo":""}</option>`).join("")}`; }
+priceOptions();
 $("#f-beds").innerHTML = `<option value="">Any beds</option>${[1,2,3,4,5].map(n=>`<option value="${n}">${n}+ beds</option>`).join("")}`;
 
 async function load(){
-  try{ S.all = SOURCE.mode==="idx" ? await loadIdx() : await (await fetch(SOURCE.sampleUrl)).json(); }
+  try{ S.all = SOURCE.mode==="idx" ? await loadIdx() : await (await fetch(SOURCE.mode==="own" ? SOURCE.ownUrl : SOURCE.sampleUrl)).json(); }
   catch(e){ S.all=[]; $("#cards").innerHTML=`<div class="empty">Listings could not load. Please call (239) 776-2393.</div>`; }
-  $("#preview").hidden = SOURCE.mode!=="sample";
+  $("#preview").hidden = SOURCE.mode==="idx";
+  $("#preview").textContent = SOURCE.mode==="sample" ? "Private preview. These are sample listings, not real homes for sale." : "Preview. Showing Marino Group's own listings. Every MLS listing is coming soon.";
 }
 function apply(){
   const f=S.f, q=f.q.trim().toLowerCase();
   S.list = S.all.filter(l =>
-    (!q || `${l.addr} ${l.city} ${l.zip} ${l.county}`.toLowerCase().includes(q)) &&
+    ((l.kind||"sale")==="rent") === (f.kind==="rent") &&
+    (!q || `${l.addr} ${l.city} ${l.zip} ${l.county} ${l.area||""} ${l.mls||""}`.toLowerCase().includes(q)) &&
     (!f.min || l.price>=+f.min) && (!f.max || l.price<=+f.max) &&
-    (!f.beds || l.beds>=+f.beds) && (!f.baths || l.baths>=+f.baths) &&
+    (!f.beds || (l.beds||0)>=+f.beds) && (!f.baths || (l.baths||0)>=+f.baths) &&
     (!f.type || l.type===f.type) && f.feats.every(x=>l.feats.includes(x)));
-  S.list.sort({new:(a,b)=>a.days-b.days,lo:(a,b)=>a.price-b.price,hi:(a,b)=>b.price-a.price,big:(a,b)=>b.sqft-a.sqft}[S.sort]);
+  S.list.sort({new:(a,b)=>(a.days??a.order??0)-(b.days??b.order??0),lo:(a,b)=>a.price-b.price,hi:(a,b)=>b.price-a.price,big:(a,b)=>(b.sqft||0)-(a.sqft||0)}[S.sort]);
   renderList(); renderMap(true);
   const extra = [f.min,f.baths,f.type].filter(Boolean).length + f.feats.length;
   $("#moreBtn").textContent = extra ? `Filters · ${extra}` : "Filters"; $("#moreBtn").classList.toggle("on",extra>0);
@@ -281,13 +290,14 @@ const badge = l => ["New","Price cut","Open house"].includes(l.status) ? `<span 
 function card(l){
   return `<article class="card" data-id="${l.id}"><figure><img src="${photo(l.photos[0])}" alt="" loading="lazy">${badge(l)}
     <button class="heart ${S.saved.includes(l.id)?"on":""}" data-heart="${l.id}" aria-label="Save home"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.600-7 10-7 10z"/></svg></button></figure>
-    <div class="body"><div class="price">${money(l.price)}</div>
-    <div class="facts">${l.beds} bd · ${l.baths} ba · ${l.sqft.toLocaleString()} sq ft</div>
+    <div class="body"><div class="price">${priceOf(l)}</div>
+    <div class="facts">${factsOf(l)}</div>
     <div class="addr">${esc(l.addr)}, ${esc(l.city)}</div>
     <div class="court">Listing courtesy of ${esc(l.broker)}</div></div></article>`;
 }
 function renderList(){
-  $("#count").textContent = `${S.list.length} home${S.list.length===1?"":"s"}` + (S.f.q.trim() ? ` in "${S.f.q.trim()}"` : "");
+  $("#count").textContent = `${S.list.length} ${S.f.kind==="rent"?"rental":"listing"}${S.list.length===1?"":"s"}` + (S.f.q.trim() ? ` in "${S.f.q.trim()}"` : "");
+  $("#idxnote").hidden = !S.all.length;
   $("#cards").innerHTML = S.list.map(card).join("") || `<div class="empty"><b>No homes match yet.</b><br>Try a wider price range or fewer filters, or save this search and we'll email you when one comes up.</div>`;
 }
 function renderMap(fit){
@@ -299,7 +309,7 @@ function renderMap(fit){
     S.layer = L.layerGroup().addTo(S.map);
   }
   S.layer.clearLayers();
-  S.list.forEach(l=>{ const m=L.marker([l.lat,l.lng],{icon:L.divIcon({html:`<span class="pin ${S.saved.includes(l.id)?"saved":""}" data-pin="${l.id}">${short(l.price)}</span>`,iconSize:[0,0]}),keyboard:false}); m.on("click",()=>openDetail(l.id)); m.addTo(S.layer); });
+  S.list.forEach(l=>{ const m=L.marker([l.lat,l.lng],{icon:L.divIcon({html:`<span class="pin ${S.saved.includes(l.id)?"saved":""}" data-pin="${l.id}">${l.kind==="rent"?money(l.price):short(l.price)}</span>`,iconSize:[0,0]}),keyboard:false}); m.on("click",()=>openDetail(l.id)); m.addTo(S.layer); });
   if(fit && S.list.length) S.map.fitBounds(L.latLngBounds(S.list.map(l=>[l.lat,l.lng])).pad(.15),{maxZoom:14});
 }
 $("#cards").addEventListener("mouseover",e=>{ const c=e.target.closest(".card"); $$(".pin.hl").forEach(p=>p.classList.remove("hl")); if(c) document.querySelector(`[data-pin="${c.dataset.id}"]`)?.classList.add("hl"); });
@@ -317,25 +327,26 @@ function toggleSave(id){
   document.querySelector(`[data-pin="${id}"]`)?.classList.toggle("saved",i<0);
   if(!$("#v-saved").hidden) renderSaved();
 }
+$("#f-kind").addEventListener("change",e=>{S.f.kind=e.target.value;S.f.max="";S.f.min="";priceOptions();apply();});
 $("#f-max").addEventListener("change",e=>{S.f.max=e.target.value;apply();});
 $("#f-beds").addEventListener("change",e=>{S.f.beds=e.target.value;apply();});
 $("#sort").addEventListener("change",e=>{S.sort=e.target.value;apply();});
 let qt; $("#q").addEventListener("input",e=>{clearTimeout(qt);qt=setTimeout(()=>{S.f.q=e.target.value;go("search");apply();},200);});
-function syncControls(){ $("#q").value=S.f.q; $("#f-max").value=S.f.max; $("#f-beds").value=S.f.beds; }
+function syncControls(){ $("#q").value=S.f.q; $("#f-kind").value=S.f.kind||"sale"; priceOptions(); $("#f-max").value=S.f.max; $("#f-beds").value=S.f.beds; }
 $("#clearBtn").onclick=()=>{S.f=BLANK();syncControls();apply();};
 function sheet(html){ const el=document.createElement("div"); el.className="scrim"; el.innerHTML=`<div class="sheet" role="dialog" aria-modal="true">${html}</div>`; el.onclick=e=>{if(e.target===el)el.remove();}; $("#sheetHost").appendChild(el); return el; }
 $("#moreBtn").onclick=()=>{
   const f=S.f, el=sheet(`<h2>Filters</h2>
     <div class="two"><label class="f">Min price<select id="s-min"><option value="">No min</option>${PRICES.map(p=>`<option value="${p}" ${f.min==p?"selected":""}>${money(p)}</option>`).join("")}</select></label>
       <label class="f">Baths<select id="s-baths"><option value="">Any</option>${[1,2,3,4].map(n=>`<option value="${n}" ${f.baths==n?"selected":""}>${n}+</option>`).join("")}</select></label></div>
-    <label class="f">Home type<select id="s-type"><option value="">Any</option>${["Single-family","Condo","Villa / townhouse"].map(t=>`<option ${f.type===t?"selected":""}>${t}</option>`).join("")}</select></label>
+    <label class="f">Home type<select id="s-type"><option value="">Any</option>${["Single-family","Condo","Villa / townhouse","Manufactured","Lot / land"].map(t=>`<option ${f.type===t?"selected":""}>${t}</option>`).join("")}</select></label>
     <div><div style="font-size:13px;color:var(--muted);margin-bottom:8px">Southwest Florida features</div><div class="chips">${FEATS.map(x=>`<button class="chip ${f.feats.includes(x)?"on":""}" data-x="${x}">${x}</button>`).join("")}</div></div>
     <button class="btn go" id="mfDone">Show homes</button>`);
   el.querySelectorAll(".chip").forEach(c=>c.onclick=()=>c.classList.toggle("on"));
   el.querySelector("#mfDone").onclick=()=>{ f.min=el.querySelector("#s-min").value; f.baths=el.querySelector("#s-baths").value; f.type=el.querySelector("#s-type").value; f.feats=[...el.querySelectorAll(".chip.on")].map(c=>c.dataset.x); el.remove(); apply(); };
 };
 function describe(f){
-  const p=[]; if(f.q) p.push(f.q); if(f.min&&f.max) p.push(`${money(f.min)} – ${money(f.max)}`); else if(f.max) p.push(`up to ${money(f.max)}`); else if(f.min) p.push(`${money(f.min)}+`);
+  const p=[]; if(f.kind==="rent") p.push("For rent"); if(f.q) p.push(f.q); if(f.min&&f.max) p.push(`${money(f.min)} – ${money(f.max)}`); else if(f.max) p.push(`up to ${money(f.max)}`); else if(f.min) p.push(`${money(f.min)}+`);
   if(f.beds) p.push(`${f.beds}+ beds`); if(f.baths) p.push(`${f.baths}+ baths`); if(f.type) p.push(f.type); if(f.feats.length) p.push(f.feats.join(", "));
   return p.join(" · ") || "All Southwest Florida homes";
 }
@@ -355,7 +366,7 @@ function renderSaved(){
   const homes=S.all.filter(l=>S.saved.includes(l.id));
   $("#savedHomes").innerHTML = homes.map(card).join("") || `<p class="sub" style="margin:0">Tap the heart on any home to save it here.</p>`;
   $("#savedSearches").innerHTML = S.searches.map(s=>`<div class="row"><div class="g"><b>${esc(describe(s.f))}</b></div><button class="btn sm" data-run="${s.id}">View</button><button class="btn sm" data-del="${s.id}" aria-label="Delete search">×</button></div>`).join("") || `<p class="sub" style="margin:0">Set your filters and tap "Save search."</p>`;
-  $$("[data-run]").forEach(b=>b.onclick=()=>{ S.f={...BLANK(),...JSON.parse(JSON.stringify(S.searches.find(s=>s.id==b.dataset.run).f))}; syncControls(); go("search"); apply(); });
+  $$("[data-run]").forEach(b=>b.onclick=()=>{ S.f={...BLANK(),kind:"sale",...JSON.parse(JSON.stringify(S.searches.find(s=>s.id==b.dataset.run).f))}; syncControls(); go("search"); apply(); });
   $$("[data-del]").forEach(b=>b.onclick=()=>{ S.searches=S.searches.filter(s=>s.id!=b.dataset.del); store.set("mh_searches",S.searches); renderSaved(); });
 }
 
@@ -398,24 +409,25 @@ function openDetail(id){
   d.innerHTML=`<div class="dbar"><button id="dBack">‹ Back</button><span class="sp"></span><button id="dShare">Share</button><button id="dSave">${S.saved.includes(id)?"♥ Saved":"♡ Save"}</button></div>
     <div class="gallery">${l.photos.map(p=>`<img src="${photo(p)}" alt="" loading="lazy">`).join("")}</div>
     <div class="dwrap"><div class="dmain">
-      <div><div class="dprice">${money(l.price)}</div>
-        <div style="font-size:16px">${l.beds} bd · ${l.baths} ba · ${l.sqft.toLocaleString()} sq ft</div>
+      <div><div class="dprice">${priceOf(l)}</div>
+        <div style="font-size:16px">${factsOf(l)}</div>
         <div style="color:var(--muted)">${esc(l.addr)}, ${esc(l.city)}, FL ${esc(l.zip)}</div></div>
       <div class="kv">
-        <div><small>Status</small><b>${esc(l.status)}</b></div><div><small>Home type</small><b>${esc(l.type)}</b></div><div><small>Year built</small><b>${l.year}</b></div>
-        <div><small>Price per sq ft</small><b>${money(Math.round(l.price/l.sqft))}</b></div><div><small>HOA</small><b>${l.hoa?money(l.hoa)+"/mo":"None"}</b></div>
-        <div><small>Flood zone</small><b>${esc(l.flood)}</b></div><div><small>County</small><b>${esc(l.county)}</b></div>${l.lot?`<div><small>Lot</small><b>${esc(l.lot)}</b></div>`:""}<div><small>Days on market</small><b>${l.days}</b></div></div>
+        ${[["Status",l.kind==="rent"?"For rent":l.status==="Price cut"?"Active · price reduced":l.status],["Type",l.type],["Year built",l.year],
+          ["Price per sq ft",l.kind!=="rent"&&l.sqft?money(Math.round(l.price/l.sqft)):null],["HOA / condo fees",l.kind==="rent"||l.beds==null?null:(l.hoa?money(l.hoa)+"/mo":"None")],
+          ["Community",l.area],["County",l.county],["Lot",l.lot],["Flood zone",l.flood],["Days on market",l.days],["MLS #",l.mls]]
+          .filter(([k,v])=>v!=null&&v!=="").map(([k,v])=>`<div><small>${k}</small><b>${esc(v)}</b></div>`).join("")}</div>
       ${l.feats.length?`<div class="chips">${l.feats.map(x=>`<span class="chip" style="cursor:default">${esc(x)}</span>`).join("")}</div>`:""}
       <p>${esc(l.desc)}</p>
-      <div class="rule" style="padding-top:24px"><h2 style="font-size:20px;margin-bottom:6px">Monthly payment</h2>
+      <div class="rule" id="payBox" style="padding-top:24px"${l.kind==="rent"?" hidden":""}><h2 style="font-size:20px;margin-bottom:6px">Monthly payment</h2>
         <div class="pay" id="payOut"></div><p style="font-size:12px;color:var(--muted);margin:2px 0 14px">Principal and interest${l.hoa?" plus HOA":""}. Taxes and insurance are not included. This is an estimate, not a loan offer.</p>
         <div class="two"><label class="f">Down payment %<input id="pDown" type="number" min="0" max="100" value="20"></label><label class="f">Interest rate %<input id="pRate" type="number" min="0" step="0.125" value="6.5"></label></div>
         <label class="f" style="margin-top:10px">Loan term<select id="pTerm"><option value="30">30 years</option><option value="15">15 years</option></select></label></div>
-      <p class="fine" style="text-align:left">Listing courtesy of ${esc(l.broker)}. Information is deemed reliable but not guaranteed.
+      <p class="fine" style="text-align:left">Listing courtesy of ${esc(l.broker)}. ${l.approx?"Map location is approximate. ":""}Information herein deemed reliable but not guaranteed. © 2026 Southwest Florida MLS, Ltd.
         <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${l.addr} ${l.city} FL ${l.zip}`)}" target="_blank" rel="noopener">Directions</a> ·
         <a href="https://msc.fema.gov/portal/home" target="_blank" rel="noopener">FEMA flood map</a></p>
     </div>
-    <aside class="side"><h2 style="font-size:20px">Tour this home</h2>
+    <aside class="side"><h2 style="font-size:20px">${l.beds==null?"Ask about this lot":"Tour this home"}</h2>
       <form id="tourForm"><label class="f">Preferred day<input name="day" type="date" min="${new Date().toISOString().slice(0,10)}"></label>
         <label class="f">Name<input name="name" required autocomplete="name"></label>
         <div class="two"><label class="f">Phone<input name="phone" type="tel" required autocomplete="tel"></label><label class="f">Email<input name="email" type="email" autocomplete="email"></label></div>
@@ -427,7 +439,7 @@ function openDetail(id){
   $("#dBack").onclick=closeDetail;
   $("#dSave").onclick=()=>{ toggleSave(id); $("#dSave").textContent=S.saved.includes(id)?"♥ Saved":"♡ Save"; };
   $("#dShare").onclick=async()=>{ const url=location.href; try{ if(navigator.share) await navigator.share({title:`${l.addr}, ${l.city}`,url}); else { await navigator.clipboard.writeText(url); toast("Link copied"); } }catch(_){} };
-  wire($("#tourForm"),$("#tourOk"),"Tour request – Marino Homes",()=>({Listing:`${l.id} – ${l.addr}, ${l.city} FL ${l.zip}`,Price:money(l.price)}),"Thanks! An agent will confirm your tour shortly.");
+  wire($("#tourForm"),$("#tourOk"),"Tour request – Marino Homes",()=>({Listing:`MLS ${l.id} – ${l.addr}, ${l.city} FL ${l.zip}`,Price:priceOf(l)}),"Thanks! An agent will confirm your tour shortly.");
 }
 function closeDetail(){ $("#detail").hidden=true; history.replaceState(null,"",location.pathname); }
 addEventListener("keydown",e=>{ if(e.key==="Escape"){ const sh=$("#sheetHost .scrim"); if(sh) sh.remove(); else if(!$("#detail").hidden) closeDetail(); } });
