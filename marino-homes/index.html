@@ -145,7 +145,7 @@ details p{color:var(--muted);margin-top:8px}
       <div style="flex:1;position:relative;min-height:0"><div id="split">
         <div id="map"></div>
         <div id="listwrap"><div class="listhead"><h1 id="count">Homes for sale</h1>
-          <select id="sort" aria-label="Sort"><option value="lo">Price: low to high</option><option value="hi">Price: high to low</option><option value="big">Largest</option></select></div>
+          <select id="sort" aria-label="Sort"><option value="hi">Price: high to low</option><option value="lo">Price: low to high</option><option value="big">Largest</option></select></div>
           <div class="cards" id="cards"></div>
           <p class="fine" id="idxnote" hidden style="text-align:left;margin-top:28px">The data relating to real estate for sale on this web site comes in part from the Internet Data Exchange of Southwest Florida MLS, Ltd. The information being provided is for consumers' personal, non-commercial use and may not be used for any purpose other than to identify prospective properties consumers may be interested in purchasing. Information herein deemed reliable but not guaranteed. © 2026 Southwest Florida MLS, Ltd.</p></div>
       </div><button class="maptoggle" id="mapToggle">Map</button></div>
@@ -259,7 +259,7 @@ $("#links").innerHTML = LINKS.map(([t,d,u])=>`<a class="row" href="${u}"${u.star
 const FEATS = ["Waterfront","Gulf access","No bridges to Gulf","Pool","No HOA","New construction","1+ acre lot","Impact windows"];
 const PRICES = [200,300,400,500,600,750,1000,1500,2000,3000,5000].map(x=>x*1000);
 const BLANK = () => ({kind:S?.f?.kind||"sale",q:"",min:"",max:"",beds:"",baths:"",type:"",feats:[]});
-var S; S = { all:[], list:[], f:{kind:"sale",q:"",min:"",max:"",beds:"",baths:"",type:"",feats:[]}, sort:"lo", saved:store.get("mh_saved",[]), searches:store.get("mh_searches",[]), map:null };
+var S; S = { all:[], list:[], f:{kind:"sale",q:"",min:"",max:"",beds:"",baths:"",type:"",feats:[]}, sort:"hi", saved:store.get("mh_saved",[]), searches:store.get("mh_searches",[]), map:null };
 const RENTS = [1500,2000,2500,3000,4000,5000,7500,10000];
 function priceOptions(){ const list = S.f.kind==="rent" ? RENTS : PRICES; $("#f-max").innerHTML = `<option value="">Any price</option>${list.map(p=>`<option value="${p}">Up to ${money(p)}${S.f.kind==="rent"?"/mo":""}</option>`).join("")}`; }
 priceOptions();
