@@ -243,6 +243,25 @@ h2{letter-spacing:-.03em;line-height:1}
   .hero-photo figcaption{left:16px}
 }
 @media (max-width:760px){.lg-cell{min-height:160px;gap:18px}}
+
+/* listing cards (Refero: Airbnb photo-first cards; Aker 8px corners, flat, no shadows) */
+.lst-head{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-bottom:26px}
+.lst-head .eyebrow{display:block;margin-bottom:14px}
+.lst-tabs{display:flex;gap:6px;background:var(--sunk);padding:4px;border-radius:999px}
+.lst-tabs button{border:0;background:transparent;font:500 15px var(--body);padding:9px 18px;border-radius:999px;color:var(--muted);cursor:pointer}
+.lst-tabs button[aria-selected="true"]{background:var(--ink);color:var(--on-ink)}
+.lst-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:34px 22px}
+.lst-card{display:grid;gap:6px;text-decoration:none;color:var(--fg)}
+.lst-photo{position:relative;display:block;aspect-ratio:4/3;border-radius:8px;overflow:hidden;background:var(--sunk);margin-bottom:8px}
+.lst-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.165,.84,.44,1)}
+.lst-card:hover .lst-photo img{transform:scale(1.03)}
+.lst-tag{position:absolute;left:12px;top:12px;font:500 12px var(--display);letter-spacing:.04em;background:rgba(255,255,255,.92);color:#1e1d1c;padding:6px 11px;border-radius:80px}
+.lst-price{font:500 28px/1 var(--display);letter-spacing:-.03em}
+.lst-price small{font-size:16px;color:var(--muted);margin-left:2px}
+.lst-facts{font-weight:600;font-size:15px}
+.lst-addr{color:var(--muted);font-size:15px;line-height:1.4}
+.lst-empty{color:var(--muted)}
+.lst-foot{margin-top:30px;color:var(--muted);font-size:15px}.lst-foot a{color:var(--fg);font-weight:600}
 </style>
 
 </head>
@@ -322,11 +341,38 @@ h2{letter-spacing:-.03em;line-height:1}
   </div>
 </section>
 
-<section id="listings" aria-label="Live MLS listings" style="padding-block:0 88px">
-  <div class="wrap"><div style="border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--surface)">
-    <iframe src="https://matrix.swflamls.com/Matrix/public/IDX.aspx?idx=90081c45" title="Marino Group listings from the SWFL MLS" style="width:100%;height:900px;border:0;display:block" loading="lazy"></iframe>
-  </div></div>
+<section id="listings" aria-labelledby="listings-h" style="padding-block:0 88px">
+  <div class="wrap">
+    <div class="lst-head"><div><span class="eyebrow">Our listings</span><h2 id="listings-h">Homes listed by Marino Group.</h2></div>
+      <div class="lst-tabs" role="tablist"><button type="button" role="tab" aria-selected="true" data-lst="sale">For sale</button><button type="button" role="tab" aria-selected="false" data-lst="rent">For rent</button></div></div>
+    <div class="lst-grid" id="lst-grid" aria-live="polite"><p class="lst-empty">Loading our listings…</p></div>
+    <p class="lst-foot">Listed by Marino Group with Waterfront Realty Group, Inc. Updated every morning from the Southwest Florida MLS. <a href="homes/">Search every home for sale →</a></p>
+  </div>
 </section>
+<script>
+/* Listing cards (Nov 27 2026, Refero: photo-first home cards). Data comes from listings/listings.json, refreshed daily by .github/workflows/listings.yml */
+(function(){
+  var grid=document.getElementById('lst-grid'), data=[], mode='sale';
+  var IDX='https://matrix.swflamls.com/Matrix/public/IDX.aspx?idx=90081c45';
+  function esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function card(h){
+    var facts=[]; if(h.beds!=null) facts.push(h.beds+(h.den?'+den':'')+' bd'); if(h.baths) facts.push(h.baths+' ba'); if(h.sqft) facts.push(h.sqft+' sq ft'); if(h.acres) facts.push(h.acres+' acres');
+    return '<a class="lst-card" href="'+IDX+'" target="_blank" rel="noopener">'+
+      '<span class="lst-photo">'+(h.photo?'<img src="'+esc(h.photo)+'" alt="'+esc(h.street+', '+h.city)+'" loading="lazy">':'')+
+      '<span class="lst-tag">'+esc(h.rent?'For rent':(h.built && +h.built>=new Date().getFullYear()?'New construction':(h.type||'For sale')))+'</span></span>'+
+      '<span class="lst-price">'+esc(h.price)+(h.rent?'<small>/mo</small>':'')+'</span>'+
+      '<span class="lst-facts">'+esc(facts.join(' · '))+'</span>'+
+      '<span class="lst-addr">'+esc(h.street)+'<br>'+esc(h.city)+(h.zip?', FL '+esc(h.zip):'')+'</span></a>';
+  }
+  function draw(){
+    var list=data.filter(function(h){return mode==='rent'?h.rent:!h.rent;});
+    grid.innerHTML=list.length?list.map(card).join(''):'<p class="lst-empty">No homes in this list right now. Call or text (239) 776-2393.</p>';
+  }
+  document.querySelectorAll('[data-lst]').forEach(function(b){b.addEventListener('click',function(){mode=b.dataset.lst;document.querySelectorAll('[data-lst]').forEach(function(x){x.setAttribute('aria-selected',x===b);});draw();});});
+  fetch('listings/listings.json',{cache:'no-cache'}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){data=j.homes||[];draw();})
+  .catch(function(){grid.innerHTML='<iframe src="'+IDX+'" title="Marino Group listings from the SWFL MLS" style="width:100%;height:900px;border:0;display:block;grid-column:1/-1" loading="lazy"></iframe>';});
+})();
+</script>
 
 <section id="sell" aria-labelledby="sell-h" style="background:var(--surface)">
   <div class="wrap split">
