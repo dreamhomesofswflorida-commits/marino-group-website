@@ -13,8 +13,10 @@ workflows:
       app_store_connect: Electrides ASC
     environment:
       ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.marinogroupswfl.app
+        provisioning_profiles:
+          - marinogroup_appstore
+        certificates:
+          - electrides_dist
       vars:
         XCODE_PROJECT: ios/App/App.xcodeproj
         XCODE_SCHEME: App
