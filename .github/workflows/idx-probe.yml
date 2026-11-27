@@ -1,0 +1,17 @@
+name: idx-probe
+on:
+  push:
+    branches: [idx-probe]
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          mkdir -p probe
+          curl -sL -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" "https://matrix.swflamls.com/Matrix/public/IDX.aspx?idx=90081c45" -o probe/idx.html || true
+          ls -la probe
+          git config user.name "listings-bot"; git config user.email "bot@marinogroupswfl.com"
+          git add probe && git commit -m "probe: IDX page" && git push || true
