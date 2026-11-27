@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Marino Group</string>
+    <string name="title_activity_main">Marino Group</string>
+    <string name="package_name">com.marinogroupswfl.app</string>
+    <string name="custom_url_scheme">com.marinogroupswfl.app</string>
+</resources>

@@ -1,0 +1,19 @@
+{
+  "appId": "com.marinogroupswfl.app",
+  "appName": "Marino Group",
+  "webDir": "www",
+  "backgroundColor": "#141312",
+  "server": {
+    "url": "https://marinogroupswfl.com/app/",
+    "allowNavigation": ["marinogroupswfl.com", "*.marinogroupswfl.com", "matrix.swflamls.com"]
+  },
+  "ios": {
+    "contentInset": "never",
+    "backgroundColor": "#141312",
+    "scheme": "MarinoGroup"
+  },
+  "plugins": {
+    "SplashScreen": {"launchShowDuration": 1000, "launchAutoHide": true, "backgroundColor": "#141312", "showSpinner": false},
+    "StatusBar": {"style": "DARK", "backgroundColor": "#141312", "overlaysWebView": false}
+  }
+}

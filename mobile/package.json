@@ -1,0 +1,20 @@
+{
+  "name": "marino-group-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Marino Group iPhone and Android app (Capacitor app that loads marinogroupswfl.com/app/, so every website update reaches the app)",
+  "scripts": {
+    "sync": "npx cap sync"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.6.9",
+    "@capacitor/core": "^7.6.9",
+    "@capacitor/ios": "^7.6.9",
+    "@capacitor/splash-screen": "^7.0.5",
+    "@capacitor/status-bar": "^7.0.6"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^7.6.9"
+  }
+}

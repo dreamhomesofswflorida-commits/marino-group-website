@@ -1,0 +1,42 @@
+# Cloud build for the Marino Group iPhone app (mobile/ folder). Same Apple developer account as Electrides.
+# Codemagic builds on a Mac and uploads to TestFlight. The app itself loads https://marinogroupswfl.com/app/,
+# so website updates reach the app without a new build.
+# One-time setup: in Codemagic add this repository, reuse the "Electrides ASC" App Store Connect key,
+# and in App Store Connect create the app "Marino Group" with bundle ID com.marinogroupswfl.app.
+workflows:
+  ios-testflight:
+    name: Marino Group iOS → TestFlight
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    working_directory: mobile
+    integrations:
+      app_store_connect: Electrides ASC
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.marinogroupswfl.app
+      vars:
+        XCODE_PROJECT: ios/App/App.xcodeproj
+        XCODE_SCHEME: App
+      node: 20
+      xcode: latest
+    triggering:
+      events: []   # start builds by hand from the Codemagic dashboard
+    scripts:
+      - name: Install packages
+        script: npm ci
+      - name: Copy app files into the iOS project
+        script: npx cap sync ios
+      - name: Use the signing profile Codemagic created
+        script: xcode-project use-profiles
+      - name: Set the build number
+        script: cd ios/App && agvtool new-version -all $BUILD_NUMBER
+      - name: Build the app
+        script: xcode-project build-ipa --project "$XCODE_PROJECT" --scheme "$XCODE_SCHEME"
+    artifacts:
+      - mobile/build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
