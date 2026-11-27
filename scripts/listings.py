@@ -68,11 +68,17 @@ def main():
         src = h.pop("photoSrc")
         name = h["id"] + ".jpg"; dest = os.path.join(ROOT, "img", name)
         try:  # a photo failure never drops a listing
-            if src and not os.path.exists(dest):
-                data = get(src.replace("Size=2", "Size=4"))
-                if len(data) < 2000:
-                    data = get(src)
-                open(dest, "wb").write(data)
+            if src and (not os.path.exists(dest) or os.path.getsize(dest) < 40000):
+                best = b""
+                for size in ("Size=5", "Size=4", "Size=3", "Size=2"):  # keep the sharpest photo the MLS gives
+                    try:
+                        data = get(src.replace("Size=2", size))
+                    except Exception:
+                        continue
+                    if data[:2] == b"\xff\xd8" and len(data) > len(best):
+                        best = data
+                if best and (not os.path.exists(dest) or len(best) > os.path.getsize(dest)):
+                    open(dest, "wb").write(best)
             if os.path.exists(dest):
                 h["photo"] = "listings/img/" + name; keep.add(name)
         except Exception as e:
