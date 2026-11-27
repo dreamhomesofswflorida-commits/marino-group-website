@@ -1,0 +1,27 @@
+# Daily: copy the Marino Group MLS listings into the website as photo cards (listings/listings.json + listings/img/).
+name: Update listings
+on:
+  schedule:
+    - cron: "17 11 * * *"   # every day, 6:17 AM New York (winter time)
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["scripts/listings.py", ".github/workflows/listings.yml"]
+permissions:
+  contents: write
+concurrency: listings
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read the MLS listings page and save photos
+        run: python3 scripts/listings.py
+      - name: Publish if anything changed
+        run: |
+          git config user.name "Marino Group listings"
+          git config user.email "dhomeswfl@gmail.com"
+          git add listings
+          git diff --cached --quiet && { echo "No changes"; exit 0; }
+          git commit -m "Listings: daily update"
+          git push
