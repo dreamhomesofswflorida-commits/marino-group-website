@@ -262,6 +262,21 @@ h2{letter-spacing:-.03em;line-height:1}
 .lst-addr{color:var(--muted);font-size:15px;line-height:1.4}
 .lst-empty{color:var(--muted)}
 .lst-foot{margin-top:30px;color:var(--muted);font-size:15px}.lst-foot a{color:var(--fg);font-weight:600}
+
+/* ===== Nov 27 2026 motion (Refero motion guide, marketing level: scroll reveals, slow photo push-in ≤6%, counting proof numbers; reduced-motion respected) ===== */
+:root{--ease-out:cubic-bezier(.16,1,.3,1)}
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease-out),transform .7s var(--ease-out);transition-delay:var(--d,0s)}
+.rv.in{opacity:1;transform:none}
+@keyframes mg-push{from{transform:scale(1.06)}to{transform:scale(1)}}
+.hero-photo{overflow:hidden;border-radius:8px}
+.hero-photo img,.hero-card img{animation:mg-push 9s var(--ease-out) both}
+.inv-card{transition:transform .5s var(--ease-out)}
+.inv-photo{background-size:108%;transition:background-size 1.2s var(--ease-out),transform .5s var(--ease-out)}
+.inv-photo:hover{background-size:116%}
+.inv-card:hover{transform:translateY(-4px)}
+.inv-btn i{transition:transform .3s var(--ease-out)}.inv-card:hover .inv-btn i{transform:translateX(5px)}
+.btn{transition:transform .12s var(--ease-out),background-color .15s,color .15s}.btn:active{transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}*{animation:none!important}}
 </style>
 
 </head>
@@ -651,5 +666,22 @@ $("contact-form").addEventListener("submit",e=>{e.preventDefault();send(e.target
 })();
 </script>
 
+<script>
+/* Motion: reveal blocks as they scroll into view, stagger siblings, count the proof numbers up. */
+(function(){
+  if(!('IntersectionObserver' in window)) return;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var sel = 'section .head, section h2, .lead, .lg-cell, .inv-card, .lst-card, .steps li, .split > *, figure, .team-grid > *, details, .areas .wrap';
+  function tag(root){ (root||document).querySelectorAll(sel).forEach(function(el){ if(el.closest('.hero')||el.classList.contains('rv')) return; el.classList.add('rv');
+      var sib = el.parentElement ? Array.prototype.indexOf.call(el.parentElement.children, el) : 0; el.style.setProperty('--d', Math.min(sib, 5) * 0.07 + 's'); io.observe(el); }); }
+  var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(!e.isIntersecting) return; e.target.classList.add('in'); io.unobserve(e.target);
+      var b = e.target.querySelector && e.target.querySelector('.lg-cell b'); if(e.target.matches('.lg-cell')) b = e.target.querySelector('b'); if(b && !reduce) count(b); }); }, {rootMargin:'0px 0px -8% 0px', threshold:.12});
+  function count(b){ var m = b.textContent.match(/^(\d+)(.*)$/); if(!m) return; var end = +m[1], suf = m[2], t0 = null;
+    function step(t){ if(!t0) t0 = t; var p = Math.min(1, (t - t0) / 1100), v = Math.round(end * (1 - Math.pow(1 - p, 3))); b.textContent = v + suf; if(p < 1) requestAnimationFrame(step); }
+    b.textContent = '0' + suf; requestAnimationFrame(step); }
+  if(reduce){ return; }
+  tag(); new MutationObserver(function(ms){ ms.forEach(function(m){ m.addedNodes.forEach(function(n){ if(n.nodeType === 1) tag(n.parentElement); }); }); }).observe(document.body, {childList:true, subtree:true});
+})();
+</script>
 </body>
 </html>
