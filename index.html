@@ -189,6 +189,60 @@ footer .fine{grid-column:1/-1;border-top:1px solid #2e2b27;padding-top:22px;disp
 @media (max-width:760px){footer .wrap{grid-template-columns:1fr}}
 .broker{font:500 13px var(--display);letter-spacing:.12em;text-transform:uppercase;color:#d8c3a0}
 @media (prefers-reduced-motion:no-preference){.sun{animation:rise 2.4s ease-out both}@keyframes rise{from{transform:translateY(28px);opacity:.6}to{transform:none;opacity:1}}}
+
+/* ===== Nov 27 2026 Refero redesign. Reference lock: Aker style (real place photography, light tight headings, staggered proof ledger, solid panel + photo card invitations, 8px corners, translucent capsule actions) + Airbnb screens (photo-first). Brand tokens kept: charcoal, cream, champagne gold; Harbor Navy for the conversion panel. ===== */
+h2{letter-spacing:-.03em;line-height:1}
+.horizon{display:none}
+.hero{padding-block:72px 0}
+.hero h1{letter-spacing:-.035em;line-height:.98}
+.hero-photo{position:relative;z-index:2;margin:48px auto 0;max-width:1180px;padding-inline:20px}
+.hero-photo img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:8px 8px 0 0}
+.hero-photo figcaption{position:absolute;left:36px;bottom:16px;font:500 12px var(--display);letter-spacing:.18em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.45);backdrop-filter:blur(6px);padding:7px 12px;border-radius:80px}
+.search{box-shadow:none;border-radius:8px}
+.ledger{padding-block:24px 64px;background:var(--bg)}
+.ledger-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 22px}
+.lg-cell{display:flex;flex-direction:column;justify-content:space-between;gap:28px;min-height:230px;padding:22px 0;border-bottom:1px solid var(--line)}
+.lg-cell b{font:300 clamp(84px,14vw,168px)/1 var(--display);letter-spacing:-.04em;color:#333}
+.lg-cell span{font-weight:500;font-size:16px;color:var(--muted);max-width:26ch}
+.lg-intro .lg-statement{font:400 clamp(26px,3.4vw,40px)/1.05 var(--display);letter-spacing:-.03em;color:var(--fg);max-width:16ch}
+.ledger-grid .lg-cell:nth-child(2){margin-top:90px}
+.ledger-grid .lg-cell:nth-child(4){margin-top:90px}
+.ledger-grid .lg-cell:nth-child(odd){border-right:1px solid var(--line);padding-right:22px}
+.invite{padding-block:48px}
+.invite-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.inv-card{position:relative;display:flex;flex-direction:column;justify-content:space-between;gap:24px;min-height:440px;padding:32px;border-radius:8px;color:#fff;text-decoration:none;background-size:cover;background-position:center;overflow:hidden}
+.inv-card h2{color:#fff;font-size:clamp(34px,4.6vw,62px);line-height:.92;max-width:11ch;position:relative}
+.inv-navy{background:#1B2A47}
+.inv-photo::before{content:"";position:absolute;inset:0;background:linear-gradient(rgba(6,11,17,.55),rgba(4,4,4,0) 75%)}
+.inv-label{position:relative;font:500 14px var(--display);letter-spacing:.02em;opacity:.8}
+.inv-btn{position:relative;align-self:flex-start;display:inline-flex;align-items:center;justify-content:space-between;gap:28px;min-width:240px;height:51px;padding:0 20px 0 24px;border-radius:160px;background:rgba(212,211,211,.15);backdrop-filter:blur(5px);font:600 14px var(--body)}
+.inv-photo .inv-btn{background:rgba(0,0,0,.35)}
+.inv-btn i{font-style:normal;font-size:18px}
+.inv-card:hover .inv-btn{background:rgba(212,211,211,.3)}
+@media (max-width:760px){
+  .invite-grid{grid-template-columns:1fr}
+  .inv-card{min-height:340px}
+  .ledger-grid{grid-template-columns:1fr 1fr}
+  .lg-intro{grid-column:1/-1;border-right:0!important;min-height:0}
+  .ledger-grid .lg-cell:nth-child(2){margin-top:0}
+  .ledger-grid .lg-cell:nth-child(3){margin-top:60px;border-right:0;padding-right:0}
+  .ledger-grid .lg-cell:nth-child(2){border-right:1px solid var(--line);padding-right:16px}
+  .ledger-grid .lg-cell:nth-child(4){grid-column:1/-1;margin-top:0}
+  .lg-cell{min-height:190px}
+  .hero-photo{padding-inline:0;margin-top:36px}.hero-photo img{border-radius:0}
+  .hero-photo figcaption{left:16px}
+}
+
+.inv-photo::before{background:linear-gradient(rgba(6,11,17,.72),rgba(6,11,17,.25) 60%,rgba(4,4,4,.35))}
+@media (min-width:1000px){
+  .hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:center;gap:40px;padding:64px max(22px,calc((100vw - 1180px)/2)) 64px}
+  .hero .wrap{padding:0;margin:0;max-width:none}
+  .hero .search{grid-template-columns:1fr 1fr;max-width:none}.hero .search .btn{grid-column:1/-1}
+  .hero-photo{margin:0;padding:0;max-width:none}
+  .hero-photo img{border-radius:8px;aspect-ratio:4/5;height:auto}
+  .hero-photo figcaption{left:16px}
+}
+@media (max-width:760px){.lg-cell{min-height:160px;gap:18px}}
 </style>
 
 </head>
@@ -236,10 +290,18 @@ footer .fine{grid-column:1/-1;border-top:1px solid #2e2b27;padding-top:22px;disp
       <a class="btn btn-ghost" href="#build">Build a new home</a>
     </div>
   </div>
-  <div class="horizon" aria-hidden="true"><div class="sun"></div><div class="sea"><div class="glint"></div></div></div>
+  <figure class="hero-photo"><img src="img/models/acheron.webp" alt="A Marino Group new-construction home in Southwest Florida at sunset" width="640" height="360" fetchpriority="high"><figcaption>New construction · Southwest Florida</figcaption></figure>
 </section>
 
 <div class="areas"><div class="wrap"><b>We serve</b><a href="areas/naples/" style="text-decoration:none">Naples</a><a href="areas/golden-gate-estates/" style="text-decoration:none">Golden Gate Estates</a><a href="areas/marco-island/" style="text-decoration:none">Marco Island</a><a href="areas/bonita-springs/" style="text-decoration:none">Bonita Springs</a><a href="areas/estero/" style="text-decoration:none">Estero</a><a href="areas/fort-myers/" style="text-decoration:none">Fort Myers</a><a href="areas/lehigh-acres/" style="text-decoration:none">Lehigh Acres</a><a href="areas/cape-coral/" style="text-decoration:none">Cape Coral</a><a href="areas/port-charlotte/" style="text-decoration:none">Port Charlotte</a></div></div>
+<section class="ledger" aria-label="Marino Group at a glance">
+  <div class="wrap ledger-grid">
+    <div class="lg-cell lg-intro"><span class="eyebrow">At a glance</span><p class="lg-statement">A local team that knows Southwest Florida block by block.</p></div>
+    <div class="lg-cell"><b>9+</b><span>local agents on the Marino Group team</span></div>
+    <div class="lg-cell"><b>3</b><span>counties served: Collier, Lee and Charlotte</span></div>
+    <div class="lg-cell"><b>3</b><span>languages: English, Spanish and Russian</span></div>
+  </div>
+</section>
 
 <section id="buy" aria-labelledby="buy-h">
   <div class="wrap split">
@@ -417,6 +479,13 @@ footer .fine{grid-column:1/-1;border-top:1px solid #2e2b27;padding-top:22px;disp
       <details><summary>Can I build a new home with you?</summary><p>Yes. Choose a model, and we'll help you with the lot, the financing, and the build through our licensed builder partner.</p></details>
       <details><summary>What languages do you speak?</summary><p>Our team speaks English, Spanish, and Russian, so you can work with us in the language you are most comfortable with.</p></details>
     </div>
+  </div>
+</section>
+
+<section class="invite" aria-label="Next steps">
+  <div class="wrap invite-grid">
+    <a class="inv-card inv-navy" href="#value"><span class="inv-label">Selling</span><h2>What's your home worth?</h2><span class="inv-btn">Get a free home value <i aria-hidden="true">→</i></span></a>
+    <a class="inv-card inv-photo" href="#build" style="background-image:url('img/models/aeson.webp')"><span class="inv-label">Building</span><h2>Build a new home on your lot.</h2><span class="inv-btn">See our home models <i aria-hidden="true">→</i></span></a>
   </div>
 </section>
 
