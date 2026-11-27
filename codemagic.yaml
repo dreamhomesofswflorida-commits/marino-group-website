@@ -18,6 +18,7 @@ workflows:
       vars:
         XCODE_PROJECT: ios/App/App.xcodeproj
         XCODE_SCHEME: App
+        APP_STORE_APPLE_ID: 6840201014   # Marino Group app in App Store Connect
       node: 20
       xcode: latest
     triggering:
@@ -29,11 +30,18 @@ workflows:
         script: npx cap sync ios
       - name: Use the signing profile Codemagic created
         script: xcode-project use-profiles
-      - name: Set the build number
-        script: cd ios/App && agvtool new-version -all $BUILD_NUMBER
+      - name: Set the build number (one higher than the last TestFlight build)
+        script: |
+          LATEST=$(app-store-connect get-latest-testflight-build-number "$APP_STORE_APPLE_ID" 2>/dev/null || echo 0)
+          cd ios/App && agvtool new-version -all $((LATEST + 1))
       - name: Build the app
-        script: xcode-project build-ipa --project "$XCODE_PROJECT" --scheme "$XCODE_SCHEME"
+        script: |
+          xcode-project build-ipa --project "$XCODE_PROJECT" --scheme "$XCODE_SCHEME" || {
+            grep -h -E "error:|Provisioning profile|Signing for" /tmp/xcodebuild_logs/*.log | sort -u | head -60
+            tail -n 80 /tmp/xcodebuild_logs/*.log
+            exit 1; }
     artifacts:
+      - build/ios/ipa/*.ipa
       - mobile/build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
     publishing:
