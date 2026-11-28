@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Unsubscribe | Marino Group</title>
+<link rel="icon" href="/img/marino_logo_transparent_gold.png">
+<style>
+body{margin:0;background:#141312;color:#f3ece0;font:17px/1.6 "Figtree","Segoe UI",Arial,sans-serif;display:grid;place-items:center;min-height:100vh;padding:24px}
+main{max-width:520px;text-align:center}h1{font:400 34px/1.15 "Jost",Arial,sans-serif;margin:0 0 14px}p{color:#bdb3a3}a{color:#d8c3a0}
+button{font:500 16px inherit;padding:12px 22px;border-radius:999px;border:1px solid #b8955d;background:#d8c3a0;color:#1e1d1c;cursor:pointer;margin-top:10px}
+</style>
+</head>
+<body><main id="m">
+  <h1>Stop emails from Marino Group?</h1>
+  <p>You won't get follow-up or market update emails anymore. You can always call or text (239) 776-2393.</p>
+  <button id="b">Unsubscribe</button>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/js/config.js"></script>
+<script>
+const C=window.MG_CONFIG||{}, t=new URLSearchParams(location.search).get("t");
+document.getElementById("b").onclick=async()=>{
+  const m=document.getElementById("m");
+  try{ const sb=supabase.createClient(C.SUPABASE_URL,C.SUPABASE_ANON_KEY); const {error}=await sb.rpc("unsubscribe",{p_token:t}); if(error) throw error;
+    m.innerHTML='<h1>You are unsubscribed.</h1><p>Sorry to see you go. <a href="/">Back to marinogroupswfl.com</a></p>'; }
+  catch(e){ m.innerHTML='<h1>Something went wrong.</h1><p>Reply to any of our emails with "unsubscribe" or call (239) 776-2393 and we will remove you.</p>'; }
+};
+if(!t) document.getElementById("m").innerHTML='<h1>Link not complete</h1><p>Reply to our email with "unsubscribe" or call (239) 776-2393.</p>';
+</script>
+</body></html>

@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mortgage Calculator &amp; How Much Home Can I Afford? | Southwest Florida | Marino Group</title>
+<meta name="description" content="Monthly payment with Florida taxes, homeowners and flood insurance and HOA, plus how much home you can afford in Southwest Florida. Get connected with a trusted local lender.">
+<link rel="canonical" href="https://marinogroupswfl.com/mortgage/">
+<link rel="icon" href="/img/marino_logo_transparent_gold.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Figtree:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#f6f3ee;--surface:#fff;--sunk:#ece6dc;--fg:#1e1d1c;--muted:#655f56;--line:#ddd5c8;--gold:#b8955d;--gold-soft:#d8c3a0;--gulf:#2f5d62;
+--display:"Jost","Futura","Century Gothic",Arial,sans-serif;--body:"Figtree","Segoe UI",Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#141312;--surface:#1d1b19;--sunk:#25221f;--fg:#efe8dc;--muted:#a79e90;--line:#36322d;--gold:#d3b585;--gold-soft:#e3cfa9;--gulf:#7fb0b3;color-scheme:dark}}
+*{box-sizing:border-box}[hidden]{display:none!important}html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font:16px/1.55 var(--body)}
+a{color:inherit}.wrap{max-width:1100px;margin:0 auto;padding-inline:20px}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.12;margin:0;text-wrap:balance}
+h1{font-size:clamp(32px,5vw,52px)}h2{font-size:clamp(24px,3vw,32px)}h3{font-size:19px;font-weight:500}
+p{margin:0}
+.eyebrow{font-family:var(--display);font-weight:500;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.top{background:#141312;color:#f3ece0}.top .wrap{display:flex;align-items:center;gap:20px;padding-block:14px}
+.top a.home{font:500 18px var(--display);letter-spacing:.08em;text-decoration:none}.top .call{margin-left:auto;color:var(--gold-soft);text-decoration:none;font:500 15px var(--display)}
+.hero{background:#141312;color:#f3ece0;padding-block:44px 56px}.hero p{color:#bdb3a3;max-width:60ch;margin-top:12px}
+section{padding-block:44px}
+.tabs{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap}
+.tabs button{font:500 15px var(--body);border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:10px 18px;border-radius:999px;cursor:pointer}
+.tabs button[aria-selected=true]{background:var(--gold-soft);border-color:var(--gold);color:#1e1d1c}
+.grid{display:grid;gap:20px;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
+@media (max-width:820px){.grid{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px}
+label{display:block;font-size:14px;color:var(--muted);margin:12px 0 5px}
+input,select,textarea{width:100%;font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.row{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.big{font:400 clamp(38px,6vw,56px)/1 var(--display)}
+.lines{list-style:none;padding:0;margin:16px 0 0}.lines li{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line)}
+.lines i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px}
+.bar{display:flex;height:14px;border-radius:7px;overflow:hidden;margin-top:16px;background:var(--sunk)}
+.btn{display:inline-flex;align-items:center;justify-content:center;font:500 16px var(--body);padding:13px 22px;border-radius:999px;border:1px solid transparent;background:var(--gold-soft);color:#1e1d1c;cursor:pointer;text-decoration:none}
+.fine{font-size:13px;color:var(--muted);margin-top:12px}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.err{color:#b4472c;margin-top:10px}
+footer{background:#141312;color:#bdb3a3;padding-block:30px;font-size:14px}footer p+p{margin-top:6px}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><a class="home" href="/">MARINO GROUP</a><a class="call" href="tel:+12397762393">(239) 776-2393</a></div></header>
+<main>
+<section class="hero"><div class="wrap">
+  <span class="eyebrow">Buyer tools · Southwest Florida</span>
+  <h1 style="margin-top:12px">What will your home really cost each month?</h1>
+  <p>Florida payments are more than principal and interest. This calculator includes property taxes, homeowners and flood insurance, and HOA fees, the costs buyers here most often underestimate.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-t="pay">Monthly payment</button>
+    <button role="tab" aria-selected="false" data-t="aff">How much can I afford?</button>
+    <button role="tab" aria-selected="false" data-t="pre">Get pre-approved</button>
+  </div>
+
+  <div data-p="pay" class="grid">
+    <div class="card">
+      <div class="row">
+        <div><label for="price">Home price</label><input id="price" type="number" value="450000" step="5000" min="0"></div>
+        <div><label for="down">Down payment %</label><input id="down" type="number" value="20" step="1" min="0" max="100"></div>
+      </div>
+      <div class="row">
+        <div><label for="rate">Interest rate %</label><input id="rate" type="number" value="7.25" step="0.125" min="0"></div>
+        <div><label for="term">Loan term</label><select id="term"><option value="30">30 years</option><option value="20">20 years</option><option value="15">15 years</option></select></div>
+      </div>
+      <div class="row">
+        <div><label for="county">County (sets the tax estimate)</label><select id="county"><option value="1.05">Collier</option><option value="1.35">Lee</option><option value="1.45">Charlotte</option><option value="custom">Other / enter my own</option></select></div>
+        <div><label for="tax">Property tax % per year</label><input id="tax" type="number" value="1.05" step="0.05" min="0"></div>
+      </div>
+      <div class="row">
+        <div><label for="ins">Homeowners insurance / year</label><input id="ins" type="number" value="4500" step="100" min="0"></div>
+        <div><label for="flood">Flood insurance / year</label><input id="flood" type="number" value="0" step="100" min="0"></div>
+        <div><label for="hoa">HOA / condo fees / month</label><input id="hoa" type="number" value="0" step="25" min="0"></div>
+      </div>
+      <p class="fine">Rate default: about the national 30-year average in late November 2026 (Freddie Mac). Taxes: typical first-year rate for a non-homestead purchase; your homestead exemption can lower it. Insurance varies a lot by age, roof and wind mitigation; get real quotes before you buy.</p>
+    </div>
+    <div class="card" aria-live="polite">
+      <span class="eyebrow">Estimated monthly payment</span>
+      <p class="big" id="total" style="margin-top:10px">—</p>
+      <div class="bar" id="bar" aria-hidden="true"></div>
+      <ul class="lines" id="lines"></ul>
+      <p class="fine" id="loanNote"></p>
+      <p style="margin-top:18px"><button class="btn" data-go="pre">Get pre-approved</button></p>
+    </div>
+  </div>
+
+  <div data-p="aff" class="grid" hidden>
+    <div class="card">
+      <div class="row">
+        <div><label for="inc">Household income / year (before taxes)</label><input id="inc" type="number" value="110000" step="1000" min="0"></div>
+        <div><label for="debt">Monthly debt payments (car, cards, loans)</label><input id="debt" type="number" value="500" step="50" min="0"></div>
+      </div>
+      <div class="row">
+        <div><label for="cash">Cash for down payment</label><input id="cash" type="number" value="60000" step="1000" min="0"></div>
+        <div><label for="arate">Interest rate %</label><input id="arate" type="number" value="7.25" step="0.125" min="0"></div>
+      </div>
+      <div class="row">
+        <div><label for="ahoa">Expected HOA / month</label><input id="ahoa" type="number" value="0" step="25" min="0"></div>
+        <div><label for="acounty">County</label><select id="acounty"><option value="1.05">Collier</option><option value="1.35">Lee</option><option value="1.45">Charlotte</option></select></div>
+      </div>
+      <p class="fine">Uses common lender limits: housing up to 28% of gross monthly income and all debts up to 36%. Many loans allow more; a lender will give you your real number.</p>
+    </div>
+    <div class="card" aria-live="polite">
+      <span class="eyebrow">Comfortable price range</span>
+      <p class="big" id="affRange" style="margin-top:10px">—</p>
+      <ul class="lines" id="affLines"></ul>
+      <p style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn" data-go="pre">Get pre-approved</button><a class="btn" style="background:transparent;border-color:var(--line);color:inherit" href="/homes/">Search homes</a></p>
+    </div>
+  </div>
+
+  <div data-p="pre" hidden>
+    <form class="card" id="pf" style="max-width:720px">
+      <h2>Get pre-approved with a trusted local lender</h2>
+      <p class="fine" style="margin-top:6px">We connect you with a lender we work with and help you through the process. No cost to talk, and no credit check until you choose to apply.</p>
+      <div class="row"><div><label for="pn">Your name</label><input id="pn" required autocomplete="name"></div><div><label for="pp">Mobile</label><input id="pp" type="tel" autocomplete="tel"></div><div><label for="pe">Email</label><input id="pe" type="email" autocomplete="email"></div></div>
+      <div class="row">
+        <div><label for="pb">Price range</label><input id="pb" placeholder="e.g. $400,000"></div>
+        <div><label for="pd">Down payment</label><select id="pd"><option>Less than 5%</option><option>5–10%</option><option selected>10–20%</option><option>20% or more</option><option>Cash buyer</option></select></div>
+        <div><label for="pc">Credit (best guess)</label><select id="pc"><option>760+</option><option selected>700–759</option><option>640–699</option><option>580–639</option><option>Not sure</option></select></div>
+      </div>
+      <div class="row">
+        <div><label for="pt">When do you want to buy?</label><select id="pt"><option>0–3 months</option><option>3–6 months</option><option>6–12 months</option><option>Just exploring</option></select></div>
+        <div><label for="pf1">First-time buyer?</label><select id="pf1"><option>Yes</option><option selected>No</option></select></div>
+        <div><label for="pv">Veteran / VA eligible?</label><select id="pv"><option selected>No</option><option>Yes</option></select></div>
+      </div>
+      <label for="pl">Preferred language</label><select id="pl"><option>English</option><option>Español</option><option>Русский</option></select>
+      <p class="err" id="perr" hidden></p>
+      <button class="btn" style="margin-top:16px">Send my request</button>
+      <p class="fine">By sending, you agree that Marino Group and one lender partner may contact you by phone, text or email. You can opt out any time. Marino Group is not a lender.</p>
+    </form>
+    <div class="card" id="pdone" hidden style="max-width:720px"><span class="eyebrow">Request received</span><h2 style="margin-top:8px">Thank you! We'll call you shortly.</h2><p class="fine">Questions? Call or text (239) 776-2393.</p></div>
+  </div>
+</div></section>
+</main>
+<footer><div class="wrap">
+  <p>Marino Group · Brokered by Waterfront Realty Group, Inc. · Equal Housing Opportunity</p>
+  <p>Estimates only, not a loan offer. Rates, taxes and insurance vary; confirm with your lender, insurance agent and the county Property Appraiser.</p>
+</div></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/js/config.js"></script>
+<script>
+const C = window.MG_CONFIG || {};
+const LIVE = !!(C.SUPABASE_URL && C.SUPABASE_ANON_KEY && window.supabase);
+const sb = LIVE ? supabase.createClient(C.SUPABASE_URL, C.SUPABASE_ANON_KEY) : null;
+const $ = id => document.getElementById(id), v = id => +$(id).value || 0;
+const money = n => "$" + Math.round(n).toLocaleString("en-US");
+const pmt = (P, r, yrs) => { const i = r/100/12, n = yrs*12; return i ? P*i/(1-Math.pow(1+i,-n)) : P/n; };
+const COL = ["#b8955d","#2f5d62","#8a6a35","#7fb0b3","#c9a878","#655f56"];
+
+function pay(){
+  const price=v("price"), dp=Math.min(100,v("down"))/100, loan=price*(1-dp);
+  const pi=pmt(loan,v("rate"),+$("term").value), tax=price*v("tax")/100/12, ins=v("ins")/12, fl=v("flood")/12, hoa=v("hoa");
+  const pmi = dp<0.2 && loan>0 ? loan*0.006/12 : 0;
+  const parts=[["Principal & interest",pi],["Property taxes",tax],["Homeowners insurance",ins],["Flood insurance",fl],["HOA / condo fees",hoa],["Mortgage insurance (PMI)",pmi]].filter(x=>x[1]>0.5);
+  const tot=parts.reduce((s,x)=>s+x[1],0);
+  $("total").textContent = money(tot) + "/mo";
+  $("bar").innerHTML = parts.map((x,i)=>`<span style="width:${100*x[1]/tot}%;background:${COL[i%6]}"></span>`).join("");
+  $("lines").innerHTML = parts.map((x,i)=>`<li><span><i style="background:${COL[i%6]}"></i>${x[0]}</span><b>${money(x[1])}</b></li>`).join("");
+  $("loanNote").textContent = `Loan amount ${money(loan)} · down payment ${money(price*dp)}${pmi?" · PMI estimated until you reach 20% equity":""}.`;
+}
+function aff(){
+  const m=v("inc")/12, r=v("arate"), taxR=+$("acounty").value/100, insY=4500, hoa=v("ahoa"), cash=v("cash"), debt=v("debt");
+  const maxHousing=Math.max(0,Math.min(m*0.28, m*0.36-debt));
+  // solve price where housing cost = maxHousing, down = min(cash, 20%)
+  let lo=0, hi=5e6;
+  for(let k=0;k<60;k++){ const p=(lo+hi)/2, down=Math.min(cash,p), loan=p-down, pmi=down/p<0.2?loan*0.006/12:0;
+    const cost=pmt(loan,r,30)+p*taxR/12+insY/12+hoa+pmi; cost>maxHousing?hi=p:lo=p; }
+  const top=Math.floor(lo/5000)*5000, low=Math.floor(top*0.85/5000)*5000;
+  $("affRange").textContent = top>0 ? money(low)+" – "+money(top) : "—";
+  $("affLines").innerHTML = `<li><span>Housing budget (28% / 36% rule)</span><b>${money(maxHousing)}/mo</b></li><li><span>Down payment used</span><b>${money(Math.min(cash,top))}</b></li><li><span>Estimated insurance</span><b>${money(insY/12)}/mo</b></li>`;
+}
+document.querySelectorAll("input,select").forEach(e=>e.addEventListener("input",()=>{ if(e.id==="county" && e.value!=="custom") $("tax").value=e.value; pay(); aff(); }));
+function tab(t){ document.querySelectorAll("[role=tab]").forEach(b=>b.setAttribute("aria-selected",b.dataset.t===t)); document.querySelectorAll("[data-p]").forEach(p=>p.hidden=p.dataset.p!==t); history.replaceState(null,"","#"+t); }
+document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>tab(b.dataset.t));
+document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{tab(b.dataset.go); scrollTo({top:0,behavior:"smooth"});});
+const P=new URLSearchParams(location.search); if(P.get("price")) $("price").value=P.get("price"); if(P.get("hoa")) $("hoa").value=P.get("hoa");
+if(["pay","aff","pre"].includes(location.hash.slice(1))) tab(location.hash.slice(1));
+pay(); aff();
+$("pf").onsubmit = async e=>{
+  e.preventDefault(); const er=$("perr");
+  if(!$("pn").value.trim() || (!$("pe").value.trim() && !$("pp").value.trim())){ er.textContent="Please enter your name and a phone or email."; er.hidden=false; return; }
+  const row={name:$("pn").value.trim(),email:$("pe").value.trim()||null,phone:$("pp").value.trim()||null,lead_type:"preapproval",language:$("pl").value,source:"website /mortgage",
+    timeline:$("pt").value,details:{price_range:$("pb").value,down:$("pd").value,credit:$("pc").value,first_time:$("pf1").value,va:$("pv").value}};
+  try{ if(LIVE){ const {error}=await sb.from("leads").insert(row); if(error) throw error; } $("pf").hidden=true; $("pdone").hidden=false; }
+  catch(x){ er.textContent="Something went wrong. Please call or text (239) 776-2393."; er.hidden=false; }
+};
+</script>
+<script src="/js/app-back.js"></script>
+</body>
+</html>

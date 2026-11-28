@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Homes for Rent in Naples &amp; Southwest Florida | Marino Group</title>
+<meta name="description" content="Homes and condos for rent from Marino Group in Naples and Southwest Florida. Ask about a home, schedule a showing, or let us rent out your property.">
+<link rel="canonical" href="https://marinogroupswfl.com/rentals/">
+<link rel="icon" href="/img/marino_logo_transparent_gold.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Figtree:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#f6f3ee;--surface:#fff;--sunk:#ece6dc;--fg:#1e1d1c;--muted:#655f56;--line:#ddd5c8;--gold:#b8955d;--gold-soft:#d8c3a0;
+--display:"Jost","Futura","Century Gothic",Arial,sans-serif;--body:"Figtree","Segoe UI",Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#141312;--surface:#1d1b19;--sunk:#25221f;--fg:#efe8dc;--muted:#a79e90;--line:#36322d;--gold:#d3b585;--gold-soft:#e3cfa9;color-scheme:dark}}
+*{box-sizing:border-box}[hidden]{display:none!important}html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font:16px/1.55 var(--body)}
+a{color:inherit}.wrap{max-width:1100px;margin:0 auto;padding-inline:20px}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.12;margin:0;text-wrap:balance}
+h1{font-size:clamp(32px,5vw,50px)}h2{font-size:28px}
+p{margin:0}.lead{color:var(--muted)}
+.eyebrow{font-family:var(--display);font-weight:500;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.top{background:#141312;color:#f3ece0}.top .wrap{display:flex;align-items:center;gap:20px;padding-block:14px}
+.top a.home{font:500 18px var(--display);letter-spacing:.08em;text-decoration:none}.top .call{margin-left:auto;color:var(--gold-soft);text-decoration:none;font:500 15px var(--display)}
+.hero{background:#141312;color:#f3ece0;padding-block:44px 52px}.hero p{color:#bdb3a3;max-width:60ch;margin-top:12px}
+section{padding-block:36px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px}
+.grid2{display:grid;gap:20px;grid-template-columns:1fr 1fr}@media (max-width:800px){.grid2{grid-template-columns:1fr}}
+label{display:block;font-size:14px;color:var(--muted);margin:12px 0 5px}
+input,select,textarea{width:100%;font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.row{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.btn{display:inline-flex;font:500 16px var(--body);padding:12px 22px;border-radius:999px;border:1px solid var(--gold);background:var(--gold-soft);color:#1e1d1c;cursor:pointer;margin-top:14px}
+ul.ticks{padding-left:20px;color:var(--muted)}ul.ticks li{margin:6px 0}
+footer{background:#141312;color:#bdb3a3;padding-block:30px;font-size:14px}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><a class="home" href="/">MARINO GROUP</a><a class="call" href="tel:+12397762393">(239) 776-2393</a></div></header>
+<main>
+<section class="hero"><div class="wrap"><span class="eyebrow">Rentals · Southwest Florida</span><h1 style="margin-top:12px">Homes for rent from Marino Group.</h1>
+  <p>Save the rentals you like and ask about any of them. We answer in English, Spanish and Russian.</p></div></section>
+<section><div class="wrap">
+  <div class="acct" id="acct"></div>
+  <div class="lgrid" id="lgrid" style="margin-top:20px"><p class="lead">Loading rentals…</p></div>
+</div></section>
+<section style="padding-top:0"><div class="wrap grid2">
+  <div class="card"><span class="eyebrow">For owners</span><h2 style="margin-top:8px">Rent out your home with us</h2>
+    <ul class="ticks"><li>A rent price based on what similar homes rent for</li><li>Listing on the MLS and major rental sites, with professional photos</li><li>Tenant screening and a Florida lease</li><li>Showings handled for you</li></ul>
+    <p class="lead" style="margin-top:10px">Thinking of selling later? Ask for a <a href="/sell/">free home value report</a> too.</p></div>
+  <form class="card" id="of"><h2>Tell us about your property</h2>
+    <label for="oa">Property address</label><input id="oa" required>
+    <div class="row"><div><label for="ob">Beds</label><input id="ob" type="number" min="0"></div><div><label for="oba">Baths</label><input id="oba" type="number" min="0" step=".5"></div><div><label for="ow">Available</label><input id="ow" type="date"></div></div>
+    <div class="row"><div><label for="on">Your name</label><input id="on" required autocomplete="name"></div><div><label for="op">Mobile</label><input id="op" type="tel" autocomplete="tel"></div><div><label for="oe">Email</label><input id="oe" type="email" autocomplete="email"></div></div>
+    <p id="oerr" style="color:#b4472c;margin-top:8px" hidden></p>
+    <button class="btn">Send</button>
+    <p id="odone" hidden style="margin-top:12px">Thank you! We'll contact you shortly.</p>
+  </form>
+</div></section>
+</main>
+<footer><div class="wrap">Marino Group · Brokered by Waterfront Realty Group, Inc. · Equal Housing Opportunity · (239) 776-2393</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/js/config.js"></script>
+<script>window.MG_FILTER="rent";</script>
+<script src="/js/buyer.js"></script>
+<script>
+document.getElementById("of").onsubmit=async e=>{ e.preventDefault(); const g=id=>document.getElementById(id).value.trim(), er=document.getElementById("oerr");
+  if(!g("op")&&!g("oe")){ er.textContent="Please add a phone or email."; er.hidden=false; return; }
+  const row={name:g("on"),phone:g("op")||null,email:g("oe")||null,address:g("oa"),beds:+g("ob")||null,baths:+g("oba")||null,lead_type:"seller",property_type:"Rental property",
+    reason:"Owner wants to rent out the property"+(g("ow")?", available "+g("ow"):""),source:"website /rentals",details:{landlord:true}};
+  try{ if(window.MGBuyer&&window.MGBuyer.live) await window.MGBuyer.insertLead(row);
+    e.target.querySelector("button").hidden=true; document.getElementById("odone").hidden=false; }
+  catch(x){ er.textContent="Something went wrong. Please call or text (239) 776-2393."; er.hidden=false; } };
+</script>
+<script src="/js/app-back.js"></script>
+</body>
+</html>

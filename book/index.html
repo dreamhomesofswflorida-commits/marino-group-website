@@ -90,7 +90,7 @@ async function listView(){
   $("#app").innerHTML = `<span class="eyebrow">Marino Group listings</span><h1 style="margin-top:8px">Book a showing</h1>
     <p class="muted" style="margin-top:8px">For licensed agents. Pick the home, then a time. You'll get a confirmation link right away.</p>
     <div class="homes">${homes.map(h=>`<button class="lst" data-id="${h.id}">${h.photo_url?`<img src="${esc(h.photo_url)}" alt="">`:`<div class="ph">Photo coming soon</div>`}
-      <div class="t"><b>${esc(h.address)}</b><br><span class="muted small">${money(h.list_price)}${h.mls_number?` · MLS ${esc(h.mls_number)}`:""}</span></div></button>`).join("") || `<p class="muted">No listings are taking showings online right now. Call (239) 776-2393.</p>`}</div>`;
+      <div class="t"><b>${esc(h.address)}</b><br><span class="muted small">${money(h.list_price)}${h.mls_number?` · MLS ${esc(h.mls_number)}`:""}${h.virtual_tour_url?" · Virtual tour":""}</span></div></button>`).join("") || `<p class="muted">No listings are taking showings online right now. Call (239) 776-2393.</p>`}</div>`;
   document.querySelectorAll("[data-id]").forEach(b=>b.onclick=()=>{ history.pushState({}, "", "?l="+b.dataset.id); bookView(homes.find(h=>h.id===b.dataset.id)); });
 }
 
@@ -114,6 +114,7 @@ async function bookView(h){
     $("#app").innerHTML = `<a href="?" class="small muted" id="all">← All listings</a>
       <span class="eyebrow" style="display:block;margin-top:14px">Book a showing</span><h1 style="margin-top:6px">${esc(h.address)}</h1>
       <p class="muted">${money(h.list_price)}${h.mls_number?` · MLS ${esc(h.mls_number)}`:""} · Times are Naples (Eastern) time</p>
+      ${h.virtual_tour_url && /^https:\/\//.test(h.virtual_tour_url)?`<p style="margin-top:10px"><a class="btn" href="${esc(h.virtual_tour_url)}" target="_blank" rel="noopener">Take the virtual tour first</a></p>`:""}
       <div class="card" style="margin-top:18px">
         <h2>1. Pick a day and time</h2>
         <div class="days">${days.map(d=>{const x=new Date(d+"T12:00:00");return `<button type="button" class="day ${d===S.day?"on":""}" data-day="${d}">${x.toLocaleDateString("en-US",{weekday:"short"})}<b>${x.getDate()}</b><span class="small">${x.toLocaleDateString("en-US",{month:"short"})}</span></button>`}).join("")}</div>

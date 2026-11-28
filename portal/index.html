@@ -199,8 +199,9 @@ async function loadAll(){
   const [team,deals,milestones,tasks,documents,homes] = await Promise.all(["team_members","deals","milestones","tasks","documents","homes"].map(t=>db.all(t)));
   // Upgrade-2 tables (schema-v2.sql). If not installed yet, they load as empty.
   const opt = t => db.all(t).catch(()=>[]);
-  const [leads,showings,offers,checklist] = await Promise.all(["leads","showings","offers","checklist"].map(opt));
-  S.data = {team,deals,milestones,tasks,documents,homes,leads,showings,offers,checklist};
+  const [leads,showings,offers,checklist,reviews,favorites,saved_searches] = await Promise.all(["leads","showings","offers","checklist","reviews","favorites","saved_searches"].map(opt));
+  let outbox = []; if(LIVE){ const r = await sb.from("outbox").select("*").order("created_at",{ascending:false}).limit(150); outbox = r.data||[]; }
+  S.data = {team,deals,milestones,tasks,documents,homes,leads,showings,offers,checklist,reviews,favorites,saved_searches,outbox};
 }
 const showsOf = id => S.data.showings.filter(s=>s.deal_id===id).sort((a,b)=>String(b.start_at).localeCompare(String(a.start_at)));
 const offersOf = id => S.data.offers.filter(o=>o.deal_id===id).sort((a,b)=>String(b.received_at).localeCompare(String(a.received_at)));
@@ -293,7 +294,7 @@ function render(){
 function renderAgent(){
   const newLeads = S.data.leads.filter(l=>l.status==="New").length;
   const pendingShows = S.data.showings.filter(s=>s.status==="Requested").length;
-  const tabs = [["board","Transaction board"],["leads",`Seller leads${newLeads?` (${newLeads})`:""}`],["showings",`Showings${pendingShows?` (${pendingShows})`:""}`],["tasks","My tasks"],["homes","Homeowners"],["new","+ New deal"]];
+  const tabs = [["board","Transaction board"],["leads",`Leads${newLeads?` (${newLeads})`:""}`],["reviews",`Reviews${S.data.reviews.filter(r=>!r.approved).length?` (${S.data.reviews.filter(r=>!r.approved).length})`:""}`],["alerts","Emails"],["showings",`Showings${pendingShows?` (${pendingShows})`:""}`],["tasks","My tasks"],["homes","Homeowners"],["new","+ New deal"]];
   const active = S.data.deals.filter(d=>d.stage!=="Closed");
   const pending = active.filter(d=>STAGES.indexOf(d.stage)>=2);
   const t = today();
@@ -314,21 +315,44 @@ function renderAgent(){
     }).join("")}</div>`;
   }
   if(S.tab==="leads"){
-    const rows = S.data.leads.slice().sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at)));
-    body = `<div class="card"><div class="row" style="justify-content:space-between;flex-wrap:wrap"><h2 style="font-size:22px">Seller leads</h2>
-      <span class="small muted">From the “What's my home worth?” page: <a href="/sell/" target="_blank">${location.host}/sell</a></span></div>
-      <p class="small muted">Promise on the page: a home value report within 24 hours. Mark each lead as you go.</p>
+    const LT = {all:"All",seller:"Sellers",tour:"Tours",buyer:"Buyers",preapproval:"Pre-approval",renter:"Renters"};
+    S.lt = S.lt || "all";
+    const rows = S.data.leads.filter(l=>S.lt==="all"||(l.lead_type||"seller")===S.lt).sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at)));
+    body = `<div class="card"><div class="row" style="justify-content:space-between;flex-wrap:wrap"><h2 style="font-size:22px">Leads</h2>
+      <span class="small muted">From <a href="/sell/" target="_blank">/sell</a>, <a href="/homes/" target="_blank">/homes</a>, <a href="/mortgage/#pre" target="_blank">/mortgage</a> and <a href="/rentals/" target="_blank">/rentals</a></span></div>
+      <div class="row" style="flex-wrap:wrap;margin:10px 0">${Object.entries(LT).map(([k,v])=>`<button class="btn sm ${S.lt===k?"gold":""}" data-lt="${k}">${v} (${k==="all"?S.data.leads.length:S.data.leads.filter(l=>(l.lead_type||"seller")===k).length})</button>`).join("")}</div>
+      <p class="small muted">Seller leads were promised a home value report within 24 hours. Mark each lead as you go.</p>
       <table><tr><th>Received</th><th>Owner</th><th>Property</th><th>Timeline</th><th>Status</th><th></th></tr>
       ${rows.map(l=>{const late = l.status==="New" && (Date.now()-new Date(l.created_at))>24*36e5; return `<tr>
         <td class="small ${late?"late":""}">${dt(l.created_at)}${late?"<br>Over 24 hours":""}</td>
-        <td>${esc(l.name)}<br><span class="small muted">${esc(l.phone||"")} ${esc(l.email||"")}${l.language&&l.language!=="English"?` · ${esc(l.language)}`:""}</span></td>
-        <td>${esc(l.address)}<br><span class="small muted">${[l.property_type,l.beds&&`${l.beds} bd`,l.baths&&`${l.baths} ba`,l.sqft&&`${Number(l.sqft).toLocaleString()} sq ft`,l.year_built&&`built ${l.year_built}`,l.condition].filter(Boolean).map(esc).join(" · ")}</span>${l.reason?`<br><span class="small">“${esc(l.reason)}”</span>`:""}</td>
+        <td><span class="tag">${esc(LT[l.lead_type||"seller"]||l.lead_type)}</span> ${esc(l.name)}<br><span class="small muted">${esc(l.phone||"")} ${esc(l.email||"")}${l.language&&l.language!=="English"?` · ${esc(l.language)}`:""}</span></td>
+        <td>${esc(l.address)}<br><span class="small muted">${[l.property_type,l.beds&&`${l.beds} bd`,l.baths&&`${l.baths} ba`,l.sqft&&`${Number(l.sqft).toLocaleString()} sq ft`,l.year_built&&`built ${l.year_built}`,l.condition].filter(Boolean).map(esc).join(" · ")}</span>${l.reason?`<br><span class="small">“${esc(l.reason)}”</span>`:""}${l.details?`<br><span class="small muted">${Object.entries(l.details).filter(([k,v])=>v!==""&&v!=null&&!(Array.isArray(v)&&!v.length)).map(([k,v])=>`${esc(k.replace(/_/g," "))}: ${esc(Array.isArray(v)?v.join(", "):typeof v==="number"&&k.startsWith("instant")?money(v):v)}`).join(" · ")}</span>`:""}</td>
         <td class="small">${esc(l.timeline||"")}</td>
         <td><select data-leadstatus="${l.id}" style="min-width:130px">${LEAD_STATUS.map(x=>`<option ${x===l.status?"selected":""}>${x}</option>`).join("")}</select>
           ${l.est_low?`<div class="small muted">${money(l.est_low)}–${money(l.est_high)}</div>`:""}${l.cma_url?`<div class="small"><a href="${esc(l.cma_url)}" target="_blank">CMA</a></div>`:""}</td>
         <td style="white-space:nowrap">${l.phone?`<a class="btn sm" href="tel:${esc(l.phone.replace(/\D/g,""))}">Call</a> <a class="btn sm" href="${smsLink(l.phone,`Hi ${l.name.split(" ")[0]}, this is ${agentOf(S.user).full_name} with Marino Group. I'm preparing your home value report for ${l.address.split(",")[0]}. Any upgrades I should know about?`)}">Text</a>`:""}
           <button class="btn sm" data-leadedit="${l.id}">Value</button></td></tr>`}).join("") || "<tr><td colspan=6 class='muted'>No leads yet.</td></tr>"}
-      </table></div>`;
+      </table></div>
+      <div class="card" style="margin-top:20px"><h2 style="font-size:22px">Buyers' saved searches and homes</h2>
+      <ul class="list">${S.data.saved_searches.map(x=>`<li><span class="grow">${esc(x.email||"")} · <b style="font-weight:600">${esc(x.name||"Search")}</b><br><span class="small muted">Alerts ${esc(x.frequency)} · ${Object.entries(x.criteria||{}).filter(([k,v])=>v&&!(Array.isArray(v)&&!v.length)).map(([k,v])=>esc(k)+": "+esc(Array.isArray(v)?v.join(", "):v)).join(" · ")}</span></span><span class="small muted">${fmt(String(x.created_at).slice(0,10))}</span></li>`).join("") || "<li class='muted small'>No saved searches yet.</li>"}
+      ${S.data.favorites.length?`<li><span class="grow"><b style="font-weight:600">Saved homes</b><br><span class="small muted">${Object.entries(S.data.favorites.reduce((m,f)=>{(m[f.address]=m[f.address]||[]).push(f.email);return m},{})).map(([a,e])=>`${esc(a)} (${e.length}: ${e.map(esc).join(", ")})`).join(" · ")}</span></span></li>`:""}</ul></div>`;
+  }
+  if(S.tab==="reviews"){
+    const rs = S.data.reviews.slice().sort((a,b)=>(a.approved-b.approved)||String(b.created_at).localeCompare(String(a.created_at)));
+    body = `<div class="card"><div class="row" style="justify-content:space-between;flex-wrap:wrap"><h2 style="font-size:22px">Client reviews</h2><span class="small muted">Ask clients at <a href="/reviews/#write" target="_blank">${location.host}/reviews</a> · approved reviews show on the website</span></div>
+      <ul class="list">${rs.map(r=>`<li style="align-items:start"><span class="grow"><b style="font-weight:600;color:var(--gold)">${"★".repeat(r.rating)}${"☆".repeat(5-r.rating)}</b> ${esc(r.name)} <span class="small muted">${esc(r.role||"")} ${esc(r.city||"")} · ${esc(r.email||"")}</span><br>${esc(r.body)}</span>
+        <span style="white-space:nowrap">${r.approved?`<span class="tag">On website</span> <button class="btn sm" data-rv="${r.id}" data-on="0">Hide</button>`:`<button class="btn sm gold" data-rv="${r.id}" data-on="1">Approve</button>`} <button class="btn sm" data-rvdel="${r.id}">Delete</button></span></li>`).join("") || "<li class='muted small'>No reviews yet. Send happy clients the link above.</li>"}</ul>
+      <button class="btn sm" id="copyRv" style="margin-top:10px">Copy review request text</button></div>`;
+  }
+  if(S.tab==="alerts"){
+    const ob = S.data.outbox, sent = ob.filter(o=>o.status==="sent").length, q = ob.filter(o=>o.status==="queued").length, f = ob.filter(o=>o.status==="failed").length;
+    body = `<div class="card"><h2 style="font-size:22px">Automatic emails</h2>
+      <p class="small muted">New leads, showing requests, confirmations, feedback, review alerts and follow-ups are emailed automatically. Follow-ups: seller leads on day 3 and 14, buyers on day 2, then a monthly check-in for a year; past clients get a monthly home note.</p>
+      <div class="stats" style="margin-top:12px"><div class="stat"><b>${sent}</b><span class="small muted">Sent</span></div><div class="stat"><b>${q}</b><span class="small muted">Waiting to send</span></div><div class="stat"><b>${f}</b><span class="small muted">Failed</span></div><div class="stat"><b>${ob.length}</b><span class="small muted">Last 150</span></div></div>
+      ${q && !sent ? `<p class="small" style="color:var(--warn)">Emails are waiting because the sending account isn't connected yet (Gmail app password in Supabase secrets).</p>`:""}
+      <button class="btn sm" id="testMail">Send me a test email</button>
+      <table style="margin-top:12px"><tr><th>When</th><th>To</th><th>Subject</th><th>Status</th></tr>
+      ${ob.map(o=>`<tr><td class="small">${dt(o.created_at)}</td><td class="small">${esc(o.to_email)}</td><td>${esc(o.subject)}${o.error?`<br><span class="small late">${esc(o.error)}</span>`:""}</td><td><span class="tag">${o.status}</span></td></tr>`).join("") || "<tr><td colspan=4 class='muted'>Nothing yet.</td></tr>"}</table></div>`;
   }
   if(S.tab==="showings"){
     const up = S.data.showings.filter(s=>new Date(s.start_at)>new Date(Date.now()-2*36e5) && s.status!=="Cancelled").sort((a,b)=>String(a.start_at).localeCompare(String(b.start_at)));
@@ -391,6 +415,11 @@ function renderAgent(){
     try{ await db.update("leads",l.id,patch); Object.assign(l,patch); render(); toast("Saved"); }catch(e){ toast(e.message); } });
   document.querySelectorAll("[data-showok]").forEach(b=>b.onclick=()=>setShowing(S.data.showings.find(s=>s.id===b.dataset.showok),"Confirmed"));
   document.querySelectorAll("[data-showno]").forEach(b=>b.onclick=()=>setShowing(S.data.showings.find(s=>s.id===b.dataset.showno),"Declined"));
+  document.querySelectorAll("[data-lt]").forEach(b=>b.onclick=()=>{S.lt=b.dataset.lt;render();});
+  document.querySelectorAll("[data-rv]").forEach(b=>b.onclick=async()=>{ const r=S.data.reviews.find(x=>x.id===b.dataset.rv); try{ await db.update("reviews",r.id,{approved:b.dataset.on==="1"}); r.approved=b.dataset.on==="1"; render(); toast(r.approved?"Review is on the website":"Review hidden"); }catch(e){toast(e.message);} });
+  document.querySelectorAll("[data-rvdel]").forEach(b=>b.onclick=async()=>{ if(!confirm("Delete this review?")) return; try{ await db.remove("reviews",b.dataset.rvdel); S.data.reviews=S.data.reviews.filter(x=>x.id!==b.dataset.rvdel); render(); }catch(e){toast(e.message);} });
+  if($("#copyRv")) $("#copyRv").onclick=()=>{ const m=`Thank you for trusting Marino Group! Would you share a quick review of your experience? It takes one minute: ${location.origin}/reviews/#write — ${agentOf(S.user).full_name}`; navigator.clipboard?.writeText(m).then(()=>toast("Copied. Paste it in a text or email."),()=>prompt("Copy:",m)); };
+  if($("#testMail")) $("#testMail").onclick=async()=>{ if(!LIVE) return toast("Demo mode"); try{ await db.insert("outbox",{kind:"test_"+Date.now(),to_email:S.user,subject:"Test email from your Marino Group website",body:"If you can read this, automatic emails are working.\n\n— Marino Group"}); await loadAll(); render(); toast("Test email queued. It sends within a minute."); }catch(e){toast(e.message);} };
 }
 
 function dealCard(d){
@@ -471,6 +500,8 @@ function openDeal(id){
       <div style="flex:1;min-width:140px"><label>Status</label><select id="lsStatus">${["Coming soon","Active","Pending","Sold","Off market"].map(x=>`<option ${x===(d.listing_status||"Coming soon")?"selected":""}>${x}</option>`).join("")}</select></div>
     </div>
     <label>Photo link (shown on the booking page)</label><input id="lsPhoto" value="${esc(d.photo_url??"")}" placeholder="https://...">
+    <label>Virtual tour link (Matterport, video, 3D tour)</label><input id="lsTour" value="${esc(d.virtual_tour_url??"")}" placeholder="https://...">
+    <p class="small muted" style="margin:6px 0 0">Need staging? <a href="/marinodesign/" target="_blank">Order AI virtual staging from Marino Design</a> and add the photos to the MLS.</p>
     <div class="row" style="flex-wrap:wrap;margin-top:6px">
       <label class="row" style="color:var(--fg);gap:8px;margin:0"><input type="checkbox" id="lsOpen" ${d.showings_open?"checked":""} style="width:auto"> Take showing requests online</label>
       <div style="flex:1;min-width:200px"><label>Who confirms showings?</label><select id="lsAppr">${[["seller","The seller, in their portal"],["agent","Me (the listing agent)"],["auto","Confirm automatically"]].map(([v,l])=>`<option value="${v}" ${v===(d.showing_approval||"seller")?"selected":""}>${l}</option>`).join("")}</select></div>
@@ -527,7 +558,7 @@ function openDeal(id){
   if(d.side==="seller"){
     $("#lsSave").onclick = async()=>{
       const patch = {mls_number:$("#lsMls").value.trim()||null,list_price:$("#lsPrice").value?+$("#lsPrice").value:null,list_date:$("#lsDate").value||null,listing_status:$("#lsStatus").value,
-        photo_url:$("#lsPhoto").value.trim()||null,showings_open:$("#lsOpen").checked,showing_approval:$("#lsAppr").value,showing_notes:$("#lsNotes").value.trim()||null};
+        photo_url:$("#lsPhoto").value.trim()||null,showings_open:$("#lsOpen").checked,showing_approval:$("#lsAppr").value,showing_notes:$("#lsNotes").value.trim()||null,virtual_tour_url:$("#lsTour").value.trim()||null};
       try{ await db.update("deals",id,patch); Object.assign(d,patch); render(); openDeal(id); toast("Listing saved"); }catch(e){ toast(e.message); }
     };
     $("#lsLink").onclick = ()=>{ const u=BOOK_URL(id); navigator.clipboard?.writeText(u).then(()=>toast("Booking link copied. Put it in the MLS showing instructions."),()=>prompt("Copy this link:",u)); };
@@ -612,6 +643,7 @@ function clientDeal(d){
     <div class="stat"><b>${dom(d)??"—"}</b><span class="small muted">Days on market${d.list_date?` · listed ${fmt(d.list_date)}`:""}</span></div>
     <div class="stat"><b>${past.length}</b><span class="small muted">Showings · ${week} this week${avg?` · interest ${avg}/5`:""}</span></div>
   </div>
+  ${d.virtual_tour_url&&/^https:\/\//.test(d.virtual_tour_url)?`<p style="margin:-8px 0 18px"><a class="btn sm" href="${esc(d.virtual_tour_url)}" target="_blank" rel="noopener">View your home's virtual tour</a></p>`:""}
   ${pendingReq.length?`<div class="card" style="margin-bottom:20px;border-color:var(--gold)"><h2 style="font-size:20px">Showing requests waiting for you</h2>
     <ul class="list">${pendingReq.map(s=>`<li><span class="grow"><b style="font-weight:600">${dt(s.start_at)}</b> · ${s.minutes} min<br><span class="small muted">${esc(s.agent_name)}, ${esc(s.brokerage||"agent")}</span></span>
     ${d.showing_approval==="seller"?`<button class="btn sm gold" data-sok="${s.id}">Approve</button><button class="btn sm" data-sno="${s.id}">Decline</button>`:`<span class="small muted">Your agent will confirm</span>`}</li>`).join("")}</ul></div>`:""}

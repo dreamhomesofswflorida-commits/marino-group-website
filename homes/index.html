@@ -135,9 +135,17 @@ footer .fine{grid-column:1/-1;border-top:1px solid #2e2b27;padding-top:20px;disp
   </div>
 </div></section>
 
+<section style="padding-top:0" id="mg-buyer"><div class="wrap">
+  <div class="acct" id="acct"></div>
+  <div class="head" style="display:grid;gap:10px;margin:18px 0 20px"><span class="eyebrow">Homes listed by Marino Group</span><h2>Save the homes you like. Tour them with us.</h2></div>
+  <div class="lgrid" id="lgrid"><p class="lead">Loading homes…</p></div>
+</div></section>
+
 <section style="padding-top:0"><div class="wrap">
   <div class="head" style="display:grid;gap:10px;margin-bottom:24px"><span class="eyebrow">Know before you buy</span><h2>Southwest Florida buyer tools</h2></div>
   <div class="grid3">
+    <a class="tile" href="/check/"><small>Any address</small><h3>Property check</h3><p>Flood zone, flood insurance, taxes, local prices and schools for any home in Southwest Florida.</p><span class="go">Check a home →</span></a>
+    <a class="tile" href="/mortgage/"><small>Payments</small><h3>Mortgage calculator</h3><p>Your real monthly cost with Florida taxes, insurance and HOA, and how much home you can afford.</p><span class="go">Calculate →</span></a>
     <a class="tile" href="https://msc.fema.gov/portal/home" target="_blank" rel="noopener"><small>Flood</small><h3>FEMA flood maps</h3><p>Look up a property's flood zone. It affects insurance cost and building rules.</p><span class="go">Open FEMA map →</span></a>
     <a class="tile" href="https://www.collierappraiser.com/" target="_blank" rel="noopener"><small>Collier County</small><h3>Property Appraiser</h3><p>Ownership, assessed value, taxes and sales history for Naples, Marco Island and Golden Gate Estates.</p><span class="go">Open site →</span></a>
     <a class="tile" href="https://www.leepa.org/" target="_blank" rel="noopener"><small>Lee County</small><h3>Property Appraiser</h3><p>Records for Cape Coral, Fort Myers, Lehigh Acres, Estero and Bonita Springs.</p><span class="go">Open site →</span></a>
@@ -196,12 +204,21 @@ for(const [k,v] of p){ const el=hs.elements[k]; if(!el) continue;
   else if(el.type==="checkbox"){ if(el.value===v) el.checked=true; }
   else { const o=[...el.options||[]].find(o=>o.value===v||o.text===v); if(o) el.value=o.value; } }
 hs.addEventListener("change",show); hs.addEventListener("submit",e=>e.preventDefault()); show();
-document.getElementById("lead").addEventListener("submit",e=>{e.preventDefault();
-  send(e.target,document.getElementById("l-ok"),"Saved home search – Marino Group website",
-    {Name:document.getElementById("l-name").value,Phone:document.getElementById("l-phone").value,Email:document.getElementById("l-email").value,
-     Timeline:document.getElementById("l-when").value,...crit()});});
+document.getElementById("lead").addEventListener("submit",async e=>{e.preventDefault();
+  const data={Name:document.getElementById("l-name").value,Phone:document.getElementById("l-phone").value,Email:document.getElementById("l-email").value,
+     Timeline:document.getElementById("l-when").value,...crit()};
+  if(window.MGBuyer && window.MGBuyer.live){
+    const ok=document.getElementById("l-ok"), btn=e.target.querySelector("button[type=submit]"); btn.disabled=true;
+    try{ await window.MGBuyer.searchLead(data, Object.fromEntries(new FormData(hs))); e.target.reset(); ok.hidden=false; ok.textContent="Thanks! We saved your search and will send you matching homes.";}
+    catch(x){ ok.hidden=false; ok.textContent="Sorry, that didn't send. Please call or text (239) 776-2393."; }
+    btn.disabled=false; return; }
+  send(e.target,document.getElementById("l-ok"),"Saved home search – Marino Group website",data);});
+window.MGcrit = crit;
 
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/js/config.js"></script>
+<script src="/js/buyer.js"></script>
 <script src="/js/app-back.js" defer></script>
 </body>
 </html>

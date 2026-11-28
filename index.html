@@ -473,6 +473,18 @@ h2{letter-spacing:-.03em;line-height:1}
     </div>
   </div>
 </section>
+<section id="reviews" aria-labelledby="rv-h" hidden style="padding-top:0">
+  <div class="wrap">
+    <div class="head" style="display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap"><div><span class="eyebrow">Client reviews</span><h2 id="rv-h" style="margin-top:8px">What our clients say.</h2></div><a class="btn btn-ghost" href="reviews/">All reviews</a></div>
+    <div id="rv-list" style="display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));margin-top:24px"></div>
+  </div>
+</section>
+<script>
+(function(){var C=window.MG_CONFIG||{};function go(){if(!window.supabase||!C.SUPABASE_URL)return;var sb=supabase.createClient(C.SUPABASE_URL,C.SUPABASE_ANON_KEY,{auth:{persistSession:false}});
+sb.rpc("public_reviews").then(function(r){var d=(r.data||[]).filter(function(x){return x.rating>=4}).slice(0,3);if(!d.length)return;var e=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})};
+document.getElementById("rv-list").innerHTML=d.map(function(x){return '<article style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px"><div style="color:var(--gold);letter-spacing:2px" aria-label="'+x.rating+' out of 5 stars">'+"★".repeat(x.rating)+'</div><p style="margin-top:10px">'+e(x.body)+'</p><p style="color:var(--muted);font-size:14px;margin-top:10px">'+e(x.name)+(x.city?' · '+e(x.city):'')+'</p></article>'}).join("");document.getElementById("reviews").hidden=false;});}
+if(window.supabase)go();else{var s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js";s.onload=function(){var c=document.createElement("script");c.src="/js/config.js";c.onload=function(){C=window.MG_CONFIG||{};go()};document.head.appendChild(c)};document.head.appendChild(s);}})();
+</script>
 
 <section class="reviews" id="reviews" aria-labelledby="rev-h">
   <div class="wrap">
@@ -590,6 +602,11 @@ h2{letter-spacing:-.03em;line-height:1}
     <div style="display:grid;gap:8px;align-content:start">
       <span class="broker">Follow</span>
       <a href="https://www.facebook.com/DreamhomeRealty239/" target="_blank" rel="noopener">Facebook</a>
+      <a href="sell/">Free home value report</a>
+      <a href="mortgage/">Mortgage calculator</a>
+      <a href="check/">Property check</a>
+      <a href="rentals/">Rentals</a>
+      <a href="reviews/">Client reviews</a>
       <a href="woodenconcept/">Wooden Concept Renovations</a>
       <a href="marinodesign/">Marino Design</a>
       <a href="app/">Get the Marino Group app</a>

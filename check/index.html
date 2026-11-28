@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Property Check: Flood Zone, Taxes, Schools | Southwest Florida | Marino Group</title>
+<meta name="description" content="Check any Southwest Florida address: FEMA flood zone, whether flood insurance is likely required, estimated property taxes, local price per square foot, schools and county records.">
+<link rel="canonical" href="https://marinogroupswfl.com/check/">
+<link rel="icon" href="/img/marino_logo_transparent_gold.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Figtree:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#f6f3ee;--surface:#fff;--sunk:#ece6dc;--fg:#1e1d1c;--muted:#655f56;--line:#ddd5c8;--gold:#b8955d;--gold-soft:#d8c3a0;--gulf:#2f5d62;--ok:#3d7a4f;--warn:#a8642a;
+--display:"Jost","Futura","Century Gothic",Arial,sans-serif;--body:"Figtree","Segoe UI",Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#141312;--surface:#1d1b19;--sunk:#25221f;--fg:#efe8dc;--muted:#a79e90;--line:#36322d;--gold:#d3b585;--gold-soft:#e3cfa9;--gulf:#7fb0b3;--ok:#7fbf8e;--warn:#e0a46a;color-scheme:dark}}
+*{box-sizing:border-box}[hidden]{display:none!important}html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font:16px/1.55 var(--body)}
+a{color:inherit}.wrap{max-width:1000px;margin:0 auto;padding-inline:20px}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.12;margin:0;text-wrap:balance}
+h1{font-size:clamp(32px,5vw,50px)}h2{font-size:24px}h3{font-size:18px;font-weight:500}
+p{margin:0}
+.eyebrow{font-family:var(--display);font-weight:500;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.top{background:#141312;color:#f3ece0}.top .wrap{display:flex;align-items:center;gap:20px;padding-block:14px}
+.top a.home{font:500 18px var(--display);letter-spacing:.08em;text-decoration:none}.top .call{margin-left:auto;color:var(--gold-soft);text-decoration:none;font:500 15px var(--display)}
+.hero{background:#141312;color:#f3ece0;padding-block:44px 84px}.hero p{color:#bdb3a3;max-width:60ch;margin-top:12px}
+form.search{display:flex;gap:10px;margin-top:-50px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:0 16px 40px #0002;flex-wrap:wrap}
+input,select{font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;flex:1;min-width:220px}
+.btn{display:inline-flex;align-items:center;justify-content:center;font:500 16px var(--body);padding:12px 22px;border-radius:999px;border:1px solid transparent;background:var(--gold-soft);color:#1e1d1c;cursor:pointer;text-decoration:none}
+.btn.ghost{background:transparent;border-color:var(--line);color:inherit}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:24px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px}
+.big{font:400 34px/1.1 var(--display);margin:8px 0}
+.pill{display:inline-block;border-radius:999px;padding:3px 12px;font-size:14px;font-weight:600}
+.pill.ok{background:#3d7a4f22;color:var(--ok)}.pill.warn{background:#a8642a22;color:var(--warn)}
+.muted{color:var(--muted)}.small{font-size:14px}
+ul.links{list-style:none;padding:0;margin:10px 0 0}ul.links li{padding:7px 0;border-bottom:1px solid var(--line)}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+footer{background:#141312;color:#bdb3a3;padding-block:30px;font-size:14px;margin-top:40px}footer p+p{margin-top:6px}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><a class="home" href="/">MARINO GROUP</a><a class="call" href="tel:+12397762393">(239) 776-2393</a></div></header>
+<main>
+<section class="hero"><div class="wrap">
+  <span class="eyebrow">Property check · Southwest Florida</span>
+  <h1 style="margin-top:12px">Know a home before you buy it.</h1>
+  <p>Enter any address in Collier, Lee or Charlotte County to see its FEMA flood zone, whether lenders will likely require flood insurance, estimated taxes, local prices and where to find schools and county records.</p>
+</div></section>
+<div class="wrap">
+  <form class="search" id="f"><label for="a" class="small muted" style="position:absolute;left:-9999px">Address</label><input id="a" placeholder="Street address, city, FL zip" autocomplete="street-address" required><input id="p" type="number" placeholder="Price (optional)" style="max-width:200px;min-width:150px"><button class="btn">Check</button></form>
+  <p class="muted small" id="msg" style="margin-top:12px" aria-live="polite"></p>
+  <div id="out" hidden>
+    <h2 id="addr" style="margin-top:26px"></h2>
+    <div class="grid">
+      <div class="card"><span class="eyebrow">FEMA flood zone</span><p class="big" id="zone">—</p><p id="zoneTxt" class="small"></p><p class="small muted" style="margin-top:10px">Source: FEMA National Flood Hazard Layer. Elevation, the building's elevation certificate and its insurance history set the real premium.</p></div>
+      <div class="card"><span class="eyebrow">Estimated property taxes</span><p class="big" id="tax">—</p><p id="taxTxt" class="small muted"></p></div>
+      <div class="card"><span class="eyebrow">Local prices</span><p class="big" id="ppsf">—</p><p id="ppsfTxt" class="small muted"></p></div>
+      <div class="card"><span class="eyebrow">Records, schools and safety</span><ul class="links small" id="links"></ul></div>
+    </div>
+    <div class="card" style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+      <div><h3>Want the full picture?</h3><p class="small muted">A Marino Group agent can pull sales history, permits, HOA rules and insurance quotes for this home.</p></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn" id="mort" href="/mortgage/">Monthly payment</a><a class="btn ghost" id="val" href="/sell/">Home value report</a><a class="btn ghost" href="tel:+12397762393">Call an agent</a></div>
+    </div>
+  </div>
+</div>
+</main>
+<footer><div class="wrap"><p>Marino Group · Brokered by Waterfront Realty Group, Inc. · Equal Housing Opportunity</p><p>Information is from public sources and estimates; verify with the county, FEMA, your insurance agent and your lender before you buy.</p></div></footer>
+<script>
+const $=id=>document.getElementById(id), money=n=>"$"+Math.round(n).toLocaleString("en-US");
+const COUNTY={
+  "Collier County":{rate:1.05,pa:["Collier County Property Appraiser","https://www.collierappraiser.com/"],sch:["Collier County Public Schools","https://www.collierschools.com/"],evac:["Florida evacuation zones (Know Your Zone)","https://www.floridadisaster.org/knowyourzone/"]},
+  "Lee County":{rate:1.35,pa:["Lee County Property Appraiser","https://www.leepa.org/"],sch:["Lee County schools","https://www.leeschools.net/"],evac:["Florida evacuation zones (Know Your Zone)","https://www.floridadisaster.org/knowyourzone/"]},
+  "Charlotte County":{rate:1.45,pa:["Charlotte County Property Appraiser","https://www.ccappraiser.com/"],sch:["Charlotte County schools","https://www.yourcharlotteschools.net/"],evac:["Florida evacuation zones (Know Your Zone)","https://www.floridadisaster.org/knowyourzone/"]}
+};
+const ZONES={
+  "AE":"High-risk area (1% yearly flood chance). Lenders require flood insurance for federally backed mortgages.",
+  "A":"High-risk area without a base flood elevation on the map. Flood insurance is required with most mortgages.",
+  "AH":"High-risk shallow flooding area. Flood insurance is required with most mortgages.",
+  "AO":"High-risk sheet-flow area. Flood insurance is required with most mortgages.",
+  "VE":"Coastal high-hazard area with wave action. Flood insurance is required with most mortgages and is usually the most expensive.",
+  "V":"Coastal high-hazard area. Flood insurance is required with most mortgages.",
+  "X":"Moderate-to-low risk. Flood insurance is usually not required, but more than 20% of flood insurance claims come from these areas, and it is often inexpensive here.",
+  "D":"Undetermined risk. Ask an insurance agent about coverage."
+};
+$("f").onsubmit=async e=>{
+  e.preventDefault(); $("msg").textContent="Checking…"; $("out").hidden=true;
+  try{
+    const g=await (await fetch("https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=json&maxLocations=1&outFields=Postal,Subregion,Region&SingleLine="+encodeURIComponent($("a").value))).json();
+    const c=(g.candidates||[])[0];
+    if(!c || c.score<80){ $("msg").textContent="We couldn't find that address. Try adding the city and zip code."; return; }
+    if(c.attributes.Region!=="Florida"){ $("msg").textContent="This tool covers Southwest Florida addresses."; return; }
+    const zip=c.attributes.Postal, county=c.attributes.Subregion, K=COUNTY[county];
+    $("addr").textContent=c.address;
+    const fz=await (await fetch(`https://hazards.fema.gov/arcgis/rest/services/public/NFHL/MapServer/28/query?geometry=${c.location.x},${c.location.y}&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=FLD_ZONE,ZONE_SUBTY,STATIC_BFE,SFHA_TF&returnGeometry=false&f=json`)).json().catch(()=>({}));
+    const a=((fz.features||[])[0]||{}).attributes;
+    if(a){ const z=a.FLD_ZONE, sf=a.SFHA_TF==="T";
+      $("zone").innerHTML=`Zone ${z} <span class="pill ${sf?"warn":"ok"}">${sf?"High risk":"Lower risk"}</span>`;
+      $("zoneTxt").textContent=(ZONES[z]||"")+(a.STATIC_BFE>0&&a.STATIC_BFE<9000?` Base flood elevation: ${a.STATIC_BFE} ft.`:"")+(a.ZONE_SUBTY&&/SHADED|0.2/i.test(a.ZONE_SUBTY)?" (Shaded X: 0.2% yearly chance.)":"");
+    } else { $("zone").textContent="Not available"; $("zoneTxt").textContent="FEMA's map didn't answer for this spot. Check FEMA's Flood Map Service Center."; }
+    const price=+$("p").value||0;
+    if(K){ $("tax").textContent=price?money(price*K.rate/100)+"/yr":K.rate+"% / yr";
+      $("taxTxt").textContent=(price?`About ${K.rate}% of the price in ${county} for a new owner without homestead. `:`Typical first-year rate in ${county} for a new owner without homestead. Enter a price to see dollars. `)+"A Florida homestead exemption lowers this for your primary home, and Save Our Homes caps later increases at 3% a year.";
+      $("links").innerHTML=[K.pa,K.sch,K.evac,["FEMA Flood Map Service Center","https://msc.fema.gov/portal/search"]].map(([t,u])=>`<li><a href="${u}" target="_blank" rel="noopener">${t}</a></li>`).join("");
+    } else { $("tax").textContent="—"; $("taxTxt").textContent="Outside Collier, Lee and Charlotte."; $("links").innerHTML=""; }
+    try{ const V=await (await fetch("/sell/values.json",{cache:"no-cache"})).json(); const h=V.zips[zip+"|house"], co=V.zips[zip+"|condo"]||V.zips[zip+"|attached"];
+      if(h||co){ $("ppsf").textContent=h?`$${h[2]}/sq ft`:`$${co[2]}/sq ft`;
+        $("ppsfTxt").textContent=[h&&`Single-family homes in ${zip}: median $${h[2]} per sq ft (${h[0]} sales, last 6 months)`, co&&`Condos and villas: median $${co[2]} per sq ft (${co[0]} sales)`].filter(Boolean).join(". ")+". Source: SWFL MLS."; }
+      else { $("ppsf").textContent="—"; $("ppsfTxt").textContent="Not enough recent sales in this zip code."; }
+    }catch(x){}
+    $("mort").href="/mortgage/"+(price?"?price="+price:""); $("val").href="/sell/?address="+encodeURIComponent(c.address);
+    $("msg").textContent=""; $("out").hidden=false;
+  }catch(x){ $("msg").textContent="Something went wrong. Please try again."; }
+};
+const q=new URLSearchParams(location.search); if(q.get("address")){ $("a").value=q.get("address"); if(q.get("price")) $("p").value=q.get("price"); $("f").requestSubmit(); }
+</script>
+<script src="/js/app-back.js"></script>
+</body>
+</html>
