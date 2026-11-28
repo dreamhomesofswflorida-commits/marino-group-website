@@ -1,0 +1,36 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Voice recording | Marino Group</title>
+<style>
+:root{--bg:#141312;--fg:#efe8dc;--gold:#d3b585;--muted:#a79e90;--surface:#1d1b19;--line:#36322d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:18px/1.55 Inter,system-ui,sans-serif}
+main{max-width:720px;margin:0 auto;padding:28px 20px 60px}h1{font-size:26px;margin:0 0 6px}p.m{color:var(--muted);margin:0 0 18px}
+.script{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;font-size:21px;line-height:1.6}
+.row{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0}button{font:600 17px Inter,system-ui;border:0;border-radius:999px;padding:14px 24px;cursor:pointer}
+#rec{background:#c0392b;color:#fff}#stop{background:var(--fg);color:var(--bg)}#send{background:var(--gold);color:#141312}button:disabled{opacity:.4;cursor:default}
+#status{font-size:17px;color:var(--gold);min-height:26px}audio{width:100%;margin-top:8px}
+.tips{color:var(--muted);font-size:15px}
+</style></head><body><main>
+<h1>Voice sample for your course</h1>
+<p class="m">Quiet room, phone about a hand's length away. Press Record, read the text below twice at your normal pace, then press Stop and Send.</p>
+<div class="script">Welcome to Buying Foreclosures and Tax Deeds in Collier County. I'm Jorge Marino, a Realtor here in Naples. In this course, I'll show you step by step how county auctions really work: where to find the lists, how to research a property, how to figure out your maximum bid, and what to do after you win. Most people lose money at auctions because they skip the research. Don't be one of them. Write down your number, bring a cashier's check, and never bid more than you planned. If you have questions, call or text me at two three nine, seven seven six, two three nine three.</div>
+<div class="row"><button id="rec">● Record</button><button id="stop" disabled>■ Stop</button><button id="send" disabled>Send to Claude</button></div>
+<div id="status"></div><audio id="play" controls hidden></audio>
+<p class="tips">You can listen back before sending, and record again as many times as you like. Only the last one you send is used.</p>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/js/config.js"></script>
+<script>
+const C=window.MG_CONFIG||window.CONFIG||{}; const sb=supabase.createClient(C.SUPABASE_URL,C.SUPABASE_ANON_KEY);
+let mr,chunks=[],blob,t0,timer;const $=id=>document.getElementById(id),st=$("status");
+$("rec").onclick=async()=>{try{const s=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:true,autoGainControl:true}});
+ const mime=["audio/webm;codecs=opus","audio/mp4","audio/webm"].find(m=>window.MediaRecorder&&MediaRecorder.isTypeSupported(m))||"";
+ mr=new MediaRecorder(s,mime?{mimeType:mime,audioBitsPerSecond:128000}:{});chunks=[];mr.ondataavailable=e=>chunks.push(e.data);
+ mr.onstop=()=>{s.getTracks().forEach(t=>t.stop());blob=new Blob(chunks,{type:mr.mimeType});$("play").src=URL.createObjectURL(blob);$("play").hidden=false;$("send").disabled=false;clearInterval(timer);st.textContent="Recorded "+Math.round((Date.now()-t0)/1000)+" seconds. Listen back, then press Send.";};
+ mr.start();t0=Date.now();$("rec").disabled=true;$("stop").disabled=false;$("send").disabled=true;timer=setInterval(()=>st.textContent="Recording… "+Math.round((Date.now()-t0)/1000)+"s",500);
+}catch(e){st.textContent="Microphone not available: "+e.message+". Allow the microphone for this site and try again.";}};
+$("stop").onclick=()=>{mr.stop();$("rec").disabled=false;$("stop").disabled=true;};
+$("send").onclick=async()=>{$("send").disabled=true;st.textContent="Sending…";
+ const b64=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result.split(",")[1]);fr.readAsDataURL(blob);});
+ const {error}=await sb.from("voice_samples").insert({mime:blob.type,seconds:Math.round((Date.now()-t0)/1000),data:b64});
+ st.textContent=error?("Could not send: "+error.message):"Sent! Go back to the chat and tell Claude \"sent\".";if(error)$("send").disabled=false;};
+</script></body></html>
