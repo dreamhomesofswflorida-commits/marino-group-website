@@ -133,7 +133,7 @@ footer{background:#141312;color:#bdb3a3;padding-block:40px;font-size:14px}footer
 
 <script>
 /* Paste each Stripe Payment Link URL here (https://buy.stripe.com/...). Empty = "Enrollment opens soon". */
-const STRIPE_LINKS = { starter: "", pro: "", coaching: "" };
+const STRIPE_LINKS = { starter: "https://buy.stripe.com/8x27sKaox5ZRblt6T14AU00", pro: "https://buy.stripe.com/4gM6oGeEN2NF1KT7X54AU01", coaching: "" };
 let anyMissing = false;
 document.querySelectorAll(".buy").forEach(a => {
   const url = STRIPE_LINKS[a.dataset.tier];
