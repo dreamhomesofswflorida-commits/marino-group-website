@@ -683,5 +683,6 @@ $("contact-form").addEventListener("submit",e=>{e.preventDefault();send(e.target
   tag(); new MutationObserver(function(ms){ ms.forEach(function(m){ m.addedNodes.forEach(function(n){ if(n.nodeType === 1) tag(n.parentElement); }); }); }).observe(document.body, {childList:true, subtree:true});
 })();
 </script>
+<script src="/js/app-back.js" defer></script>
 </body>
 </html>
