@@ -37,9 +37,9 @@ video{width:100%;border-radius:14px;background:#000;aspect-ratio:16/9}
 <script>
 const K=(window.MG_CONFIG||{}).SUPABASE_ANON_KEY;
 const FN="https://ssbnylpqoxnzwxhsmomc.supabase.co/functions/v1/course-access";
-const T={en:{title:"Buying Foreclosures & Tax Deeds in Collier County",hi:"Welcome! Your lessons",bonus:"Your downloads",save:"Bookmark this page: it is your personal access link. We also emailed it to you.",names:["How the sales work","Finding the lists","Researching a property","Comps and your maximum bid","Registering and bidding","After you win"],lesson:"Lesson"},
- es:{title:"Ejecuciones Hipotecarias y Tax Deeds en el Condado de Collier",hi:"¡Bienvenido! Tus lecciones",bonus:"Tus descargas",save:"Guarda esta página: es tu enlace personal de acceso. También te lo enviamos por correo.",names:["Cómo funcionan las ventas","Encontrar las listas","Investigar una propiedad","Comparables y tu oferta máxima","Registro y ofertas","Después de ganar"],lesson:"Lección"}};
-const app=document.getElementById("app"), sid=new URLSearchParams(location.search).get("session_id");
+const T={en:{title:"Buying Foreclosures & Tax Deeds in Collier County",hi:"Welcome! Your lessons",bonus:"Your downloads",save:"Bookmark this page now: it is your personal access link. Lost it? Text (239) 776-2393 with your purchase receipt.",names:["How the sales work","Finding the lists","Researching a property","Comps and your maximum bid","Registering and bidding","After you win"],lesson:"Lesson"},
+ es:{title:"Ejecuciones Hipotecarias y Tax Deeds en el Condado de Collier",hi:"¡Bienvenido! Tus lecciones",bonus:"Tus descargas",save:"Guarda esta página ahora: es tu enlace personal de acceso. ¿Lo perdiste? Escribe al (239) 776-2393 con tu recibo de compra.",names:["Cómo funcionan las ventas","Encontrar las listas","Investigar una propiedad","Comparables y tu oferta máxima","Registro y ofertas","Después de ganar"],lesson:"Lección"}};
+const app=document.getElementById("app"), qs=new URLSearchParams(location.search), sid=qs.get("session_id"), kc=qs.get("k");
 let D=null, lang=localStorage.getItem("mgCourseLang")||((navigator.language||"").startsWith("es")?"es":"en"), cur=0;
 const seen=()=>{try{return JSON.parse(localStorage.getItem("mgSeen_"+lang)||"[]")}catch(e){return[]}};
 function err(m){app.innerHTML=`<div class="msg"><span class="eyebrow">Course access</span><h1>${m}</h1><p>If you just paid, wait a minute and refresh. Still stuck? Call or text <a href="tel:+12397762393">(239) 776-2393</a> and we'll help right away.</p><p><a href="/course/">Back to the course page</a></p></div>`}
@@ -56,8 +56,8 @@ function render(){
  document.getElementById("v").onended=()=>{const s2=seen();if(!s2.includes(cur)){s2.push(cur);localStorage.setItem("mgSeen_"+lang,JSON.stringify(s2))} if(cur<5){cur++;render();document.getElementById("v").play().catch(()=>{})} else render()};
 }
 (async()=>{
- if(!sid) return err("Open the link from your purchase email to watch the course.");
- try{const r=await fetch(FN,{method:"POST",headers:{"Content-Type":"application/json",apikey:K,Authorization:"Bearer "+K},body:JSON.stringify({session_id:sid})});
+ if(!sid&&!kc) return err("Open the link from your purchase email to watch the course.");
+ try{const r=await fetch(FN,{method:"POST",headers:{"Content-Type":"application/json",apikey:K,Authorization:"Bearer "+K},body:JSON.stringify({session_id:sid,k:kc})});
   const j=await r.json(); if(!r.ok) return err(j.error||"We couldn't open your course."); D=j; render();
   setTimeout(()=>location.reload(),5.5*3600*1000);
  }catch(e){err("We couldn't reach the course server.")}

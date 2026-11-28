@@ -17,18 +17,26 @@ const j = (o: unknown, s = 200) => new Response(JSON.stringify(o), { status: s, 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   try {
-    const { session_id } = await req.json();
-    if (!/^cs_(live|test)_[A-Za-z0-9]+$/.test(session_id || "")) return j({ error: "Missing or invalid purchase link." }, 400);
-    const key = Deno.env.get("STRIPE_COURSE_KEY");
-    if (!key) return j({ error: "Course access is not set up yet." }, 503);
-    const r = await fetch(`https://api.stripe.com/v1/checkout/sessions/${session_id}`, { headers: { Authorization: `Bearer ${key}` } });
-    const s = await r.json();
-    if (!r.ok) return j({ error: "We could not find that purchase." }, 404);
-    const tier = LINKS[s.payment_link];
-    if (!tier || s.payment_status !== "paid") return j({ error: "This purchase is not complete." }, 403);
+    const { session_id, k } = await req.json();
     const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+    const key = Deno.env.get("STRIPE_COURSE_KEY");
+    let tier: string | undefined, s: any = { amount_total: 0 }, verified = false;
+    if (key && /^cs_(live|test)_[A-Za-z0-9]+$/.test(session_id || "")) {
+      // strongest check: ask Stripe that this checkout was paid
+      const r = await fetch(`https://api.stripe.com/v1/checkout/sessions/${session_id}`, { headers: { Authorization: `Bearer ${key}` } });
+      s = await r.json();
+      if (!r.ok) return j({ error: "We could not find that purchase." }, 404);
+      tier = LINKS[s.payment_link];
+      if (!tier || s.payment_status !== "paid") return j({ error: "This purchase is not complete." }, 403);
+      verified = true;
+    } else if (k) {
+      // fallback: private tier access code that only the Stripe post-payment redirect contains
+      const { data } = await sb.from("course_codes").select("tier").eq("code", k).eq("active", true).maybeSingle();
+      tier = data?.tier;
+    }
+    if (!tier) return j({ error: "Missing or invalid purchase link." }, 403);
     const email = s.customer_details?.email || null, name = s.customer_details?.name || null;
-    const { data: existing } = await sb.from("course_buyers").select("session_id").eq("session_id", session_id).maybeSingle();
+    const { data: existing } = verified ? await sb.from("course_buyers").select("session_id").eq("session_id", session_id).maybeSingle() : { data: true };
     if (!existing) {
       await sb.from("course_buyers").insert({ session_id, tier, email, name, amount: s.amount_total });
       const link = `https://marinogroupswfl.com/course/thanks/?session_id=${session_id}`;
