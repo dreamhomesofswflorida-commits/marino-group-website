@@ -5,8 +5,8 @@
   try{ inApp = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()) || sessionStorage.getItem("mgApp")==="1"; }catch(e){}
   if(!inApp || location.pathname.indexOf("/app/")===0) return;
   // Sign-in areas (client portal, agent showings) stay on the website, not in the app.
-  if(/^\/(portal|showings)(\/|$)/.test(location.pathname)){ location.replace("/app/"); return; }
-  try{ var st0=document.createElement("style"); st0.textContent='a[href^="/portal"],a[href^="/showings"]{display:none!important}'; (document.head||document.documentElement).appendChild(st0); }catch(e){}
+  if(/^\/(portal|showings|course)(\/|$)/.test(location.pathname)){ location.replace("/app/"); return; }
+  try{ var st0=document.createElement("style"); st0.textContent='a[href^="/portal"],a[href^="/showings"],a[href^="/course"]{display:none!important}'; (document.head||document.documentElement).appendChild(st0); }catch(e){}
   function add(){
     if(document.getElementById("mg-app-back")) return;
     var a=document.createElement("a");
