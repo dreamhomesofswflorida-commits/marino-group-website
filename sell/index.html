@@ -28,6 +28,9 @@ p{margin:0}
 .hero{background:#141312;color:var(--on-ink);padding-block:56px 120px}
 .hero .lead{color:#bdb3a3;max-width:58ch;margin-top:16px;font-size:18px}
 .formcard{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:30px;margin-top:-84px;box-shadow:0 20px 50px #0002}
+.ac{position:relative}#acList{position:absolute;z-index:20;left:0;right:0;top:100%;margin:4px 0 0;padding:4px;list-style:none;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.12);max-height:320px;overflow:auto}
+#acList li{padding:10px 12px;border-radius:8px;cursor:pointer;line-height:1.3}#acList li[aria-selected=true],#acList li:hover{background:var(--bg)}#acList b{font-weight:600}#acList small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+#found{margin-top:12px;padding:12px 14px;border:1px solid var(--gold);border-radius:12px;background:var(--bg);font-size:15px;line-height:1.45}#found small{display:block;color:var(--muted);font-size:13px;margin-top:4px}
 .steps{display:flex;gap:8px;margin-bottom:22px}.steps i{flex:1;height:4px;border-radius:4px;background:var(--line)}.steps i.on{background:var(--gold)}
 label{display:block;font-size:14px;color:var(--muted);margin:14px 0 6px}
 input,select,textarea{width:100%;font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
@@ -68,7 +71,11 @@ footer{background:#141312;color:#bdb3a3;padding-block:36px;font-size:14px}footer
       <div data-step="1">
         <h2>Where is your home?</h2>
         <label for="address">Property address</label>
-        <input id="address" name="address" autocomplete="street-address" placeholder="1234 Main St, Naples, FL 34113" required>
+        <div class="ac">
+          <input id="address" name="address" autocomplete="off" placeholder="Start typing: 1234 Main St" required aria-autocomplete="list" aria-controls="acList">
+          <ul id="acList" role="listbox" hidden></ul>
+        </div>
+        <div id="found" hidden></div>
         <label for="community">Community or subdivision (optional)</label>
         <input id="community" name="community" list="subs" placeholder="e.g. Naples Manor, Island Walk, Golden Gate Estates" autocomplete="off">
         <datalist id="subs"></datalist>
@@ -78,6 +85,7 @@ footer{background:#141312;color:#bdb3a3;padding-block:36px;font-size:14px}footer
           <label><input type="radio" name="property_type" value="Condo / villa"><span>Condo / villa</span></label>
           <label><input type="radio" name="property_type" value="Townhouse"><span>Townhouse</span></label>
           <label><input type="radio" name="property_type" value="Duplex / multifamily"><span>Duplex / multifamily</span></label>
+          <label><input type="radio" name="property_type" value="Manufactured"><span>Manufactured</span></label>
           <label><input type="radio" name="property_type" value="Land"><span>Land</span></label>
         </div>
       </div>
@@ -192,7 +200,7 @@ f.onsubmit = async e => {
     beds:num(v.beds), baths:num(v.baths), sqft:num(v.sqft), year_built:num(v.year_built), condition:v.condition, timeline:v.timeline,
     reason:[v.community&&("Community: "+v.community.trim()), v.reason.trim()].filter(Boolean).join(" · ")||null, language:v.language, source:"website /sell", lead_type:"seller"};
   row._community = (v.community||"").trim().toUpperCase().replace(/\s+/g," ");
-  const est = await quick(row); delete row._community; if(est) row.details = {instant_low:est.lo, instant_high:est.hi, basis:est.basis};
+  const est = await quick(row); delete row._community; row.details = Object.assign({}, est?{instant_low:est.lo, instant_high:est.hi, basis:est.basis}:{}, MATCH?{record:{type:MATCH.ptype, units:MATCH.units, beds:MATCH.beds, baths:MATCH.baths, sqft:MATCH.sqft, year:MATCH.year, community:MATCH.community, last_sold:MATCH.last_sold, src:MATCH.src}}:{}); if(!Object.keys(row.details).length) delete row.details;
   const btn = document.getElementById("next"); btn.disabled = true; btn.textContent = "Sending…";
   try{
     if(LIVE){ const {error} = await sb.from("leads").insert(row); if(error) throw error; }
@@ -227,7 +235,37 @@ async function quick(r){
     return {lo:round(band[0]*r.sqft), hi:round(band[1]*r.sqft), n, zip:where, label:{house:"single-family",condo:"condo",attached:"villa and townhouse"}[k], basis:`${zip} ${k} $/sqft ${p25}-${p50}-${p75}`};
   }catch(e){ return null; }
 }
-const q = new URLSearchParams(location.search).get("address"); if(q) f.address.value = q;
+
+/* ---- address lookup: county + MLS records ---- */
+const SUF={STREET:"ST",AVENUE:"AVE",DRIVE:"DR",COURT:"CT",LANE:"LN",BOULEVARD:"BLVD",ROAD:"RD",CIRCLE:"CIR",TERRACE:"TER",PLACE:"PL",PARKWAY:"PKWY",HIGHWAY:"HWY",TRAIL:"TRL",POINT:"PT",SOUTHWEST:"SW",SOUTHEAST:"SE",NORTHWEST:"NW",NORTHEAST:"NE",NORTH:"N",SOUTH:"S",EAST:"E",WEST:"W"};
+const normQ = t => t.split(",")[0].toUpperCase().replace(/[.#]/g," ").replace(/\b(UNIT|APT|STE)\b.*$/,"").replace(/\s+/g," ").trim().split(" ").map(w=>SUF[w]||w).join(" ");
+const tc = t => (t||"").toLowerCase().replace(/\b([a-z])/g,c=>c.toUpperCase()).replace(/\b(Sw|Se|Nw|Ne|Us)\b/g,m=>m.toUpperCase()).replace(/(\d)(St|Nd|Rd|Th)\b/g,(m,a,b)=>a+b.toLowerCase());
+const TYPE_CHIP={"Single family":"Single family","Condo":"Condo / villa","Villa":"Condo / villa","Townhouse":"Townhouse","Multifamily":"Duplex / multifamily","Manufactured":"Manufactured"};
+const facts = h => [h.ptype && (h.ptype==="Multifamily" && h.units>1 ? `Multifamily · ${h.units} units` : h.ptype), (h.beds||h.baths) && `${h.beds??"?"} bd / ${h.baths??"?"} ba`, h.sqft && `${h.sqft.toLocaleString()} sq ft`, h.year && `built ${h.year}`].filter(Boolean).join(" · ");
+const acIn=f.address, acList=document.getElementById("acList"), found=document.getElementById("found");
+let acHits=[], acSel=-1, acT=null, acSeq=0, MATCH=null;
+function acRender(){ acList.hidden=!acHits.length; acList.innerHTML=acHits.map((h,i)=>`<li role="option" data-i="${i}" aria-selected="${i===acSel}"><b>${tc(h.address)}${h.unit?" #"+h.unit:""}</b>, ${tc(h.city)} ${h.zip}<small>${facts(h)||"&nbsp;"}</small></li>`).join(""); }
+async function acFetch(){ const q=normQ(acIn.value); if(!sb || q.length<5 || !/^\d/.test(q)){ acHits=[]; return acRender(); }
+  const my=++acSeq; const {data}=await sb.rpc("lookup_address",{q}); if(my!==acSeq) return; acHits=(data||[]).slice(0,8); acSel=-1; acRender(); }
+acIn.addEventListener("input",()=>{ MATCH=null; found.hidden=true; clearTimeout(acT); acT=setTimeout(acFetch,220); });
+acIn.addEventListener("keydown",e=>{ if(acList.hidden) return;
+  if(e.key==="ArrowDown"||e.key==="ArrowUp"){ e.preventDefault(); acSel=(acSel+(e.key==="ArrowDown"?1:-1)+acHits.length)%acHits.length; acRender(); }
+  else if(e.key==="Enter" && acSel>=0){ e.preventDefault(); acPick(acHits[acSel]); }
+  else if(e.key==="Escape"){ acHits=[]; acRender(); } });
+acList.addEventListener("mousedown",e=>{ const li=e.target.closest("li"); if(li){ e.preventDefault(); acPick(acHits[+li.dataset.i]); } });
+acIn.addEventListener("blur",()=>setTimeout(()=>{ acHits=[]; acRender(); },150));
+function setIf(el,v){ if(v!=null && v!=="" && !el.value) el.value=v; }
+function acPick(h){
+  MATCH=h; acHits=[]; acRender();
+  acIn.value=`${tc(h.address)}${h.unit?" #"+h.unit:""}, ${tc(h.city)}, FL ${h.zip}`;
+  const chip=TYPE_CHIP[h.ptype]; if(chip){ const r=f.querySelector(`input[name=property_type][value="${chip}"]`); if(r) r.checked=true; }
+  if(h.community) setIf(f.community, h.community);
+  ["beds","baths","sqft"].forEach(k=>{ f[k].value = h[k]!=null ? String(h[k]) : f[k].value; }); if(h.year) f.year_built.value=h.year;
+  const fx=facts(h);
+  found.innerHTML = fx ? `<b>We found your home:</b> ${fx}${h.community?" · "+tc(h.community):""}<small>From ${h.src.includes("mls")?"MLS and ":""}county property records. If anything is off, fix it on the next step.</small>` : `<b>Address found.</b><small>Add the home details on the next step.</small>`;
+  found.hidden=false;
+}
+const q = new URLSearchParams(location.search).get("address"); if(q){ f.address.value = q; acFetch(); }
 </script>
 <script src="/js/app-back.js"></script>
 </body>
