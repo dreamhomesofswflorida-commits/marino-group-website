@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Marino Group</title>
-<meta name="description" content="The Marino Group app: search Southwest Florida homes, build a new home, get your home's value and reach our team.">
+<title>Marino Homes</title>
+<meta name="description" content="The Marino Homes app by Marino Group: search Southwest Florida homes, build a new home, get your home's value and reach our team.">
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="theme-color" content="#141312">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Marino Group">
+<meta name="apple-mobile-web-app-title" content="Marino Homes">
 <link rel="apple-touch-icon" href="/img/app/icon-192.png">
 <link rel="icon" href="/img/marino_logo_transparent_gold.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -148,7 +148,7 @@ input,select,textarea{width:100%;background:var(--surface);border:1px solid var(
     <text x="120" y="300" font-family="Poppins, Jost, sans-serif" font-weight="500" font-size="176" letter-spacing="42" fill="#D8C3A0">MARIN</text>
     <circle cx="985" cy="238" r="66" fill="none" stroke="#F6D9A0" stroke-width="40" opacity=".18"/>
     <circle cx="985" cy="238" r="66" fill="none" stroke="#FFF3DC" stroke-width="13"/>
-    <text x="600" y="420" text-anchor="middle" font-family="Poppins, Jost, sans-serif" font-weight="500" font-size="64" letter-spacing="26" fill="#D8C3A0">GROUP</text>
+    <text x="600" y="420" text-anchor="middle" font-family="Poppins, Jost, sans-serif" font-weight="500" font-size="64" letter-spacing="26" fill="#D8C3A0">HOMES</text>
   </symbol>
   <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
   <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></symbol>
@@ -167,7 +167,7 @@ input,select,textarea{width:100%;background:var(--surface);border:1px solid var(
 </svg>
 
 <header class="bar">
-  <svg viewBox="0 0 1200 520" role="img" aria-label="Marino Group"><use href="#mg-logo"/></svg>
+  <svg viewBox="0 0 1200 520" role="img" aria-label="Marino Homes"><use href="#mg-logo"/></svg>
   <a href="tel:+12397762393">(239) 776-2393</a>
 </header>
 
@@ -211,7 +211,7 @@ input,select,textarea{width:100%;background:var(--surface);border:1px solid var(
       <a class="pill" href="tel:+12397762393" aria-label="Call"><svg class="ico"><use href="#i-phone"/></svg></a>
       <a class="pill" href="sms:+12397762393" aria-label="Text"><svg class="ico"><use href="#i-chat"/></svg></a>
     </div>
-    <div class="install" id="install" hidden><span>Add Marino Group to your home screen</span><button id="installBtn">Install</button></div>
+    <div class="install" id="install" hidden><span>Add Marino Homes to your home screen</span><button id="installBtn">Install</button></div>
     <div class="install" id="iosTip" hidden><span>To install: tap Share, then <b>Add to Home Screen</b>.</span></div>
   </section>
 
@@ -363,7 +363,7 @@ function topic(){ const v=$("#c-topic").value==="value"; $("#c-addr-l").hidden=!
   $("#c-title").textContent=v?"What's your home worth?":"How can we help?"; }
 $("#c-topic").addEventListener("change",topic); topic();
 $("#cf").addEventListener("submit",async e=>{e.preventDefault(); const btn=e.target.querySelector("button"), ok=$("#c-ok"); btn.disabled=true;
-  const t=$("#c-topic"), data={_subject:(t.value==="value"?"Home value request":"New message")+" – Marino Group app",_template:"table",
+  const t=$("#c-topic"), data={_subject:(t.value==="value"?"Home value request":"New message")+" – Marino Homes app",_template:"table",
     "I want to":t.options[t.selectedIndex].text,Address:$("#c-addr").value,Name:$("#c-name").value,Phone:$("#c-phone").value,Email:$("#c-email").value,Message:$("#c-msg").value};
   try{ const r=await fetch("https://formsubmit.co/ajax/dhomeswfl@gmail.com",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify(data)});
     if(!r.ok) throw 0; e.target.reset(); topic(); ok.textContent="Thanks! A Marino Group agent will contact you shortly."; }
