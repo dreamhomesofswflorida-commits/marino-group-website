@@ -100,6 +100,44 @@ input,select,textarea{width:100%;background:var(--surface);border:1px solid var(
 .sh-card{animation:mg-up .5s cubic-bezier(.16,1,.3,1) both}.sh-card:nth-child(2){animation-delay:.08s}.sh-card:nth-child(3){animation-delay:.16s}
 .act,.card,.sh-card,.pill,.btn{transition:transform .12s cubic-bezier(.16,1,.3,1)}.act:active,.card:active,.sh-card:active,.pill:active,.btn:active{transform:scale(.97)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* Nov 28 2026 Commercial section (Refero: Airbnb filter sheet — segmented control, type tiles, sticky result bar) */
+.cm-hero{position:relative;border-radius:8px;overflow:hidden;background:var(--ink);color:var(--on-ink);padding:20px 18px;display:grid;gap:10px;cursor:pointer;text-align:left;border:0;width:100%}
+.cm-hero::before{content:"";position:absolute;inset:-40% -20% auto auto;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(216,195,160,.28),rgba(216,195,160,0) 70%);animation:cm-glow 6s ease-in-out infinite alternate}
+@keyframes cm-glow{from{transform:translate(0,0)}to{transform:translate(-30px,20px)}}
+.cm-hero .eyebrow{color:var(--gold-soft)}
+.cm-hero b{font:300 24px/1.15 var(--display);letter-spacing:-.02em}
+.cm-hero span.s{font-size:14px;color:#bdb3a3}
+.cm-hero .go{position:absolute;right:16px;bottom:16px;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--gold-soft);color:#1e1d1c;font-size:20px;transition:transform .3s cubic-bezier(.16,1,.3,1)}
+.cm-hero:hover .go{transform:translateX(4px)}
+.cm-skyline{display:flex;align-items:flex-end;gap:5px;height:34px;opacity:.9}
+.cm-skyline i{display:block;width:12px;background:linear-gradient(var(--gold-soft),rgba(216,195,160,.25));border-radius:2px 2px 0 0;transform-origin:bottom;animation:cm-rise .9s cubic-bezier(.16,1,.3,1) both}
+@keyframes cm-rise{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.seg{position:relative;display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:12px;padding:4px;background:var(--surface)}
+.seg button{position:relative;z-index:1;border:0;background:none;padding:11px 0;font-weight:600;cursor:pointer;color:var(--muted);transition:color .25s}
+.seg button.on{color:var(--fg)}
+.seg .thumb{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border:1.5px solid var(--fg);border-radius:9px;transition:transform .35s cubic-bezier(.16,1,.3,1)}
+.seg[data-v="lease"] .thumb{transform:translateX(100%)}
+.cm-sec{display:grid;gap:12px}
+.cm-sec h2{font:500 18px var(--display)}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tile{display:grid;justify-items:center;gap:8px;padding:16px 6px;border:1px solid var(--line);border-radius:12px;background:var(--surface);cursor:pointer;font-size:14px;transition:transform .15s cubic-bezier(.16,1,.3,1),border-color .2s,box-shadow .2s}
+.tile svg{width:30px;height:30px;stroke:var(--fg);fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s,transform .35s cubic-bezier(.16,1,.3,1)}
+.tile.on{border:2px solid var(--fg);padding:15px 5px;font-weight:600}
+.tile.on svg{stroke:var(--gold);transform:translateY(-2px) scale(1.06)}
+.tile:active{transform:scale(.95)}
+.cm-results{display:grid;gap:14px}
+.cm-empty{display:grid;gap:8px;padding:18px;border-radius:12px;background:var(--sunk)}
+.cm-empty b{font:500 17px var(--display)}
+.cm-steps{display:grid;gap:10px;counter-reset:st}
+.cm-steps div{display:flex;gap:12px;align-items:flex-start;font-size:14px}
+.cm-steps div::before{counter-increment:st;content:counter(st);flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--on-ink);font:500 13px var(--display)}
+.cm-bar{position:fixed;left:0;right:0;bottom:calc(62px + env(safe-area-inset-bottom));z-index:9;background:var(--surface);border-top:1px solid var(--line);padding:12px 18px;display:flex;align-items:center;gap:12px;transform:translateY(110%);transition:transform .4s cubic-bezier(.16,1,.3,1)}
+.cm-bar.show{transform:none}
+.cm-bar .txt{flex:1;font-size:14px;line-height:1.3}.cm-bar .txt b{display:block;font-size:15px}
+.cm-bar .btn{padding:12px 18px;white-space:nowrap}
+#v-commercial{padding-bottom:70px}
+.cm-own{display:flex;gap:14px;align-items:center}
 </style>
 <script>try{if(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform()){sessionStorage.setItem("mgApp","1");document.documentElement.classList.add("in-app")}}catch(e){}</script>
 <style>.in-app a[href^="/portal"],.in-app a[href^="/showings"],.in-app a[href^="/course"],.in-app #install,.in-app #iosTip{display:none!important}</style>
@@ -120,6 +158,12 @@ input,select,textarea{width:100%;background:var(--surface);border:1px solid var(
   <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.3"/></symbol>
   <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3"/></symbol>
   <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A17 17 0 0 1 3 5a2 2 0 0 1 2-2z"/></symbol>
+  <symbol id="c-office" viewBox="0 0 32 32"><path d="M6 28V5h14v23M20 12h6v16M3 28h26M10 9h2M14 9h2M10 13h2M14 13h2M10 17h2M14 17h2M11 28v-5h4v5M23 16h1M23 20h1"/></symbol>
+  <symbol id="c-retail" viewBox="0 0 32 32"><path d="M4 12l2-6h20l2 6M4 12c0 2 1.6 3 3 3s3-1 3-3c0 2 1.6 3 3 3s3-1 3-3c0 2 1.6 3 3 3s3-1 3-3c0 2 1.6 3 3 3s3-1 3-3M6 15v13h20V15M13 28v-7h6v7"/></symbol>
+  <symbol id="c-industrial" viewBox="0 0 32 32"><path d="M3 28V14l7 4v-4l7 4v-4l7 4V6h4v22zM3 28h26M8 23h3M15 23h3M22 23h3"/></symbol>
+  <symbol id="c-land" viewBox="0 0 32 32"><path d="M3 26l8-11 5 6 4-4 9 9zM3 26h26M21 5v8M21 5l6 2-6 2"/></symbol>
+  <symbol id="c-multi" viewBox="0 0 32 32"><path d="M4 28V10l8-4v22M12 28V6M12 12h16v16M2 28h28M7 14h2M7 19h2M16 16h2M22 16h2M16 21h2M22 21h2"/></symbol>
+  <symbol id="c-mixed" viewBox="0 0 32 32"><path d="M5 28V14h22v14M3 28h26M5 14l3-5h16l3 5M8 9V4h16v5M10 19h3M19 19h3M14 28v-4h4v4"/></symbol>
 </svg>
 
 <header class="bar">
@@ -143,6 +187,13 @@ input,select,textarea{width:100%;background:var(--surface);border:1px solid var(
       <a class="act" href="/rentals/"><svg class="ico"><use href="#i-key"/></svg><div><b>Rentals</b><br><span>Homes for rent</span></div></a>
       <a class="act" href="/reviews/"><svg class="ico"><use href="#i-chat"/></svg><div><b>Reviews</b><br><span>What clients say</span></div></a>
     </div>
+    <button class="cm-hero" data-go="commercial" aria-label="Commercial real estate">
+      <div class="eyebrow">New · Commercial</div>
+      <b>Space for your business.</b>
+      <span class="s">Office · Retail · Industrial · Land · Buy or lease</span>
+      <span class="cm-skyline" aria-hidden="true"><i style="height:40%"></i><i style="height:75%;animation-delay:.08s"></i><i style="height:55%;animation-delay:.16s"></i><i style="height:100%;animation-delay:.24s"></i><i style="height:65%;animation-delay:.32s"></i><i style="height:85%;animation-delay:.4s"></i><i style="height:45%;animation-delay:.48s"></i></span>
+      <span class="go" aria-hidden="true">›</span>
+    </button>
     <div class="shelf-wrap" id="shelfWrap" hidden>
       <div class="shelf-head"><div class="eyebrow">Homes we're selling</div><a href="/#listings" class="small">See all</a></div>
       <div class="shelf" id="shelf"></div>
@@ -177,6 +228,36 @@ input,select,textarea{width:100%;background:var(--surface);border:1px solid var(
       <button class="btn dark" type="submit">Show homes</button>
     </form>
     <a class="btn line" href="/areas/">Read the area guides</a>
+    <button class="btn line" data-go="commercial">Looking for commercial space?</button>
+  </section>
+
+  <!-- COMMERCIAL -->
+  <section class="view" id="v-commercial" hidden>
+    <div><div class="eyebrow">Commercial</div><h1 class="title" style="margin-top:6px">Space for your business.</h1>
+      <p class="muted small" style="margin-top:6px">Tell us what you need. Our agents search every commercial listing in Southwest Florida for you, including spaces not yet advertised.</p></div>
+    <div class="seg" id="cmSeg" data-v="buy" role="tablist"><span class="thumb"></span><button class="on" data-v="buy" role="tab">Buy</button><button data-v="lease" role="tab">Lease</button></div>
+    <div class="cm-sec"><h2>Type of property</h2><div class="tiles" id="cmTiles"></div></div>
+    <div class="cm-sec"><h2>Where</h2><div class="chips" style="flex-wrap:wrap" id="cmAreas"></div></div>
+    <div class="cm-sec"><h2>Size and budget</h2>
+      <div class="row"><label class="f">Size<select id="cmSize"><option value="">Any size</option><option>Under 1,500 sq ft</option><option>1,500 – 5,000 sq ft</option><option>5,000 – 15,000 sq ft</option><option>15,000+ sq ft</option><option>Land: under 1 acre</option><option>Land: 1 – 5 acres</option><option>Land: 5+ acres</option></select></label>
+      <label class="f" id="cmBudgetL">Budget<select id="cmBudget"></select></label></div></div>
+    <div class="cm-sec" id="cmListWrap" hidden><h2 id="cmListH">Our listings</h2><div class="shelf" id="cmList"></div></div>
+    <div class="cm-empty" id="cmEmpty">
+      <b>We'll find it for you.</b>
+      <div class="cm-steps"><div>Send your request below. It takes 30 seconds.</div><div>An agent searches the full MLS and our network, on and off market.</div><div>You get a short list of matching spaces, usually within one business day.</div></div>
+    </div>
+    <form id="cmf" class="card">
+      <div class="eyebrow">Your request</div>
+      <label class="f">Name<input id="cm-name" required autocomplete="name"></label>
+      <div class="row"><label class="f">Phone<input id="cm-phone" type="tel" required autocomplete="tel"></label><label class="f">Email<input id="cm-email" type="email" autocomplete="email"></label></div>
+      <label class="f">When do you need it?<select id="cm-when"><option>As soon as possible</option><option>In 1 – 3 months</option><option>In 3 – 6 months</option><option>Just exploring</option></select></label>
+      <label class="f">Anything else? (business type, parking, zoning…)<textarea id="cm-msg" rows="3"></textarea></label>
+      <button class="btn dark" type="submit">Find my space</button>
+      <p class="ok" id="cm-ok" hidden></p>
+    </form>
+    <div class="card cm-own"><svg class="ico" style="width:28px;height:28px"><use href="#c-office"/></svg><div style="flex:1"><b>Own a commercial property?</b><div class="small muted">Sell it or find a tenant with our team.</div></div><button class="pill" id="cmOwn" aria-label="Contact us about my property" style="background:none;cursor:pointer;font-size:20px;color:var(--gold)">›</button></div>
+    <p class="fine">Marino Group · Brokered by Waterfront Realty Group, Inc.</p>
+    <div class="cm-bar" id="cmBar"><div class="txt"><b id="cmSum">Buy · Any type</b><span class="muted" id="cmSum2">All Southwest Florida</span></div><button class="btn dark" id="cmGo">Find my space</button></div>
   </section>
 
   <!-- BUILD -->
@@ -198,7 +279,7 @@ input,select,textarea{width:100%;background:var(--surface);border:1px solid var(
   <section class="view" id="v-contact" hidden>
     <div><div class="eyebrow">Contact</div><h1 class="title" style="margin-top:6px" id="c-title">How can we help?</h1></div>
     <form id="cf" class="card">
-      <label class="f">I want to<select id="c-topic"><option value="value">Know my home's value</option><option>Buy a home</option><option>Sell my home</option><option>Build a new home</option><option>Rent</option><option>Something else</option></select></label>
+      <label class="f">I want to<select id="c-topic"><option value="value">Know my home's value</option><option>Buy a home</option><option>Sell my home</option><option>Build a new home</option><option>Rent</option><option>Commercial property</option><option>Something else</option></select></label>
       <label class="f" id="c-addr-l">Property address<input id="c-addr" autocomplete="street-address"></label>
       <label class="f">Name<input id="c-name" required autocomplete="name"></label>
       <div class="row"><label class="f">Phone<input id="c-phone" type="tel" required autocomplete="tel"></label><label class="f">Email<input id="c-email" type="email" autocomplete="email"></label></div>
@@ -236,6 +317,7 @@ function go(v,push=true){
   if(push) history.replaceState(null,"","#"+v);
   scrollTo(0,0);
   if(v==="build") loadModels();
+  const cb=document.getElementById("cmBar"); if(cb&&v!=="commercial") cb.classList.remove("show");
 }
 $$("[data-go]").forEach(b=>b.addEventListener("click",()=>{ if(b.dataset.topic){ $("#c-topic").value=b.dataset.topic; topic(); } go(b.dataset.go); }));
 go((location.hash.slice(1)||"home"),false);
@@ -285,6 +367,50 @@ $("#cf").addEventListener("submit",async e=>{e.preventDefault(); const btn=e.tar
     "I want to":t.options[t.selectedIndex].text,Address:$("#c-addr").value,Name:$("#c-name").value,Phone:$("#c-phone").value,Email:$("#c-email").value,Message:$("#c-msg").value};
   try{ const r=await fetch("https://formsubmit.co/ajax/dhomeswfl@gmail.com",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify(data)});
     if(!r.ok) throw 0; e.target.reset(); topic(); ok.textContent="Thanks! A Marino Group agent will contact you shortly."; }
+  catch(_){ ok.textContent="Sorry, that didn't send. Please call or text (239) 776-2393."; }
+  ok.hidden=false; btn.disabled=false; });
+
+/* commercial (Nov 28 2026) */
+const CM_TYPES=[["office","Office"],["retail","Retail"],["industrial","Industrial"],["land","Land"],["multi","Multifamily"],["mixed","Mixed use"]];
+const CM_BUDGET={buy:["Any budget","Under $500,000","$500,000 – $1M","$1M – $3M","$3M – $10M","$10M+"],lease:["Any rent","Under $2,000 / month","$2,000 – $5,000 / month","$5,000 – $10,000 / month","$10,000+ / month"]};
+const CM={mode:"buy",types:new Set(),areas:new Set()};
+$("#cmTiles").innerHTML=CM_TYPES.map(([k,n])=>`<button type="button" class="tile" data-t="${k}"><svg><use href="#c-${k}"/></svg>${n}</button>`).join("");
+$("#cmAreas").innerHTML=AREAS.filter(a=>a!=="Golden Gate Estates").map(a=>`<button type="button" class="chip" data-a="${a}">${a}</button>`).join("");
+function cmBudget(){ $("#cmBudget").innerHTML=CM_BUDGET[CM.mode].map(b=>`<option>${b}</option>`).join(""); $("#cmBudgetL").firstChild.textContent=CM.mode==="buy"?"Budget":"Monthly rent"; }
+function cmSum(){
+  const t=[...CM.types].map(k=>CM_TYPES.find(x=>x[0]===k)[1]);
+  $("#cmSum").textContent=(CM.mode==="buy"?"Buy":"Lease")+" · "+(t.length?t.join(", "):"Any type");
+  $("#cmSum2").textContent=CM.areas.size?[...CM.areas].join(", "):"All Southwest Florida";
+  cmRender();
+}
+$("#cmSeg").addEventListener("click",e=>{const b=e.target.closest("button"); if(!b) return; CM.mode=b.dataset.v; $("#cmSeg").dataset.v=CM.mode;
+  $$("#cmSeg button").forEach(x=>x.classList.toggle("on",x===b)); cmBudget(); cmSum();});
+$("#cmTiles").addEventListener("click",e=>{const b=e.target.closest(".tile"); if(!b) return; const k=b.dataset.t; CM.types.has(k)?CM.types.delete(k):CM.types.add(k); b.classList.toggle("on"); cmSum();});
+$("#cmAreas").addEventListener("click",e=>{const b=e.target.closest(".chip"); if(!b) return; const a=b.dataset.a; CM.areas.has(a)?CM.areas.delete(a):CM.areas.add(a); b.classList.toggle("on"); cmSum();});
+$("#cmGo").onclick=()=>{ $("#cmf").scrollIntoView({behavior:"smooth",block:"start"}); setTimeout(()=>$("#cm-name").focus({preventScroll:true}),450); };
+$("#cmOwn").onclick=()=>{ $("#c-topic").value="Commercial property"; topic(); $("#c-msg").value="Hi, I own a commercial property and would like to sell it or find a tenant."; go("contact"); };
+/* Our own commercial listings and land from the team's daily feed (full MLS commercial search arrives with the IDX feed) */
+let CM_LIST=[];
+const cmKind=t=>{t=(t||"").toLowerCase(); if(/lot|land|acre/.test(t)) return "land"; if(/office/.test(t)) return "office"; if(/retail|store|restaurant/.test(t)) return "retail";
+  if(/industrial|warehouse|flex/.test(t)) return "industrial"; if(/multi|duplex|triplex|quad|apartment/.test(t)) return "multi"; if(/commercial|mixed|business/.test(t)) return "mixed"; return null; };
+fetch('/listings/listings.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(j=>{ CM_LIST=(j&&j.homes||[]).map(h=>({...h,kind:cmKind(h.type)})).filter(h=>h.kind); cmRender(); }).catch(()=>{});
+function cmRender(){
+  const L=CM_LIST.filter(h=>(CM.mode==="lease")===!!h.rent && (!CM.types.size||CM.types.has(h.kind)) && (!CM.areas.size||[...CM.areas].some(a=>(h.city||"").includes(a))));
+  $("#cmListWrap").hidden=!L.length; $("#cmListH").textContent=L.length===1?"1 of our listings fits":L.length+" of our listings fit";
+  $("#cmList").innerHTML=L.map(h=>{ const f=[]; if(h.sqft)f.push(h.sqft+" sq ft"); if(h.acres)f.push(h.acres+" acres"); f.push(h.type);
+    return `<a class="sh-card" href="https://matrix.swflamls.com/Matrix/public/IDX.aspx?idx=90081c45" target="_blank" rel="noopener"><span class="sh-photo">${h.photo?`<img src="/${esc(h.photo)}" alt="" loading="lazy">`:""}<span class="sh-tag">${esc(CM_TYPES.find(x=>x[0]===h.kind)[1])}</span></span><span class="sh-price">${esc(h.price)}</span><span class="sh-facts">${esc(f.join(" · "))}</span><span class="sh-addr">${esc(h.street)}, ${esc(h.city)}</span></a>`;}).join("");
+  $("#cmEmpty").querySelector("b").textContent=L.length?"Want more options?":"We'll find it for you.";
+}
+cmBudget(); cmSum();
+const cmIO=new IntersectionObserver(es=>es.forEach(en=>$("#cmBar").classList.toggle("show",!en.isIntersecting && !$("#v-commercial").hidden)),{threshold:0});
+cmIO.observe($("#cmf"));
+$("#cmf").addEventListener("submit",async e=>{e.preventDefault(); const btn=e.target.querySelector("button"), ok=$("#cm-ok"); btn.disabled=true;
+  const t=[...CM.types].map(k=>CM_TYPES.find(x=>x[0]===k)[1]);
+  const data={_subject:"Commercial request – Marino Homes app",_template:"table","Buy or lease":CM.mode==="buy"?"Buy":"Lease","Property type":t.join(", ")||"Any",
+    "Areas":[...CM.areas].join(", ")||"All Southwest Florida","Size":$("#cmSize").value||"Any","Budget":$("#cmBudget").value,"When":$("#cm-when").value,
+    Name:$("#cm-name").value,Phone:$("#cm-phone").value,Email:$("#cm-email").value,Message:$("#cm-msg").value};
+  try{ const r=await fetch("https://formsubmit.co/ajax/dhomeswfl@gmail.com",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify(data)});
+    if(!r.ok) throw 0; e.target.reset(); ok.textContent="Thanks! A Marino Group agent will send you matching spaces, usually within one business day."; }
   catch(_){ ok.textContent="Sorry, that didn't send. Please call or text (239) 776-2393."; }
   ok.hidden=false; btn.disabled=false; });
 
