@@ -120,7 +120,7 @@ function demoData(){
     team_members:[{email:"dhomeswfl@gmail.com",full_name:"Jorge Marino",phone:"(239) 776-2393"}],
     deals:[
       {id:d1,address:"2728 Randall Blvd, Naples, FL 34120",side:"seller",stage:"Inspection",client_name:"Sample Seller",client_email:"client@example.com",agent_email:"dhomeswfl@gmail.com",price:625000,contract_date:addDays(t,-12),closing_date:addDays(t,23)},
-      {id:d2,address:"298 Castaways St, Marco Island, FL 34145",side:"seller",stage:"Showing / Listing Prep",client_name:"Sample Owner",client_email:"owner@example.com",agent_email:"dhomeswfl@gmail.com",price:3350000},
+      {id:d2,address:"298 Castaways St, Marco Island, FL 34145",side:"seller",stage:"Showing / Listing Prep",client_name:"Sample Owner",client_email:"owner@example.com",agent_email:"dhomeswfl@gmail.com",price:3350000,list_price:3350000,list_date:addDays(t,-18),listing_status:"Active",mls_number:"226000000",showings_open:true,showing_approval:"seller",showing_notes:"Lockbox on the front door, code 1234. Please remove shoes."},
       {id:d3,address:"5622 Deauville Ct, Cape Coral, FL",side:"buyer",stage:"Financing & Appraisal",client_name:"Sample Buyer",client_email:"buyer@example.com",agent_email:"dhomeswfl@gmail.com",price:410000,contract_date:addDays(t,-24),closing_date:addDays(t,11)},
       {id:d4,address:"Golden Gate Estates lot, Naples",side:"buyer",stage:"Lead",client_name:"New Lead",client_email:"",agent_email:"dhomeswfl@gmail.com",price:null}
     ],
@@ -138,6 +138,21 @@ function demoData(){
       {id:uid(),deal_id:d1,name:"Executed contract.pdf",path:"",client_visible:true,uploaded_at:addDays(t,-12)},
       {id:uid(),deal_id:d1,name:"Inspection report.pdf",path:"",client_visible:true,uploaded_at:addDays(t,-2)},
       {id:uid(),deal_id:d3,name:"Pre-approval letter.pdf",path:"",client_visible:true,uploaded_at:addDays(t,-25)}
+    ],
+    leads:[
+      {id:uid(),created_at:new Date(Date.now()-3*36e5).toISOString(),name:"Sample Seller Lead",email:"lead@example.com",phone:"(239) 555-0142",address:"5221 Sholtz St, Naples, FL 34113",property_type:"Duplex / multifamily",beds:4,baths:2,sqft:1272,year_built:1973,condition:"Updated",timeline:"0-3 months",reason:"Both units rented",language:"Español",status:"New"},
+      {id:uid(),created_at:new Date(Date.now()-50*36e5).toISOString(),name:"Curious Owner",email:"owner2@example.com",phone:"",address:"4410 Sample Dr, Naples, FL 34112",property_type:"Single family",beds:3,baths:2,sqft:1650,year_built:1995,condition:"Original but well kept",timeline:"Just curious",language:"English",status:"CMA sent",est_low:510000,est_high:545000}
+    ],
+    showings:[
+      {id:uid(),deal_id:d2,start_at:addDays(t,1)+"T14:00:00-05:00",minutes:30,status:"Requested",agent_name:"Ana Buyer-Agent",agent_phone:"(239) 555-0110",agent_email:"ana@example.com",brokerage:"Sample Realty",buyer_name:"The Smiths"},
+      {id:uid(),deal_id:d2,start_at:new Date(Date.now()-48*36e5).toISOString(),minutes:30,status:"Confirmed",agent_name:"Luis Agent",agent_phone:"(239) 555-0111",brokerage:"Gulf Coast Homes",fb_interest:4,fb_price:"About right",fb_comment:"Buyers loved the view and the kitchen. Thinking about a second visit.",fb_at:new Date(Date.now()-40*36e5).toISOString()},
+      {id:uid(),deal_id:d2,start_at:new Date(Date.now()-5*864e5).toISOString(),minutes:45,status:"Confirmed",agent_name:"Maria Agent",agent_phone:"(239) 555-0112",brokerage:"Naples Premier",fb_interest:2,fb_price:"Too high",fb_comment:"Nice home, buyers felt the price is above recent sales."}
+    ],
+    offers:[
+      {id:uid(),deal_id:d1,received_at:addDays(t,-14),buyer_agent:"Ana Buyer-Agent, Sample Realty",price:615000,financing:"Conventional, 20% down",escrow_deposit:20000,closing_date:addDays(t,23),status:"Accepted"}
+    ],
+    checklist:[
+      ...["Listing agreement","Seller's property disclosure","Executed purchase contract","Escrow deposit receipt","Inspection report","Repair addendum"].map((name,i)=>({id:uid(),deal_id:d1,name,status:i<5?"Received":"Sent for signature",who:i===5?"client":"agent",sort:i,sign_url:i===5?"https://example.com/sign":null,due_date:i===5?addDays(t,1):null}))
     ],
     homes:[
       {id:uid(),client_name:"Sample Homeowner",client_email:"home@example.com",address:"1450 Sample Way, Naples, FL 34119",purchase_price:540000,purchase_date:"2022-06-15",current_value:655000,value_updated:addDays(t,-20),insurance_renewal:addDays(t,48),agent_email:"dhomeswfl@gmail.com",notes:""}
@@ -182,7 +197,24 @@ const db = {
 const S = {user:null, role:null, tab:null, data:null};
 async function loadAll(){
   const [team,deals,milestones,tasks,documents,homes] = await Promise.all(["team_members","deals","milestones","tasks","documents","homes"].map(t=>db.all(t)));
-  S.data = {team,deals,milestones,tasks,documents,homes};
+  // Upgrade-2 tables (schema-v2.sql). If not installed yet, they load as empty.
+  const opt = t => db.all(t).catch(()=>[]);
+  const [leads,showings,offers,checklist] = await Promise.all(["leads","showings","offers","checklist"].map(opt));
+  S.data = {team,deals,milestones,tasks,documents,homes,leads,showings,offers,checklist};
+}
+const showsOf = id => S.data.showings.filter(s=>s.deal_id===id).sort((a,b)=>String(b.start_at).localeCompare(String(a.start_at)));
+const offersOf = id => S.data.offers.filter(o=>o.deal_id===id).sort((a,b)=>String(b.received_at).localeCompare(String(a.received_at)));
+const checkOf = id => S.data.checklist.filter(c=>c.deal_id===id).sort((a,b)=>(a.sort||0)-(b.sort||0));
+const dt = d => d ? new Date(d).toLocaleString("en-US",{weekday:"short",month:"short",day:"numeric",hour:"numeric",minute:"2-digit",timeZone:"America/New_York"}) : "—";
+const dom = d => d.list_date ? Math.max(0,Math.floor((Date.now()-new Date(d.list_date+"T12:00:00"))/864e5)) : null;
+const smsLink = (phone, body) => `sms:${String(phone||"").replace(/[^\d+]/g,"")}${/iPhone|iPad|Mac/.test(navigator.userAgent)?"&":"?"}body=${encodeURIComponent(body)}`;
+const BOOK_URL = id => `${location.origin}/book/?l=${id}`;
+const LEAD_STATUS = ["New","CMA sent","Appointment","Listed","Not now","Lost"];
+const CHECK_STATUS = ["Needed","Sent for signature","Signed","Received","Not needed"];
+const SELLER_CHECKLIST = ["Listing agreement","Seller's property disclosure","Lead-based paint disclosure (pre-1978)","HOA / condo documents","Survey and elevation certificate","Executed purchase contract","Escrow deposit receipt","Inspection report","Repair addendum","Closing statement"];
+const BUYER_CHECKLIST = ["Buyer brokerage agreement","Pre-approval or proof of funds","Executed purchase contract","Escrow deposit receipt","Inspection report","Appraisal","Insurance binder","Final walk-through form","Closing statement"];
+async function setShowing(s, status){
+  try{ await db.update("showings",s.id,{status}); s.status=status; render(); if(S.openDeal) openDeal(S.openDeal); toast(`Showing ${status.toLowerCase()}`); }catch(e){ toast(e.message); }
 }
 const msOf = id => S.data.milestones.filter(m=>m.deal_id===id).sort((a,b)=>a.sort-b.sort);
 const tasksOf = id => S.data.tasks.filter(t=>t.deal_id===id).sort((a,b)=>(a.done-b.done)||String(a.due_date).localeCompare(String(b.due_date)));
@@ -230,6 +262,7 @@ function renderLogin(){
       <div class="demo-pick">
         <button class="btn" data-demo="agent">Agent / team view</button>
         <button class="btn" data-demo="client">Client view (seller under contract)</button>
+        <button class="btn" data-demo="seller">Seller view (home for sale)</button>
         <button class="btn" data-demo="home">Homeowner dashboard</button>
       </div>`}
     </div>
@@ -246,7 +279,7 @@ function renderLogin(){
   } else {
     document.querySelectorAll("[data-demo]").forEach(b=>b.onclick=()=>{
       const r = b.dataset.demo;
-      enter(r==="agent" ? "dhomeswfl@gmail.com" : r==="client" ? "client@example.com" : "home@example.com", r==="agent"?"agent":"client");
+      enter(r==="agent" ? "dhomeswfl@gmail.com" : r==="client" ? "client@example.com" : r==="seller" ? "owner@example.com" : "home@example.com", r==="agent"?"agent":"client");
     });
   }
 }
@@ -258,7 +291,9 @@ function render(){
 }
 
 function renderAgent(){
-  const tabs = [["board","Transaction board"],["tasks","My tasks"],["homes","Homeowners"],["new","+ New deal"]];
+  const newLeads = S.data.leads.filter(l=>l.status==="New").length;
+  const pendingShows = S.data.showings.filter(s=>s.status==="Requested").length;
+  const tabs = [["board","Transaction board"],["leads",`Seller leads${newLeads?` (${newLeads})`:""}`],["showings",`Showings${pendingShows?` (${pendingShows})`:""}`],["tasks","My tasks"],["homes","Homeowners"],["new","+ New deal"]];
   const active = S.data.deals.filter(d=>d.stage!=="Closed");
   const pending = active.filter(d=>STAGES.indexOf(d.stage)>=2);
   const t = today();
@@ -277,6 +312,39 @@ function renderAgent(){
       const ds = S.data.deals.filter(d=>d.stage===st);
       return `<div class="col"><h3>${st}<span class="muted">${ds.length}</span></h3>${ds.map(dealCard).join("")}</div>`;
     }).join("")}</div>`;
+  }
+  if(S.tab==="leads"){
+    const rows = S.data.leads.slice().sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at)));
+    body = `<div class="card"><div class="row" style="justify-content:space-between;flex-wrap:wrap"><h2 style="font-size:22px">Seller leads</h2>
+      <span class="small muted">From the “What's my home worth?” page: <a href="/sell/" target="_blank">${location.host}/sell</a></span></div>
+      <p class="small muted">Promise on the page: a home value report within 24 hours. Mark each lead as you go.</p>
+      <table><tr><th>Received</th><th>Owner</th><th>Property</th><th>Timeline</th><th>Status</th><th></th></tr>
+      ${rows.map(l=>{const late = l.status==="New" && (Date.now()-new Date(l.created_at))>24*36e5; return `<tr>
+        <td class="small ${late?"late":""}">${dt(l.created_at)}${late?"<br>Over 24 hours":""}</td>
+        <td>${esc(l.name)}<br><span class="small muted">${esc(l.phone||"")} ${esc(l.email||"")}${l.language&&l.language!=="English"?` · ${esc(l.language)}`:""}</span></td>
+        <td>${esc(l.address)}<br><span class="small muted">${[l.property_type,l.beds&&`${l.beds} bd`,l.baths&&`${l.baths} ba`,l.sqft&&`${Number(l.sqft).toLocaleString()} sq ft`,l.year_built&&`built ${l.year_built}`,l.condition].filter(Boolean).map(esc).join(" · ")}</span>${l.reason?`<br><span class="small">“${esc(l.reason)}”</span>`:""}</td>
+        <td class="small">${esc(l.timeline||"")}</td>
+        <td><select data-leadstatus="${l.id}" style="min-width:130px">${LEAD_STATUS.map(x=>`<option ${x===l.status?"selected":""}>${x}</option>`).join("")}</select>
+          ${l.est_low?`<div class="small muted">${money(l.est_low)}–${money(l.est_high)}</div>`:""}${l.cma_url?`<div class="small"><a href="${esc(l.cma_url)}" target="_blank">CMA</a></div>`:""}</td>
+        <td style="white-space:nowrap">${l.phone?`<a class="btn sm" href="tel:${esc(l.phone.replace(/\D/g,""))}">Call</a> <a class="btn sm" href="${smsLink(l.phone,`Hi ${l.name.split(" ")[0]}, this is ${agentOf(S.user).full_name} with Marino Group. I'm preparing your home value report for ${l.address.split(",")[0]}. Any upgrades I should know about?`)}">Text</a>`:""}
+          <button class="btn sm" data-leadedit="${l.id}">Value</button></td></tr>`}).join("") || "<tr><td colspan=6 class='muted'>No leads yet.</td></tr>"}
+      </table></div>`;
+  }
+  if(S.tab==="showings"){
+    const up = S.data.showings.filter(s=>new Date(s.start_at)>new Date(Date.now()-2*36e5) && s.status!=="Cancelled").sort((a,b)=>String(a.start_at).localeCompare(String(b.start_at)));
+    const fb = S.data.showings.filter(s=>s.fb_at).sort((a,b)=>String(b.fb_at).localeCompare(String(a.fb_at))).slice(0,15);
+    const addr = id => (S.data.deals.find(d=>d.id===id)||{}).address||"";
+    body = `<div class="card"><div class="row" style="justify-content:space-between;flex-wrap:wrap"><h2 style="font-size:22px">Upcoming showings</h2>
+      <span class="small muted">Agents book at <a href="/book/" target="_blank">${location.host}/book</a></span></div>
+      <table><tr><th>When</th><th>Home</th><th>Showing agent</th><th>Status</th><th></th></tr>
+      ${up.map(s=>`<tr><td>${dt(s.start_at)}<br><span class="small muted">${s.minutes} min</span></td><td>${esc(addr(s.deal_id).split(",")[0])}</td>
+        <td>${esc(s.agent_name)}<br><span class="small muted">${esc(s.brokerage||"")} ${esc(s.agent_phone||"")}${s.license_no?` · Lic ${esc(s.license_no)}`:""}</span>${s.note?`<br><span class="small">“${esc(s.note)}”</span>`:""}</td>
+        <td><span class="tag">${s.status}</span></td>
+        <td style="white-space:nowrap">${s.status==="Requested"?`<button class="btn sm gold" data-showok="${s.id}">Confirm</button> <button class="btn sm" data-showno="${s.id}">Decline</button>`:""}
+          ${s.agent_phone?` <a class="btn sm" href="${smsLink(s.agent_phone,`Hi ${s.agent_name.split(" ")[0]}, your showing at ${addr(s.deal_id).split(",")[0]} on ${dt(s.start_at)} is ${s.status==="Requested"?"received":s.status.toLowerCase()}. Details and access: ${location.origin}/book/?t=${s.token||""} — ${agentOf(S.user).full_name}, Marino Group`)}">Text agent</a>`:""}</td></tr>`).join("") || "<tr><td colspan=5 class='muted'>No upcoming showings.</td></tr>"}
+      </table></div>
+      <div class="card" style="margin-top:20px"><h2 style="font-size:22px">Latest feedback</h2>
+      <ul class="list">${fb.map(s=>`<li style="align-items:start"><span class="grow"><b style="font-weight:600">${esc(addr(s.deal_id).split(",")[0])}</b> · ${esc(s.agent_name)}<br><span class="small">Interest ${s.fb_interest}/5 · Price: ${esc(s.fb_price||"—")}</span>${s.fb_comment?`<br><span class="small muted">“${esc(s.fb_comment)}”</span>`:""}</span><span class="small muted">${dt(s.start_at)}</span></li>`).join("") || "<li class='muted small'>No feedback yet. Agents get a feedback form on their confirmation link after the showing.</li>"}</ul></div>`;
   }
   if(S.tab==="tasks"){
     const rows = S.data.tasks.filter(x=>!x.done).sort((a,b)=>String(a.due_date).localeCompare(String(b.due_date)));
@@ -312,6 +380,17 @@ function renderAgent(){
   if($("#dealForm")) $("#dealForm").onsubmit = createDeal;
   if($("#addHome")) $("#addHome").onclick = ()=>homeForm();
   document.querySelectorAll("[data-edithome]").forEach(b=>b.onclick=()=>homeForm(S.data.homes.find(h=>h.id===b.dataset.edithome)));
+  document.querySelectorAll("[data-leadstatus]").forEach(c=>c.onchange=async()=>{ const l=S.data.leads.find(x=>x.id===c.dataset.leadstatus);
+    try{ await db.update("leads",l.id,{status:c.value}); l.status=c.value; render(); toast("Lead updated"); }catch(e){ toast(e.message); } });
+  document.querySelectorAll("[data-leadedit]").forEach(b=>b.onclick=async()=>{ const l=S.data.leads.find(x=>x.id===b.dataset.leadedit);
+    const lo = prompt("Value range LOW (numbers only)", l.est_low||""); if(lo===null) return;
+    const hi = prompt("Value range HIGH", l.est_high||""); if(hi===null) return;
+    const url = prompt("Link to the CMA (optional)", l.cma_url||""); if(url===null) return;
+    const patch = {est_low:lo?+lo.replace(/\D/g,""):null, est_high:hi?+hi.replace(/\D/g,""):null, cma_url:url.trim()||null};
+    if(l.status==="New" && (patch.est_low||patch.cma_url)) patch.status="CMA sent";
+    try{ await db.update("leads",l.id,patch); Object.assign(l,patch); render(); toast("Saved"); }catch(e){ toast(e.message); } });
+  document.querySelectorAll("[data-showok]").forEach(b=>b.onclick=()=>setShowing(S.data.showings.find(s=>s.id===b.dataset.showok),"Confirmed"));
+  document.querySelectorAll("[data-showno]").forEach(b=>b.onclick=()=>setShowing(S.data.showings.find(s=>s.id===b.dataset.showno),"Declined"));
 }
 
 function dealCard(d){
@@ -378,6 +457,38 @@ function openDeal(id){
     <h3 style="margin-top:24px;font-size:18px">Documents</h3>
     <ul class="list">${docsOf(id).map(x=>`<li><span class="grow">${esc(x.name)}${x.client_visible?"":" <span class='tag'>team only</span>"}</span><span class="small muted">${fmt(String(x.uploaded_at).slice(0,10))}</span>${x.path?`<button class="btn sm" data-open="${esc(x.path)}">Open</button>`:""}</li>`).join("") || "<li class='muted small'>No documents.</li>"}</ul>
     <form id="docAdd" class="row" style="flex-wrap:wrap"><input type="file" name="file" required style="flex:2;min-width:200px"><label class="row small" style="margin:0;gap:6px;color:var(--fg)"><input type="checkbox" name="vis" checked style="width:auto"> Client can see</label><button class="btn sm">Upload</button></form>
+    <h3 style="margin-top:24px;font-size:18px">Document checklist</h3>
+    <ul class="list">${checkOf(id).map(c=>`<li><span class="grow">${esc(c.name)}${c.who==="client"?" <span class='tag'>client</span>":""}${c.sign_url?` · <a class="small" href="${esc(c.sign_url)}" target="_blank" rel="noopener">sign link</a>`:""}<br><span class="small ${c.due_date&&c.due_date<t&&!["Signed","Received","Not needed"].includes(c.status)?"late":"muted"}">${c.due_date?"Due "+fmt(c.due_date):""}</span></span>
+      <select data-chk="${c.id}" style="width:170px">${CHECK_STATUS.map(x=>`<option ${x===c.status?"selected":""}>${x}</option>`).join("")}</select><button class="btn sm" data-chkedit="${c.id}" title="Signature link and due date">Edit</button></li>`).join("") || `<li class='muted small'>No checklist yet. <button class="btn sm" id="chkTpl">Add the standard ${d.side} checklist</button></li>`}</ul>
+    <form id="chkAdd" class="row" style="flex-wrap:wrap"><input name="name" placeholder="Add a document" required style="flex:2;min-width:180px"><select name="who" style="width:110px"><option value="agent">Agent</option><option value="client">Client</option><option value="other">Other</option></select><button class="btn sm">Add</button></form>
+
+    ${d.side==="seller"?`
+    <h3 style="margin-top:28px;font-size:18px">Listing</h3>
+    <div class="row" style="flex-wrap:wrap">
+      <div style="flex:1;min-width:120px"><label>MLS #</label><input id="lsMls" value="${esc(d.mls_number??"")}"></div>
+      <div style="flex:1;min-width:120px"><label>List price</label><input id="lsPrice" type="number" value="${d.list_price??""}"></div>
+      <div style="flex:1;min-width:140px"><label>List date</label><input id="lsDate" type="date" value="${d.list_date??""}"></div>
+      <div style="flex:1;min-width:140px"><label>Status</label><select id="lsStatus">${["Coming soon","Active","Pending","Sold","Off market"].map(x=>`<option ${x===(d.listing_status||"Coming soon")?"selected":""}>${x}</option>`).join("")}</select></div>
+    </div>
+    <label>Photo link (shown on the booking page)</label><input id="lsPhoto" value="${esc(d.photo_url??"")}" placeholder="https://...">
+    <div class="row" style="flex-wrap:wrap;margin-top:6px">
+      <label class="row" style="color:var(--fg);gap:8px;margin:0"><input type="checkbox" id="lsOpen" ${d.showings_open?"checked":""} style="width:auto"> Take showing requests online</label>
+      <div style="flex:1;min-width:200px"><label>Who confirms showings?</label><select id="lsAppr">${[["seller","The seller, in their portal"],["agent","Me (the listing agent)"],["auto","Confirm automatically"]].map(([v,l])=>`<option value="${v}" ${v===(d.showing_approval||"seller")?"selected":""}>${l}</option>`).join("")}</select></div>
+    </div>
+    <label>Access instructions (only shown to confirmed agents)</label><textarea id="lsNotes" rows="2">${esc(d.showing_notes??"")}</textarea>
+    <div class="row" style="margin-top:10px;flex-wrap:wrap"><button class="btn sm gold" id="lsSave">Save listing</button><button class="btn sm" id="lsLink">Copy booking link</button></div>
+
+    <h3 style="margin-top:24px;font-size:18px">Showings (${showsOf(id).length})</h3>
+    <ul class="list">${showsOf(id).map(s=>`<li style="align-items:start"><span class="grow">${dt(s.start_at)} · ${esc(s.agent_name)} <span class="tag">${s.status}</span><br><span class="small muted">${esc(s.brokerage||"")} ${esc(s.agent_phone||"")}</span>${s.fb_at?`<br><span class="small">Feedback: ${s.fb_interest}/5 · ${esc(s.fb_price||"")}${s.fb_comment?` · “${esc(s.fb_comment)}”`:""}</span>`:""}</span>
+      ${s.status==="Requested"?`<button class="btn sm gold" data-showok="${s.id}">Confirm</button><button class="btn sm" data-showno="${s.id}">Decline</button>`:""}</li>`).join("") || "<li class='muted small'>No showings yet.</li>"}</ul>
+
+    <h3 style="margin-top:24px;font-size:18px">Offers</h3>
+    <ul class="list">${offersOf(id).map(o=>`<li style="align-items:start"><span class="grow"><b style="font-weight:600">${money(o.price)}</b> · ${esc(o.buyer_agent||"")}<br><span class="small muted">${esc(o.financing||"")}${o.escrow_deposit?` · ${money(o.escrow_deposit)} deposit`:""}${o.closing_date?` · close ${fmt(o.closing_date)}`:""}${o.contingencies?` · ${esc(o.contingencies)}`:""}</span></span>
+      <select data-offer="${o.id}" style="width:130px">${["Received","Countered","Accepted","Rejected","Withdrawn"].map(x=>`<option ${x===o.status?"selected":""}>${x}</option>`).join("")}</select></li>`).join("") || "<li class='muted small'>No offers yet.</li>"}</ul>
+    <form id="offAdd" style="display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(130px,1fr))">
+      <input name="price" type="number" placeholder="Offer price" required><input name="buyer_agent" placeholder="Buyer's agent"><input name="financing" placeholder="Cash / Conventional / FHA">
+      <input name="escrow_deposit" type="number" placeholder="Escrow deposit"><input name="closing_date" type="date" title="Closing date"><input name="contingencies" placeholder="Contingencies"><button class="btn sm">Add offer</button></form>
+    `:""}
     <p style="margin-top:28px"><button class="btn sm" id="delDeal" style="color:var(--warn)">Delete deal</button></p>
   </div>`;
   $("#drawer")?.remove(); document.body.appendChild(el);
@@ -401,6 +512,31 @@ function openDeal(id){
     try{ await db.insert("tasks",{deal_id:id,title:f.title,owner:f.owner,due_date:f.due||null,done:false}); await loadAll(); render(); openDeal(id);}catch(err){toast(err.message);} };
   $("#docAdd").onsubmit = async e=>{ e.preventDefault(); const file=e.target.file.files[0]; if(!file) return;
     try{ const path = await db.upload(id,file); await db.insert("documents",{deal_id:id,name:file.name,path,client_visible:e.target.vis.checked,uploaded_at:new Date().toISOString()}); await loadAll(); openDeal(id); toast("Uploaded");}catch(err){toast(err.message);} };
+  const reopen = async ()=>{ await loadAll(); render(); openDeal(id); };
+  el.querySelectorAll("[data-chk]").forEach(c=>c.onchange=async()=>{ try{ await db.update("checklist",c.dataset.chk,{status:c.value}); S.data.checklist.find(x=>x.id===c.dataset.chk).status=c.value; toast("Updated"); }catch(e){toast(e.message);} });
+  el.querySelectorAll("[data-chkedit]").forEach(b=>b.onclick=async()=>{ const c=S.data.checklist.find(x=>x.id===b.dataset.chkedit);
+    const url = prompt("Signature link for the client (Authentisign, DocuSign, Dotloop...). Leave blank for none.", c.sign_url||""); if(url===null) return;
+    const due = prompt("Due date (YYYY-MM-DD), blank for none", c.due_date||""); if(due===null) return;
+    const patch = {sign_url:url.trim()||null, due_date:/^\d{4}-\d{2}-\d{2}$/.test(due.trim())?due.trim():null};
+    if(patch.sign_url && c.status==="Needed") patch.status="Sent for signature";
+    try{ await db.update("checklist",c.id,patch); Object.assign(c,patch); openDeal(id); }catch(e){toast(e.message);} });
+  if($("#chkTpl")) $("#chkTpl").onclick = async()=>{ const names = d.side==="seller"?SELLER_CHECKLIST:BUYER_CHECKLIST;
+    try{ await db.insertMany("checklist",names.map((name,i)=>({deal_id:id,name,status:"Needed",who:"agent",sort:i}))); await reopen(); }catch(e){toast(e.message);} };
+  $("#chkAdd").onsubmit = async e=>{ e.preventDefault(); const f=Object.fromEntries(new FormData(e.target));
+    try{ await db.insert("checklist",{deal_id:id,name:f.name,who:f.who,status:"Needed",sort:checkOf(id).length}); await reopen(); }catch(err){toast(err.message);} };
+  if(d.side==="seller"){
+    $("#lsSave").onclick = async()=>{
+      const patch = {mls_number:$("#lsMls").value.trim()||null,list_price:$("#lsPrice").value?+$("#lsPrice").value:null,list_date:$("#lsDate").value||null,listing_status:$("#lsStatus").value,
+        photo_url:$("#lsPhoto").value.trim()||null,showings_open:$("#lsOpen").checked,showing_approval:$("#lsAppr").value,showing_notes:$("#lsNotes").value.trim()||null};
+      try{ await db.update("deals",id,patch); Object.assign(d,patch); render(); openDeal(id); toast("Listing saved"); }catch(e){ toast(e.message); }
+    };
+    $("#lsLink").onclick = ()=>{ const u=BOOK_URL(id); navigator.clipboard?.writeText(u).then(()=>toast("Booking link copied. Put it in the MLS showing instructions."),()=>prompt("Copy this link:",u)); };
+    el.querySelectorAll("[data-offer]").forEach(c=>c.onchange=async()=>{ try{ await db.update("offers",c.dataset.offer,{status:c.value}); S.data.offers.find(x=>x.id===c.dataset.offer).status=c.value; toast("Offer updated"); }catch(e){toast(e.message);} });
+    $("#offAdd").onsubmit = async e=>{ e.preventDefault(); const f=Object.fromEntries(new FormData(e.target));
+      try{ await db.insert("offers",{deal_id:id,price:+f.price,buyer_agent:f.buyer_agent||null,financing:f.financing||null,escrow_deposit:f.escrow_deposit?+f.escrow_deposit:null,closing_date:f.closing_date||null,contingencies:f.contingencies||null,status:"Received",received_at:today()}); await reopen(); toast("Offer added"); }catch(err){toast(err.message);} };
+    el.querySelectorAll("[data-showok]").forEach(b=>b.onclick=()=>setShowing(S.data.showings.find(s=>s.id===b.dataset.showok),"Confirmed"));
+    el.querySelectorAll("[data-showno]").forEach(b=>b.onclick=()=>setShowing(S.data.showings.find(s=>s.id===b.dataset.showno),"Declined"));
+  }
   $("#delDeal").onclick = async()=>{ if(!confirm("Delete this deal and its timeline, tasks and documents list?")) return;
     try{ await db.remove("deals",id); await loadAll(); close(); render(); toast("Deal deleted"); }catch(e){toast(e.message);} };
   bindTaskBoxes();
@@ -441,6 +577,8 @@ function renderClient(){
   $("#app").innerHTML = tabs + (kind==="d" ? clientDeal(item) : homeDash(item));
   document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab;render();});
   document.querySelectorAll("[data-open]").forEach(b=>b.onclick=async()=>{ try{ const u=await db.fileUrl(b.dataset.open); if(u) window.open(u,"_blank"); else toast("Demo document"); }catch(e){toast(e.message);} });
+  document.querySelectorAll("[data-sok]").forEach(b=>b.onclick=()=>setShowing(S.data.showings.find(s=>s.id===b.dataset.sok),"Confirmed"));
+  document.querySelectorAll("[data-sno]").forEach(b=>b.onclick=()=>setShowing(S.data.showings.find(s=>s.id===b.dataset.sno),"Declined"));
   bindTaskBoxes();
 }
 
@@ -457,9 +595,43 @@ function clientDeal(d){
   const nextIdx = ms.findIndex(m=>!m.done);
   const days = d.closing_date ? Math.ceil((new Date(d.closing_date+"T12:00:00")-new Date())/864e5) : null;
   const mine = tasksOf(d.id).filter(x=>x.owner==="client");
+  const toSign = checkOf(d.id).filter(c=>c.sign_url && c.status==="Sent for signature");
+  const shows = showsOf(d.id).filter(s=>s.status!=="Cancelled");
+  const past = shows.filter(s=>s.status==="Confirmed" && new Date(s.start_at)<new Date());
+  const week = past.filter(s=>new Date(s.start_at)>new Date(Date.now()-7*864e5)).length;
+  const fbs = shows.filter(s=>s.fb_at);
+  const avg = fbs.length ? (fbs.reduce((a,s)=>a+(+s.fb_interest||0),0)/fbs.length).toFixed(1) : null;
+  const priceVotes = ["Too high","About right","A good value"].map(k=>[k,fbs.filter(s=>s.fb_price===k).length]);
+  const pendingReq = shows.filter(s=>s.status==="Requested" && new Date(s.start_at)>new Date());
+  const upcoming = shows.filter(s=>s.status==="Confirmed" && new Date(s.start_at)>new Date()).sort((a,b)=>String(a.start_at).localeCompare(String(b.start_at)));
+  const offers = offersOf(d.id);
+  const listing = d.side==="seller" && (d.list_date || d.list_price || shows.length || offers.length) ? `
+  <div class="stats">
+    <div class="stat"><b>${esc(d.listing_status||d.stage)}</b><span class="small muted">Listing status${d.mls_number?` · MLS ${esc(d.mls_number)}`:""}</span></div>
+    <div class="stat"><b>${money(d.list_price||d.price)}</b><span class="small muted">List price</span></div>
+    <div class="stat"><b>${dom(d)??"—"}</b><span class="small muted">Days on market${d.list_date?` · listed ${fmt(d.list_date)}`:""}</span></div>
+    <div class="stat"><b>${past.length}</b><span class="small muted">Showings · ${week} this week${avg?` · interest ${avg}/5`:""}</span></div>
+  </div>
+  ${pendingReq.length?`<div class="card" style="margin-bottom:20px;border-color:var(--gold)"><h2 style="font-size:20px">Showing requests waiting for you</h2>
+    <ul class="list">${pendingReq.map(s=>`<li><span class="grow"><b style="font-weight:600">${dt(s.start_at)}</b> · ${s.minutes} min<br><span class="small muted">${esc(s.agent_name)}, ${esc(s.brokerage||"agent")}</span></span>
+    ${d.showing_approval==="seller"?`<button class="btn sm gold" data-sok="${s.id}">Approve</button><button class="btn sm" data-sno="${s.id}">Decline</button>`:`<span class="small muted">Your agent will confirm</span>`}</li>`).join("")}</ul></div>`:""}
+  <div class="grid2" style="margin-bottom:20px">
+    <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Showing feedback</h2>
+      ${fbs.length?`<p class="small muted">On price: ${priceVotes.map(([k,n])=>`${k} ${n}`).join(" · ")}</p>
+      <ul class="list">${fbs.map(s=>`<li style="align-items:start"><span class="small" style="min-width:110px;color:var(--gold);font-weight:600">${fmt(String(s.start_at).slice(0,10))}</span><span class="grow"><b style="font-weight:600">Interest ${s.fb_interest}/5</b> · ${esc(s.fb_price||"")}${s.fb_comment?`<br><span class="small muted">“${esc(s.fb_comment)}”</span>`:""}</span></li>`).join("")}</ul>`
+      :`<p class="muted small">Feedback from buyers' agents will appear here after each showing.</p>`}
+    </div>
+    <div style="display:grid;gap:20px;align-content:start">
+      <div class="card"><h2 style="font-size:18px">Upcoming showings</h2>
+        <ul class="list">${upcoming.map(s=>`<li><span class="grow">${dt(s.start_at)}</span><span class="small muted">${s.minutes} min</span></li>`).join("") || "<li class='muted small'>None scheduled.</li>"}</ul></div>
+      <div class="card"><h2 style="font-size:18px">Offers</h2>
+        <ul class="list">${offers.map(o=>`<li><span class="grow"><b style="font-weight:600">${money(o.price)}</b><br><span class="small muted">${esc(o.financing||"")}${o.closing_date?` · close ${fmt(o.closing_date)}`:""}</span></span><span class="tag">${o.status}</span></li>`).join("") || "<li class='muted small'>No offers yet.</li>"}</ul></div>
+    </div>
+  </div>` : "";
   return `
   <div class="hero-deal"><div><div class="eyebrow">${d.side==="buyer"?"Your purchase":"Your sale"} · ${esc(d.stage)}</div><h1 class="big">${esc(d.address)}</h1></div>
     ${days!==null && d.stage!=="Closed" ? `<div style="text-align:right"><div class="big">${days>0?days:0}</div><div class="small muted">days to closing · ${fmt(d.closing_date)}</div></div>`:""}</div>
+  ${listing}
   <div class="grid2">
     <div class="card"><h2 style="font-size:20px;margin-bottom:14px">Timeline</h2>
       ${ms.length ? `<ul class="tl">${ms.map((m,i)=>`<li class="${m.done?"ok":i===nextIdx?"next":""}"><i></i><b style="font-weight:${i===nextIdx?600:400}">${esc(m.name)}</b><br><span class="small muted">${m.done?"Done":fmt(m.due_date)}${i===nextIdx?" · next up":""}</span></li>`).join("")}</ul>`
@@ -467,6 +639,8 @@ function clientDeal(d){
     </div>
     <div style="display:grid;gap:20px;align-content:start">
       ${agentBlock(d.agent_email)}
+      ${toSign.length?`<div class="card" style="border-color:var(--gold)"><h2 style="font-size:18px">Ready for your signature</h2>
+        <ul class="list">${toSign.map(c=>`<li><span class="grow">${esc(c.name)}${c.due_date?`<br><span class="small ${c.due_date<t?"late":"muted"}">Due ${fmt(c.due_date)}</span>`:""}</span><a class="btn sm gold" href="${esc(c.sign_url)}" target="_blank" rel="noopener">Sign</a></li>`).join("")}</ul></div>`:""}
       <div class="card"><h2 style="font-size:18px">Your to-dos</h2>
         <ul class="list">${mine.map(x=>`<li><input type="checkbox" data-task="${x.id}" ${x.done?"checked":""}><span class="grow ${x.done?"done":""}">${esc(x.title)}</span><span class="small ${!x.done&&x.due_date&&x.due_date<t?"late":"muted"}">${fmt(x.due_date)}</span></li>`).join("") || "<li class='muted small'>Nothing for you right now.</li>"}</ul></div>
       <div class="card"><h2 style="font-size:18px">Documents</h2>

@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Book a Showing | Marino Group Listings</title>
+<link rel="icon" href="/img/marino_logo_transparent_gold.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Figtree:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#f6f3ee;--surface:#fff;--sunk:#ece6dc;--fg:#1e1d1c;--muted:#655f56;--line:#ddd5c8;--gold:#b8955d;--gold-soft:#d8c3a0;--ok:#3d7a4f;--warn:#a8642a;
+--display:"Jost","Futura","Century Gothic",Arial,sans-serif;--body:"Figtree","Segoe UI",Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#141312;--surface:#1d1b19;--sunk:#25221f;--fg:#efe8dc;--muted:#a79e90;--line:#36322d;--gold:#d3b585;--gold-soft:#e3cfa9;--ok:#7fbf8e;--warn:#e0a46a;color-scheme:dark}}
+*{box-sizing:border-box}[hidden]{display:none!important}html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font:16px/1.55 var(--body)}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.15;margin:0}
+h1{font-size:clamp(30px,4.4vw,44px)}h2{font-size:24px}
+p{margin:0}a{color:inherit}
+.top{background:#141312;color:#f3ece0}.top .wrap{display:flex;align-items:center;gap:16px;padding-block:14px}
+.top a.home{font:500 18px var(--display);letter-spacing:.08em;text-decoration:none}.top span{color:#bdb3a3;font-size:14px}
+.wrap{max-width:980px;margin:0 auto;padding-inline:20px}
+main{padding-block:32px 60px}
+.eyebrow{font-family:var(--display);font-weight:500;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.muted{color:var(--muted)}.small{font-size:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px}
+.homes{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));margin-top:20px}
+.lst{display:block;text-align:left;cursor:pointer;font:inherit;color:inherit;background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;padding:0}
+.lst:hover,.lst:focus-visible{border-color:var(--gold);outline:none}
+.lst img{width:100%;height:160px;object-fit:cover;display:block;background:var(--sunk)}
+.lst .ph{height:160px;background:var(--sunk);display:grid;place-items:center;color:var(--muted)}
+.lst div.t{padding:14px 16px}
+.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-top:12px}
+.day,.slot{font:inherit;color:inherit;border:1px solid var(--line);background:var(--surface);border-radius:12px;cursor:pointer}
+.day{min-width:74px;padding:8px 10px;text-align:center}.day b{display:block;font:500 20px var(--display)}
+.day.on,.slot.on{background:var(--gold-soft);border-color:var(--gold);color:#1e1d1c}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px;margin-top:12px}
+.slot{padding:9px 6px}.slot:disabled{opacity:.35;cursor:not-allowed;text-decoration:line-through}
+label{display:block;font-size:14px;color:var(--muted);margin:12px 0 5px}
+input,select,textarea{width:100%;font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.row{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.btn{display:inline-flex;align-items:center;justify-content:center;font:500 16px var(--body);padding:12px 22px;border-radius:999px;border:1px solid var(--line);background:transparent;color:inherit;cursor:pointer;text-decoration:none}
+.btn.gold{background:var(--gold-soft);border-color:var(--gold);color:#1e1d1c}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.pill{display:inline-block;border-radius:999px;padding:3px 12px;font-size:14px;font-weight:600;background:var(--sunk)}
+.pill.Confirmed{background:#3d7a4f22;color:var(--ok)}.pill.Requested{background:#b8955d26;color:var(--gold)}.pill.Declined,.pill.Cancelled{background:#a8642a22;color:var(--warn)}
+.err{color:#b4472c;margin-top:10px}
+.demo{background:var(--gold-soft);color:#1e1d1c;text-align:center;font-size:13px;padding:6px}
+.stars{display:flex;gap:6px}.stars label{margin:0}.stars input{position:absolute;opacity:0;width:1px}.stars span{display:inline-block;border:1px solid var(--line);border-radius:10px;padding:8px 14px;cursor:pointer;color:var(--fg)}.stars input:checked+span{background:var(--gold-soft);border-color:var(--gold);color:#1e1d1c}
+footer{color:var(--muted);font-size:13px;text-align:center;padding:30px 20px}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><a class="home" href="/">MARINO GROUP</a><span>Showings</span></div></header>
+<div class="demo" id="demo" hidden>Demo mode with a sample listing. Requests are not saved.</div>
+<main class="wrap" id="app"><p class="muted">Loading…</p></main>
+<footer>Marino Group · Brokered by Waterfront Realty Group, Inc. · (239) 776-2393</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/js/config.js"></script>
+<script>
+const C = window.MG_CONFIG || {};
+const LIVE = !!(C.SUPABASE_URL && C.SUPABASE_ANON_KEY && window.supabase);
+const sb = LIVE ? supabase.createClient(C.SUPABASE_URL, C.SUPABASE_ANON_KEY) : null;
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money = n => n ? "$" + Number(n).toLocaleString("en-US") : "";
+const when = d => new Date(d).toLocaleString("en-US",{weekday:"long",month:"long",day:"numeric",hour:"numeric",minute:"2-digit",timeZone:"America/New_York"});
+const params = new URLSearchParams(location.search);
+const DEMO_HOME = {id:"demo",address:"5221 Sholtz St, Naples, FL 34113",list_price:419900,photo_url:null,mls_number:"Sample"};
+$("#demo").hidden = LIVE;
+
+async function rpc(fn, args){
+  if(!LIVE) throw new Error("demo");
+  const {data,error} = await sb.rpc(fn,args); if(error) throw new Error(error.message); return data;
+}
+
+// Florida time helpers: slots are shown and booked in Naples (Eastern) time.
+function etOffset(dateStr){ // "-05:00" or "-04:00" for that date at noon
+  const d = new Date(dateStr+"T12:00:00Z");
+  const p = new Intl.DateTimeFormat("en-US",{timeZone:"America/New_York",timeZoneName:"shortOffset"}).formatToParts(d).find(x=>x.type==="timeZoneName").value; // GMT-5
+  const h = parseInt(p.replace("GMT",""),10); return (h<0?"-":"+")+String(Math.abs(h)).padStart(2,"0")+":00";
+}
+function etDate(offsetDays){ const d = new Date(Date.now()+offsetDays*864e5); return new Intl.DateTimeFormat("en-CA",{timeZone:"America/New_York"}).format(d); }
+
+async function listView(){
+  let homes = [];
+  try{ homes = LIVE ? await rpc("public_listings",{}) : [DEMO_HOME]; }catch(e){ homes = []; }
+  if(params.get("l")){ const h = homes.find(x=>x.id===params.get("l")); if(h) return bookView(h); }
+  $("#app").innerHTML = `<span class="eyebrow">Marino Group listings</span><h1 style="margin-top:8px">Book a showing</h1>
+    <p class="muted" style="margin-top:8px">For licensed agents. Pick the home, then a time. You'll get a confirmation link right away.</p>
+    <div class="homes">${homes.map(h=>`<button class="lst" data-id="${h.id}">${h.photo_url?`<img src="${esc(h.photo_url)}" alt="">`:`<div class="ph">Photo coming soon</div>`}
+      <div class="t"><b>${esc(h.address)}</b><br><span class="muted small">${money(h.list_price)}${h.mls_number?` · MLS ${esc(h.mls_number)}`:""}</span></div></button>`).join("") || `<p class="muted">No listings are taking showings online right now. Call (239) 776-2393.</p>`}</div>`;
+  document.querySelectorAll("[data-id]").forEach(b=>b.onclick=()=>{ history.pushState({}, "", "?l="+b.dataset.id); bookView(homes.find(h=>h.id===b.dataset.id)); });
+}
+
+async function bookView(h){
+  let busy = [];
+  try{ busy = LIVE ? await rpc("busy_times",{p_deal:h.id}) : []; }catch(e){}
+  const S = {day:etDate(0), time:null, mins:30};
+  const taken = (startIso, mins) => { const s=new Date(startIso).getTime(), e=s+mins*6e4; return busy.some(b=>{const bs=new Date(b.start_at).getTime(), be=bs+b.minutes*6e4; return s<be && bs<e;}); };
+  function slotsFor(day){
+    const off = etOffset(day), out=[];
+    for(let m=9*60; m<=18*60+30; m+=30){
+      const hh=String(Math.floor(m/60)).padStart(2,"0"), mm=String(m%60).padStart(2,"0");
+      const iso = `${day}T${hh}:${mm}:00${off}`;
+      const label = new Date(iso).toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit",timeZone:"America/New_York"});
+      out.push({iso,label,dis: new Date(iso) < new Date(Date.now()+60*6e4) || taken(iso,S.mins)});
+    }
+    return out;
+  }
+  function draw(){
+    const days = Array.from({length:14},(_,i)=>etDate(i));
+    $("#app").innerHTML = `<a href="?" class="small muted" id="all">← All listings</a>
+      <span class="eyebrow" style="display:block;margin-top:14px">Book a showing</span><h1 style="margin-top:6px">${esc(h.address)}</h1>
+      <p class="muted">${money(h.list_price)}${h.mls_number?` · MLS ${esc(h.mls_number)}`:""} · Times are Naples (Eastern) time</p>
+      <div class="card" style="margin-top:18px">
+        <h2>1. Pick a day and time</h2>
+        <div class="days">${days.map(d=>{const x=new Date(d+"T12:00:00");return `<button type="button" class="day ${d===S.day?"on":""}" data-day="${d}">${x.toLocaleDateString("en-US",{weekday:"short"})}<b>${x.getDate()}</b><span class="small">${x.toLocaleDateString("en-US",{month:"short"})}</span></button>`}).join("")}</div>
+        <label for="mins">Length</label><select id="mins" style="max-width:200px">${[15,30,45,60].map(m=>`<option ${m===S.mins?"selected":""} value="${m}">${m} minutes</option>`).join("")}</select>
+        <div class="slots">${slotsFor(S.day).map(s=>`<button type="button" class="slot ${s.iso===S.time?"on":""}" data-t="${s.iso}" ${s.dis?"disabled":""}>${s.label}</button>`).join("")}</div>
+      </div>
+      <form class="card" id="bk" style="margin-top:16px">
+        <h2>2. Your details</h2>
+        <div class="row"><div><label for="nm">Your name</label><input id="nm" required autocomplete="name"></div><div><label for="br">Brokerage</label><input id="br" required autocomplete="organization"></div></div>
+        <div class="row"><div><label for="ph">Mobile</label><input id="ph" type="tel" required autocomplete="tel"></div><div><label for="em">Email</label><input id="em" type="email" required autocomplete="email"></div></div>
+        <div class="row"><div><label for="lic">Florida license #</label><input id="lic" required></div><div><label for="by">Buyer's name (optional)</label><input id="by"></div></div>
+        <label for="nt">Note for the listing agent (optional)</label><textarea id="nt" rows="2"></textarea>
+        <p class="err" id="err" hidden></p>
+        <button class="btn gold" style="margin-top:16px">Request this showing</button>
+        <p class="small muted" style="margin-top:10px">Lockbox and access instructions appear on your confirmation page once the showing is confirmed.</p>
+      </form>`;
+    $("#all").onclick = e=>{e.preventDefault(); history.pushState({}, "", location.pathname); listView();};
+    document.querySelectorAll("[data-day]").forEach(b=>b.onclick=()=>{S.day=b.dataset.day;S.time=null;draw();});
+    document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{S.time=b.dataset.t;draw();});
+    $("#mins").onchange = e=>{S.mins=+e.target.value;S.time=null;draw();};
+    $("#bk").onsubmit = async e=>{
+      e.preventDefault(); const er=$("#err");
+      if(!S.time){ er.textContent="Pick a time above."; er.hidden=false; return; }
+      const args = {p_deal:h.id,p_start:S.time,p_minutes:S.mins,p_name:$("#nm").value.trim(),p_email:$("#em").value.trim(),p_phone:$("#ph").value.trim(),
+        p_brokerage:$("#br").value.trim(),p_license:$("#lic").value.trim(),p_buyer:$("#by").value.trim(),p_note:$("#nt").value.trim()};
+      try{
+        if(!LIVE){ er.textContent="Demo mode: this request was not sent."; er.hidden=false; return; }
+        const token = await rpc("request_showing",args);
+        location.href = "?t=" + token;
+      }catch(x){ er.textContent = x.message; er.hidden=false; }
+    };
+  }
+  draw();
+}
+
+async function statusView(token){
+  let s;
+  try{ s = (await rpc("showing_status",{p_token:token}))[0]; }catch(e){}
+  if(!s){ $("#app").innerHTML = `<h1>Showing not found</h1><p class="muted">Check your link, or call (239) 776-2393.</p>`; return; }
+  const after = new Date(s.start_at) < new Date(Date.now()+60*6e4);
+  const msg = {Requested:"Waiting for approval. Keep this page: it updates as soon as the seller or agent responds.",Confirmed:"You're confirmed.",Declined:"This time didn't work for the seller. Please pick another time.",Cancelled:"This showing was cancelled."}[s.status];
+  $("#app").innerHTML = `<span class="eyebrow">Your showing</span><h1 style="margin-top:6px">${esc(s.address)}</h1>
+    <div class="card" style="margin-top:18px"><span class="pill ${s.status}">${s.status}</span>
+      <p style="margin-top:10px;font-size:20px">${when(s.start_at)} · ${s.minutes} min</p><p class="muted" style="margin-top:6px">${msg}</p>
+      ${s.showing_notes?`<div style="margin-top:14px;padding:12px 14px;background:var(--sunk);border-radius:10px"><b>Access instructions</b><br>${esc(s.showing_notes).replace(/\n/g,"<br>")}</div>`:""}
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+        ${["Requested","Confirmed"].includes(s.status)&&!after?`<button class="btn" id="cx">Cancel showing</button>`:""}
+        ${s.status==="Declined"?`<a class="btn gold" href="?">Pick another time</a>`:""}
+        <a class="btn" href="tel:+12397762393">Call the listing agent</a>
+      </div></div>
+    ${s.status==="Confirmed"&&after&&!s.fb_done?`<form class="card" id="fb" style="margin-top:16px"><h2>How did it go?</h2><p class="muted small">Your feedback goes straight to the seller.</p>
+      <label>Buyer interest</label><div class="stars">${[1,2,3,4,5].map(n=>`<label><input type="radio" name="i" value="${n}" ${n===3?"checked":""}><span>${n}</span></label>`).join("")}</div>
+      <label for="pr">Price</label><select id="pr"><option>About right</option><option>Too high</option><option>A good value</option></select>
+      <label for="cm">Comments</label><textarea id="cm" rows="3"></textarea><p class="err" id="err" hidden></p>
+      <button class="btn gold" style="margin-top:14px">Send feedback</button></form>`:""}
+    ${s.fb_done?`<p class="muted" style="margin-top:14px">Thanks for your feedback.</p>`:""}`;
+  if($("#cx")) $("#cx").onclick = async()=>{ if(!confirm("Cancel this showing?")) return; await rpc("cancel_showing",{p_token:token}); statusView(token); };
+  if($("#fb")) $("#fb").onsubmit = async e=>{ e.preventDefault();
+    try{ await rpc("submit_feedback",{p_token:token,p_interest:+document.querySelector("[name=i]:checked").value,p_price:$("#pr").value,p_comment:$("#cm").value.trim()}); statusView(token); }
+    catch(x){ $("#err").textContent=x.message; $("#err").hidden=false; } };
+}
+
+window.onpopstate = () => location.reload();
+if(params.get("t")) statusView(params.get("t")); else listView();
+</script>
+</body>
+</html>

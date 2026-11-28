@@ -3,4 +3,5 @@ Allow: /
 Disallow: /portal/
 Disallow: /marino-homes/
 Disallow: /showings/signin/
+Disallow: /book/
 Sitemap: https://marinogroupswfl.com/sitemap.xml
