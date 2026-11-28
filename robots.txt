@@ -5,4 +5,6 @@ Disallow: /marino-homes/
 Disallow: /showings/signin/
 Disallow: /book/
 Disallow: /unsubscribe/
+Disallow: /course/thanks/
+Disallow: /record/
 Sitemap: https://marinogroupswfl.com/sitemap.xml
