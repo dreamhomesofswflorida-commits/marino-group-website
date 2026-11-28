@@ -4,10 +4,13 @@
   var inApp=false;
   try{ inApp = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()) || sessionStorage.getItem("mgApp")==="1"; }catch(e){}
   if(!inApp || location.pathname.indexOf("/app/")===0) return;
+  // Sign-in areas (client portal, agent showings) stay on the website, not in the app.
+  if(/^\/(portal|showings)(\/|$)/.test(location.pathname)){ location.replace("/app/"); return; }
+  try{ var st0=document.createElement("style"); st0.textContent='a[href^="/portal"],a[href^="/showings"]{display:none!important}'; (document.head||document.documentElement).appendChild(st0); }catch(e){}
   function add(){
     if(document.getElementById("mg-app-back")) return;
     var a=document.createElement("a");
-    a.id="mg-app-back"; a.href="/app/"; a.setAttribute("aria-label","Back to the Marino Group app");
+    a.id="mg-app-back"; a.href="/app/"; a.setAttribute("aria-label","Back to the Marino Homes app");
     a.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg><span>Back to app</span>';
     a.style.cssText="position:fixed;left:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:2147483000;display:flex;align-items:center;gap:6px;padding:11px 16px 11px 12px;border-radius:999px;background:#141312;color:#f3ece0;font:600 15px/1 Figtree,'Segoe UI',Arial,sans-serif;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.28)";
     a.addEventListener("click",function(e){ if(history.length>1 && document.referrer.indexOf("/app/")>-1){ e.preventDefault(); history.back(); } });
